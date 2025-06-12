@@ -1,28 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script>
-  const vid = document.createElement("video");
-  vid.src = "https://r2.guns.lol/f3c69b42-b442-42c2-abab-3ba82161eb27.mp4";
-  vid.autoplay = true;
-  vid.muted = true;
-  vid.loop = true;
-  vid.playsInline = true;
-  Object.assign(vid.style, {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    minWidth: "100%",
-    minHeight: "100%",
-    objectFit: "cover",
-    zIndex: "-999"
-  });
-  document.documentElement.appendChild(vid);
-</script>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Staged was here!</title>
+
+  <!-- Background Video Script -->
+  <script>
+    const vid = document.createElement("video");
+    vid.src = "https://r2.guns.lol/f3c69b42-b442-42c2-abab-3ba82161eb27.mp4";
+    vid.autoplay = true;
+    vid.muted = true;
+    vid.loop = true;
+    vid.playsInline = true;
+    Object.assign(vid.style, {
+      position: "fixed",
+      top: 0,
+      left: 0,
+      minWidth: "100%",
+      minHeight: "100%",
+      objectFit: "cover",
+      zIndex: "-999"
+    });
+    document.documentElement.appendChild(vid);
+  </script>
+
   <style>
     html, body {
       margin: 0;
@@ -32,16 +34,6 @@
       font-family: 'Segoe UI', sans-serif;
       background: black;
       cursor: default;
-    }
-
-    #bg-video {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      object-fit: cover;
-      z-index: -3;
     }
 
     #particles-js {
@@ -84,20 +76,9 @@
       pointer-events: none;
     }
 
-    .glitch-r {
-      color: red;
-      mix-blend-mode: screen;
-    }
-
-    .glitch-g {
-      color: lime;
-      mix-blend-mode: screen;
-    }
-
-    .glitch-b {
-      color: blue;
-      mix-blend-mode: screen;
-    }
+    .glitch-r { color: red; mix-blend-mode: screen; }
+    .glitch-g { color: lime; mix-blend-mode: screen; }
+    .glitch-b { color: blue; mix-blend-mode: screen; }
 
     #typewriter {
       font-size: 1.4em;
@@ -128,23 +109,24 @@
       filter: drop-shadow(0 0 18px white);
     }
 
-    audio {
-      display: none;
+    audio { display: none; }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: block;
+      z-index: -1;
     }
   </style>
 </head>
+
 <body>
-
-  <!-- Background Video -->
-  <video autoplay loop muted playsinline id="bg-video">
-    <source src="https://r2.guns.lol/f3c69b42-b442-42c2-abab-3ba82161eb27.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-
-  <!-- Particles -->
+  <!-- Particle Background -->
   <div id="particles-js"></div>
+  <canvas id="canvas"></canvas>
 
-  <!-- Glass UI -->
+  <!-- Frosted Glass UI -->
   <div class="glass-box">
     <div class="glitch-text" id="glitch">
       <span class="glitch-layer glitch-r">Staged</span>
@@ -154,20 +136,12 @@
     </div>
     <div id="typewriter"></div>
 
-    <!-- Social Icons Inside Glass Box -->
+    <!-- Social Icons -->
     <div class="social-icons-inside">
-      <a href="https://www.tiktok.com" target="_blank">
-        <img src="tiktok.webp" alt="TikTok" />
-      </a>
-      <a href="https://www.youtube.com" target="_blank">
-        <img src="youtube.png" alt="YouTube" />
-      </a>
-      <a href="https://www.roblox.com" target="_blank">
-        <img src="roblox.webp" alt="Roblox" />
-      </a>
-      <a href="https://www.instagram.com" target="_blank">
-        <img src="insta.webp" alt="Instagram" />
-      </a>
+      <a href="https://www.tiktok.com" target="_blank"><img src="tiktok.webp" alt="TikTok" /></a>
+      <a href="https://www.youtube.com" target="_blank"><img src="youtube.png" alt="YouTube" /></a>
+      <a href="https://www.roblox.com" target="_blank"><img src="roblox.webp" alt="Roblox" /></a>
+      <a href="https://www.instagram.com" target="_blank"><img src="insta.webp" alt="Instagram" /></a>
     </div>
   </div>
 
@@ -198,7 +172,7 @@
     });
   </script>
 
-  <!-- Typewriter -->
+  <!-- Typewriter Effect -->
   <script>
     const messages = [
       "You're staged lol!",
@@ -238,7 +212,7 @@
     type();
   </script>
 
-  <!-- RGB Glitch Follow Mouse -->
+  <!-- Glitch RGB Follow Mouse -->
   <script>
     const glitchR = document.querySelector(".glitch-r");
     const glitchG = document.querySelector(".glitch-g");
@@ -251,23 +225,13 @@
       const offsetX = (e.clientX - centerX) / 100;
       const offsetY = (e.clientY - centerY) / 100;
 
-      glitchR.style.transform = translate(${-offsetX}px, ${-offsetY}px);
-      glitchG.style.transform = translate(${offsetX}px, ${offsetY}px);
-      glitchB.style.transform = translate(${-offsetY}px, ${offsetX}px);
+      glitchR.style.transform = `translate(${-offsetX}px, ${-offsetY}px)`;
+      glitchG.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      glitchB.style.transform = `translate(${-offsetY}px, ${offsetX}px)`;
     });
   </script>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background: black;
-    }
-    canvas {
-      display: block;
-    }
-  </style>
-  <canvas id="canvas"></canvas>
+
+  <!-- Repelling Particle Canvas -->
   <script>
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
@@ -302,43 +266,3 @@
       update() {
         const dx = mouse.x - this.x;
         const dy = mouse.y - this.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const maxDist = 100;
-
-        if (dist < maxDist) {
-          const force = (maxDist - dist) / maxDist;
-          const dirX = dx / dist;
-          const dirY = dy / dist;
-          this.x -= dirX * force * this.density;
-          this.y -= dirY * force * this.density;
-        } else {
-          this.x += (this.baseX - this.x) / 10;
-          this.y += (this.baseY - this.y) / 10;
-        }
-
-        this.draw();
-      }
-    }
-
-    const particles = [];
-    for (let i = 0; i < 200; i++) {
-      particles.push(new Particle());
-    }
-
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let p of particles) {
-        p.update();
-      }
-      requestAnimationFrame(animate);
-    }
-
-    animate();
-
-    window.addEventListener("resize", () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
-  </script>
-
-
