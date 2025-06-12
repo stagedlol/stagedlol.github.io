@@ -12,6 +12,7 @@
       overflow: hidden;
       font-family: 'Segoe UI', sans-serif;
       background: black;
+      cursor: default;
     }
 
     #bg-video {
@@ -46,8 +47,42 @@
       z-index: 2;
     }
 
+    .glitch-text {
+      position: relative;
+      font-size: 3.5em;
+      font-weight: bold;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .glitch-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: white;
+      width: 100%;
+      pointer-events: none;
+    }
+
+    .glitch-r {
+      color: red;
+      mix-blend-mode: screen;
+    }
+
+    .glitch-g {
+      color: lime;
+      mix-blend-mode: screen;
+    }
+
+    .glitch-b {
+      color: blue;
+      mix-blend-mode: screen;
+    }
+
     #typewriter {
       font-size: 1.4em;
+      margin-top: 20px;
       text-shadow: 0 0 8px white, 0 0 20px #00f0ff;
       white-space: nowrap;
       overflow: hidden;
@@ -63,25 +98,53 @@
 
   <!-- Background Video -->
   <video autoplay loop muted playsinline id="bg-video">
-    <source src="background.mp4" type="video/mp4" />
+    <source src="background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
   </video>
 
-  <!-- Snow Particles -->
+  <!-- Particles -->
   <div id="particles-js"></div>
 
-  <!-- Glass Text Box -->
+  <!-- Glass UI -->
   <div class="glass-box">
+    <div class="glitch-text" id="glitch">
+      <span class="glitch-layer glitch-r">Staged</span>
+      <span class="glitch-layer glitch-g">Staged</span>
+      <span class="glitch-layer glitch-b">Staged</span>
+      <span>Staged</span>
+    </div>
     <div id="typewriter"></div>
   </div>
 
-  <!-- Background Music -->
+  <!-- Audio -->
   <audio id="bg-music" autoplay loop>
     <source src="nights.mp3" type="audio/mpeg" />
   </audio>
 
-  <!-- Scripts -->
+  <!-- Particles.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
-    // Typewriter effect
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 150 },
+        size: { value: 3 },
+        color: { value: "#ffffff" },
+        opacity: { value: 0.7 },
+        move: { enable: true, speed: 1.5 },
+        line_linked: { enable: false }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "repulse" },
+          onclick: { enable: false }
+        }
+      }
+    });
+  </script>
+
+  <!-- Typewriter -->
+  <script>
     const messages = [
       "You're staged lol!",
       "Fuck you S0cial",
@@ -120,33 +183,117 @@
     type();
   </script>
 
-  <!-- Enable Music Autoplay (in case browser blocks it) -->
+  <!-- RGB Glitch Follow Mouse -->
   <script>
-    const audio = document.getElementById("bg-music");
-    window.addEventListener('click', () => audio.play());
-  </script>
+    const glitchR = document.querySelector(".glitch-r");
+    const glitchG = document.querySelector(".glitch-g");
+    const glitchB = document.querySelector(".glitch-b");
 
-  <!-- Particle JS Library -->
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-  <script>
-    particlesJS("particles-js", {
-      particles: {
-        number: { value: 150 },
-        size: { value: 3 },
-        color: { value: "#ffffff" },
-        opacity: { value: 0.7 },
-        move: { enable: true, speed: 1.5 },
-        line_linked: { enable: false }
-      },
-      interactivity: {
-        detect_on: "canvas",
-        events: {
-          onhover: { enable: true, mode: "repulse" },
-          onclick: { enable: false }
-        }
-      }
+    document.addEventListener("mousemove", (e) => {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+
+      const offsetX = (e.clientX - centerX) / 100;
+      const offsetY = (e.clientY - centerY) / 100;
+
+      glitchR.style.transform = `translate(${-offsetX}px, ${-offsetY}px)`;
+      glitchG.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      glitchB.style.transform = `translate(${-offsetY}px, ${offsetX}px)`;
     });
   </script>
 
+</body>
+</html>
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: black;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const mouse = { x: null, y: null };
+
+    window.addEventListener("mousemove", e => {
+      mouse.x = e.x;
+      mouse.y = e.y;
+    });
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 1;
+        this.baseX = this.x;
+        this.baseY = this.y;
+        this.density = Math.random() * 20 + 5;
+        this.color = `rgb(${Math.random()*255}, ${Math.random()*255}, ${Math.random()*255})`;
+      }
+
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      update() {
+        const dx = mouse.x - this.x;
+        const dy = mouse.y - this.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const maxDist = 100;
+
+        if (dist < maxDist) {
+          const force = (maxDist - dist) / maxDist;
+          const dirX = dx / dist;
+          const dirY = dy / dist;
+          this.x -= dirX * force * this.density;
+          this.y -= dirY * force * this.density;
+        } else {
+          // return to original position
+          this.x += (this.baseX - this.x) / 10;
+          this.y += (this.baseY - this.y) / 10;
+        }
+
+        this.draw();
+      }
+    }
+
+    const particles = [];
+    for (let i = 0; i < 200; i++) {
+      particles.push(new Particle());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let p of particles) {
+        p.update();
+      }
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
 </body>
 </html>
