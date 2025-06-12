@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-<video autoplay muted loop playsinline style="position:fixed; top:0; left:0; width:100vw; height:100vh; object-fit:cover; z-index:-1;">
-  <source src="https://r2.guns.lol/f3c69b42-b442-42c2-abab-3ba82161eb27.mp4" type="video/mp4">
-</video>
-
+<html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -14,11 +12,11 @@
       padding: 0;
       height: 100%;
       overflow: hidden;
-      background: black;
       font-family: 'Segoe UI', sans-serif;
+      background: black;
+      cursor: default;
     }
 
-    /* Video Background */
     #bg-video {
       position: fixed;
       top: 0;
@@ -29,15 +27,13 @@
       z-index: -3;
     }
 
-    /* Particle Canvas */
-    #canvas {
+    #particles-js {
       position: fixed;
-      top: 0;
-      left: 0;
+      width: 100%;
+      height: 100%;
       z-index: -2;
     }
 
-    /* Frosted Glass Box */
     .glass-box {
       position: absolute;
       top: 50%;
@@ -66,13 +62,25 @@
       position: absolute;
       top: 0;
       left: 0;
+      color: white;
       width: 100%;
       pointer-events: none;
     }
 
-    .glitch-r { color: red; mix-blend-mode: screen; }
-    .glitch-g { color: lime; mix-blend-mode: screen; }
-    .glitch-b { color: blue; mix-blend-mode: screen; }
+    .glitch-r {
+      color: red;
+      mix-blend-mode: screen;
+    }
+
+    .glitch-g {
+      color: lime;
+      mix-blend-mode: screen;
+    }
+
+    .glitch-b {
+      color: blue;
+      mix-blend-mode: screen;
+    }
 
     #typewriter {
       font-size: 1.4em;
@@ -81,26 +89,6 @@
       white-space: nowrap;
       overflow: hidden;
       border-right: 2px solid rgba(255,255,255,0.75);
-    }
-
-    .social-icons-inside {
-      margin-top: 25px;
-      display: flex;
-      justify-content: center;
-      gap: 25px;
-    }
-
-    .social-icons-inside a img {
-      width: 45px;
-      height: 45px;
-      filter: drop-shadow(0 0 8px white);
-      transition: transform 0.3s ease, filter 0.3s ease;
-      border-radius: 14px;
-    }
-
-    .social-icons-inside a:hover img {
-      transform: scale(1.1);
-      filter: drop-shadow(0 0 18px white);
     }
 
     audio {
@@ -112,14 +100,14 @@
 
   <!-- Background Video -->
   <video autoplay loop muted playsinline id="bg-video">
-    <source src="https://r2.guns.lol/f3c69b42-b442-42c2-abab-3ba82161eb27.mp4" type="video/mp4">
+    <source src="background.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
-  <!-- Canvas Particles -->
-  <canvas id="canvas"></canvas>
+  <!-- Particles -->
+  <div id="particles-js"></div>
 
-  <!-- Frosted Glass UI -->
+  <!-- Glass UI -->
   <div class="glass-box">
     <div class="glitch-text" id="glitch">
       <span class="glitch-layer glitch-r">Staged</span>
@@ -128,40 +116,133 @@
       <span>Staged</span>
     </div>
     <div id="typewriter"></div>
-
-    <div class="social-icons-inside">
-      <a href="https://www.tiktok.com" target="_blank">
-        <img src="tiktok.webp" alt="TikTok" />
-      </a>
-      <a href="https://www.youtube.com" target="_blank">
-        <img src="youtube.png" alt="YouTube" />
-      </a>
-      <a href="https://www.roblox.com" target="_blank">
-        <img src="roblox.webp" alt="Roblox" />
-      </a>
-      <a href="https://www.instagram.com" target="_blank">
-        <img src="insta.webp" alt="Instagram" />
-      </a>
-    </div>
   </div>
 
-  <!-- Music -->
+  <!-- Audio -->
   <audio id="bg-music" autoplay loop>
     <source src="nights.mp3" type="audio/mpeg" />
   </audio>
 
-  <!-- Mouse-Repelling Particles -->
+  <!-- Particles.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 150 },
+        size: { value: 3 },
+        color: { value: "#ffffff" },
+        opacity: { value: 0.7 },
+        move: { enable: true, speed: 1.5 },
+        line_linked: { enable: false }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "repulse" },
+          onclick: { enable: false }
+        }
+      }
+    });
+  </script>
+
+  <!-- Typewriter -->
+  <script>
+    const messages = [
+      "You're staged lol!",
+      "Fuck you S0cial",
+      "all my links below",
+      "follow the snow..."
+    ];
+
+    let i = 0, j = 0, isDeleting = false;
+    const target = document.getElementById("typewriter");
+    const speed = 60;
+    const pause = 1400;
+
+    function type() {
+      let txt = messages[i].substring(0, j);
+      target.textContent = txt;
+
+      if (!isDeleting) {
+        if (j < messages[i].length) {
+          j++;
+        } else {
+          isDeleting = true;
+          setTimeout(type, pause);
+          return;
+        }
+      } else {
+        if (j > 0) {
+          j--;
+        } else {
+          isDeleting = false;
+          i = (i + 1) % messages.length;
+        }
+      }
+      setTimeout(type, isDeleting ? speed / 2 : speed);
+    }
+
+    type();
+  </script>
+
+  <!-- RGB Glitch Follow Mouse -->
+  <script>
+    const glitchR = document.querySelector(".glitch-r");
+    const glitchG = document.querySelector(".glitch-g");
+    const glitchB = document.querySelector(".glitch-b");
+
+    document.addEventListener("mousemove", (e) => {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+
+      const offsetX = (e.clientX - centerX) / 100;
+      const offsetY = (e.clientY - centerY) / 100;
+
+      glitchR.style.transform = translate(${-offsetX}px, ${-offsetY}px);
+      glitchG.style.transform = translate(${offsetX}px, ${offsetY}px);
+      glitchB.style.transform = translate(${-offsetY}px, ${offsetX}px);
+    });
+  </script>
+
+</body>
+</html>
+
+<head>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: black;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+<!DOCTYPE html>
+<html<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: black;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
   <script>
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
 
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
     const mouse = { x: null, y: null };
 
@@ -215,70 +296,20 @@
 
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let p of particles) p.update();
+      for (let p of particles) {
+        p.update();
+      }
       requestAnimationFrame(animate);
     }
 
     animate();
-  </script>
 
-  <!-- Typewriter Effect -->
-  <script>
-    const messages = [
-      "You're staged lol!",
-      "Fuck you S0cial",
-      "all my links below",
-      "follow the snow..."
-    ];
-
-    let i = 0, j = 0, isDeleting = false;
-    const target = document.getElementById("typewriter");
-    const speed = 60;
-    const pause = 1400;
-
-    function type() {
-      const txt = messages[i].substring(0, j);
-      target.textContent = txt;
-
-      if (!isDeleting) {
-        if (j < messages[i].length) {
-          j++;
-        } else {
-          isDeleting = true;
-          setTimeout(type, pause);
-          return;
-        }
-      } else {
-        if (j > 0) {
-          j--;
-        } else {
-          isDeleting = false;
-          i = (i + 1) % messages.length;
-        }
-      }
-
-      setTimeout(type, isDeleting ? speed / 2 : speed);
-    }
-
-    type();
-  </script>
-
-  <!-- RGB Glitch Mouse Follow -->
-  <script>
-    const glitchR = document.querySelector(".glitch-r");
-    const glitchG = document.querySelector(".glitch-g");
-    const glitchB = document.querySelector(".glitch-b");
-
-    document.addEventListener("mousemove", (e) => {
-      const centerX = window.innerWidth / 2;
-      const centerY = window.innerHeight / 2;
-      const offsetX = (e.clientX - centerX) / 100;
-      const offsetY = (e.clientY - centerY) / 100;
-
-      glitchR.style.transform = `translate(${-offsetX}px, ${-offsetY}px)`;
-      glitchG.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-      glitchB.style.transform = `translate(${-offsetY}px, ${offsetX}px)`;
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     });
   </script>
 </body>
 </html>
+
+
