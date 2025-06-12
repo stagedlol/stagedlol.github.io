@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Staged was here!</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
+      background: transparent;
       overflow: hidden;
-      background: black;
       font-family: 'Segoe UI', sans-serif;
+    }
+
+    #bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
     }
 
     #snow-canvas {
@@ -22,16 +32,6 @@
       height: 100%;
       z-index: 0;
       pointer-events: none;
-    }
-
-    video#bg-video {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -2;
     }
 
     .glass-box {
@@ -101,12 +101,16 @@
   </style>
 </head>
 <body>
+
+  <!-- Background video -->
   <video id="bg-video" autoplay muted loop playsinline>
     <source src="https://r2.guns.lol/f3c69b42-b442-42c2-abab-3ba82161eb27.mp4" type="video/mp4">
   </video>
 
+  <!-- Snow canvas -->
   <canvas id="snow-canvas"></canvas>
 
+  <!-- Main content box -->
   <div class="glass-box">
     <div class="glitch-text" id="glitch">
       <span class="glitch-layer glitch-r">Staged</span>
@@ -123,6 +127,7 @@
     </div>
   </div>
 
+  <!-- Snow particles -->
   <script>
     const canvas = document.getElementById("snow-canvas");
     const ctx = canvas.getContext("2d");
@@ -203,6 +208,7 @@
     });
   </script>
 
+  <!-- Typewriter -->
   <script>
     const messages = [
       "You're staged lol!",
@@ -227,6 +233,7 @@
     type();
   </script>
 
+  <!-- Glitch movement -->
   <script>
     const glitchR = document.querySelector(".glitch-r");
     const glitchG = document.querySelector(".glitch-g");
@@ -244,5 +251,6 @@
       glitchB.style.transform = `translate(${offsetY}px, ${-offsetX}px)`;
     });
   </script>
+
 </body>
 </html>
