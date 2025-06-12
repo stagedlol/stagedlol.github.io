@@ -20,26 +20,25 @@
 
     body, html {
       height: 100%;
-      font-family: 'Minecraft', sans-serif;
-      color: white;
       overflow: hidden;
+      font-family: 'Minecraft', sans-serif;
+      background: black;
+      color: white;
     }
 
     #bg-video {
       position: fixed;
       top: 0;
       left: 0;
-      min-width: 100%;
-      min-height: 100%;
-      z-index: -2;
+      width: 100vw;
+      height: 100vh;
       object-fit: cover;
-      filter: brightness(0.4);
+      z-index: -3;
+      filter: brightness(0.3);
     }
 
     #particles-js {
       position: fixed;
-      top: 0;
-      left: 0;
       width: 100%;
       height: 100%;
       z-index: -1;
@@ -51,26 +50,25 @@
       left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
+      z-index: 1;
     }
 
     .name {
       font-family: 'Orbitron', sans-serif;
       font-size: 3rem;
-      text-shadow: 0 0 10px orange;
+      color: #fff;
+      text-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff, 0 0 40px #00ffff;
     }
 
     .typewriter {
       font-size: 1.5rem;
       margin-top: 10px;
+      height: 40px;
       white-space: nowrap;
       overflow: hidden;
       border-right: 2px solid white;
-      animation: typing 4s steps(30, end), blink .75s step-end infinite;
-    }
-
-    @keyframes typing {
-      from { width: 0 }
-      to { width: 100% }
+      animation: blink .75s step-end infinite;
+      text-shadow: 0 0 10px cyan;
     }
 
     @keyframes blink {
@@ -86,7 +84,7 @@
 
   <!-- Background Video -->
   <video autoplay loop muted id="bg-video">
-    <source src="https://cdn.pixabay.com/video/2019/09/06/26751-361996491_large.mp4" type="video/mp4">
+    <source src="https://cdn.pixabay.com/video/2017/08/09/12268-232282929_large.mp4" type="video/mp4">
     Your browser does not support HTML5 video.
   </video>
 
@@ -96,32 +94,75 @@
     Your browser does not support the audio element.
   </audio>
 
-  <!-- Particles -->
+  <!-- Snow Particles -->
   <div id="particles-js"></div>
 
-  <!-- Center Content -->
+  <!-- Centered Content -->
   <div class="content">
     <div class="name">staged.lol</div>
-    <div class="typewriter">Welcome to my domain...</div>
+    <div class="typewriter" id="typewriter"></div>
   </div>
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
+    // Snow Particles Config
     particlesJS("particles-js", {
       particles: {
-        number: { value: 100 },
+        number: { value: 200 },
         size: { value: 3 },
-        color: { value: "#FFA500" },
-        move: { speed: 1 },
+        color: { value: "#ffffff" },
         opacity: { value: 0.7 },
+        move: {
+          enable: true,
+          speed: 1,
+          direction: "bottom",
+          straight: false
+        },
         line_linked: { enable: false }
       },
       interactivity: {
-        events: { onhover: { enable: true, mode: "repulse" } },
-        modes: { repulse: { distance: 50 } }
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "grab" },
+          onclick: { enable: true, mode: "repulse" }
+        },
+        modes: {
+          grab: { distance: 140, line_linked: { opacity: 0.5 }},
+          repulse: { distance: 100 }
+        }
       }
     });
+
+    // Typewriter with Changing Text
+    const descriptions = [
+      "Welcome to my domain...",
+      "I make cool stuff.",
+      "Snow falls, music plays.",
+      "You're not lost. You're here."
+    ];
+
+    let index = 0;
+    let char = 0;
+    let element = document.getElementById("typewriter");
+
+    function typeEffect() {
+      if (char < descriptions[index].length) {
+        element.innerHTML += descriptions[index].charAt(char);
+        char++;
+        setTimeout(typeEffect, 75);
+      } else {
+        setTimeout(() => {
+          element.innerHTML = '';
+          char = 0;
+          index = (index + 1) % descriptions.length;
+          setTimeout(typeEffect, 400);
+        }, 1800);
+      }
+    }
+
+    typeEffect();
   </script>
+
 </body>
 </html>
