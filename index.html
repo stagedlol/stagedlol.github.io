@@ -12,6 +12,7 @@
       overflow: hidden;
       font-family: 'Segoe UI', sans-serif;
       background: black;
+      cursor: default;
     }
 
     #bg-video {
@@ -21,14 +22,14 @@
       width: 100vw;
       height: 100vh;
       object-fit: cover;
-      z-index: -2;
+      z-index: -3;
     }
 
     #particles-js {
       position: fixed;
       width: 100%;
       height: 100%;
-      z-index: -1;
+      z-index: -2;
     }
 
     .glass-box {
@@ -50,79 +51,33 @@
       position: relative;
       font-size: 3.5em;
       font-weight: bold;
-      color: white;
       letter-spacing: 4px;
       text-transform: uppercase;
       text-align: center;
-      z-index: 2;
     }
 
-    .glitch-text::before,
-    .glitch-text::after {
-      content: attr(data-text);
+    .glitch-layer {
       position: absolute;
+      top: 0;
       left: 0;
-      width: 100%;
-      overflow: hidden;
       color: white;
+      width: 100%;
+      pointer-events: none;
     }
 
-    .glitch-text::before {
-      animation: glitchTop 2s infinite linear alternate-reverse;
+    .glitch-r {
       color: red;
-      z-index: -1;
+      mix-blend-mode: screen;
     }
 
-    .glitch-text::after {
-      animation: glitchBottom 2s infinite linear alternate-reverse;
+    .glitch-g {
+      color: lime;
+      mix-blend-mode: screen;
+    }
+
+    .glitch-b {
       color: blue;
-      z-index: -2;
-    }
-
-    @keyframes glitchTop {
-      0% {
-        clip: rect(0, 9999px, 0, 0);
-        transform: translate(0, 0);
-      }
-      10% {
-        clip: rect(0, 9999px, 20px, 0);
-        transform: translate(-2px, -2px);
-      }
-      20% {
-        clip: rect(0, 9999px, 10px, 0);
-        transform: translate(2px, -1px);
-      }
-      30% {
-        clip: rect(0, 9999px, 20px, 0);
-        transform: translate(-2px, 1px);
-      }
-      100% {
-        clip: rect(0, 9999px, 0, 0);
-        transform: translate(0, 0);
-      }
-    }
-
-    @keyframes glitchBottom {
-      0% {
-        clip: rect(0, 9999px, 0, 0);
-        transform: translate(0, 0);
-      }
-      10% {
-        clip: rect(20px, 9999px, 40px, 0);
-        transform: translate(2px, 2px);
-      }
-      20% {
-        clip: rect(10px, 9999px, 30px, 0);
-        transform: translate(-2px, 1px);
-      }
-      30% {
-        clip: rect(20px, 9999px, 40px, 0);
-        transform: translate(2px, -1px);
-      }
-      100% {
-        clip: rect(0, 9999px, 0, 0);
-        transform: translate(0, 0);
-      }
+      mix-blend-mode: screen;
     }
 
     #typewriter {
@@ -147,21 +102,26 @@
     Your browser does not support the video tag.
   </video>
 
-  <!-- Snow Particles -->
+  <!-- Particles -->
   <div id="particles-js"></div>
 
-  <!-- Glass Text Box -->
+  <!-- Glass UI -->
   <div class="glass-box">
-    <h1 class="glitch-text" data-text="Staged">Staged</h1>
+    <div class="glitch-text" id="glitch">
+      <span class="glitch-layer glitch-r">Staged</span>
+      <span class="glitch-layer glitch-g">Staged</span>
+      <span class="glitch-layer glitch-b">Staged</span>
+      <span>Staged</span>
+    </div>
     <div id="typewriter"></div>
   </div>
 
-  <!-- Background Music -->
+  <!-- Audio -->
   <audio id="bg-music" autoplay loop>
     <source src="nights.mp3" type="audio/mpeg" />
   </audio>
 
-  <!-- Particles.js Library -->
+  <!-- Particles.js -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
     particlesJS("particles-js", {
@@ -183,7 +143,7 @@
     });
   </script>
 
-  <!-- Typewriter Script -->
+  <!-- Typewriter -->
   <script>
     const messages = [
       "You're staged lol!",
@@ -221,6 +181,25 @@
     }
 
     type();
+  </script>
+
+  <!-- RGB Glitch Follow Mouse -->
+  <script>
+    const glitchR = document.querySelector(".glitch-r");
+    const glitchG = document.querySelector(".glitch-g");
+    const glitchB = document.querySelector(".glitch-b");
+
+    document.addEventListener("mousemove", (e) => {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+
+      const offsetX = (e.clientX - centerX) / 100;
+      const offsetY = (e.clientY - centerY) / 100;
+
+      glitchR.style.transform = `translate(${-offsetX}px, ${-offsetY}px)`;
+      glitchG.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      glitchB.style.transform = `translate(${-offsetY}px, ${offsetX}px)`;
+    });
   </script>
 
 </body>
