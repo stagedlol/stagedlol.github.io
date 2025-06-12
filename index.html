@@ -4,22 +4,124 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>staged.lol</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
+
+  <!-- Styles -->
   <style>
-    body {
+    * {
       margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: black;
-      color: orange;
-      font-family: Arial, sans-serif;
-      font-size: 2rem;
+      padding: 0;
+      box-sizing: border-box;
+      cursor: url('https://cur.cursors-4u.net/games/gam-14/gam1397.cur'), auto;
+    }
+
+    body, html {
+      height: 100%;
+      font-family: 'Minecraft', sans-serif;
+      color: white;
+      overflow: hidden;
+    }
+
+    #bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      min-width: 100%;
+      min-height: 100%;
+      z-index: -2;
+      object-fit: cover;
+      filter: brightness(0.4);
+    }
+
+    #particles-js {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       text-align: center;
+    }
+
+    .name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3rem;
+      text-shadow: 0 0 10px orange;
+    }
+
+    .typewriter {
+      font-size: 1.5rem;
+      margin-top: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 2px solid white;
+      animation: typing 4s steps(30, end), blink .75s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent }
+    }
+
+    audio {
+      display: none;
     }
   </style>
 </head>
 <body>
-  staged.lol is live!
+
+  <!-- Background Video -->
+  <video autoplay loop muted id="bg-video">
+    <source src="https://cdn.pixabay.com/video/2019/09/06/26751-361996491_large.mp4" type="video/mp4">
+    Your browser does not support HTML5 video.
+  </video>
+
+  <!-- Background Music -->
+  <audio autoplay loop>
+    <source src="https://files.catbox.moe/your-song.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+  </audio>
+
+  <!-- Particles -->
+  <div id="particles-js"></div>
+
+  <!-- Center Content -->
+  <div class="content">
+    <div class="name">staged.lol</div>
+    <div class="typewriter">Welcome to my domain...</div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 100 },
+        size: { value: 3 },
+        color: { value: "#FFA500" },
+        move: { speed: 1 },
+        opacity: { value: 0.7 },
+        line_linked: { enable: false }
+      },
+      interactivity: {
+        events: { onhover: { enable: true, mode: "repulse" } },
+        modes: { repulse: { distance: 50 } }
+      }
+    });
+  </script>
 </body>
 </html>
