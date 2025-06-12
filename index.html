@@ -1,7 +1,3 @@
-<video id="bg-video" autoplay loop muted playsinline>
-  <source src="https://r2.guns.lol/f3c69b42-b442-42c2-abab-3ba82161eb27.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,8 +10,8 @@
       padding: 0;
       height: 100%;
       overflow: hidden;
-      font-family: 'Segoe UI', sans-serif;
       background: black;
+      font-family: 'Segoe UI', sans-serif;
       cursor: default;
     }
 
@@ -29,11 +25,12 @@
       z-index: -3;
     }
 
-    #particles-js {
+    #canvas {
       position: fixed;
-      width: 100%;
-      height: 100%;
+      top: 0;
+      left: 0;
       z-index: -2;
+      display: block;
     }
 
     .glass-box {
@@ -69,20 +66,9 @@
       pointer-events: none;
     }
 
-    .glitch-r {
-      color: red;
-      mix-blend-mode: screen;
-    }
-
-    .glitch-g {
-      color: lime;
-      mix-blend-mode: screen;
-    }
-
-    .glitch-b {
-      color: blue;
-      mix-blend-mode: screen;
-    }
+    .glitch-r { color: red; mix-blend-mode: screen; }
+    .glitch-g { color: lime; mix-blend-mode: screen; }
+    .glitch-b { color: blue; mix-blend-mode: screen; }
 
     #typewriter {
       font-size: 1.4em;
@@ -122,12 +108,12 @@
 
   <!-- Background Video -->
   <video autoplay loop muted playsinline id="bg-video">
-    <source src="background.mp4" type="video/mp4">
+    <source src="https://r2.guns.lol/f3c69b42-b442-42c2-abab-3ba82161eb27.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
-  <!-- Particles -->
-  <div id="particles-js"></div>
+  <!-- Canvas Particles -->
+  <canvas id="canvas"></canvas>
 
   <!-- Glass UI -->
   <div class="glass-box">
@@ -156,34 +142,12 @@
     </div>
   </div>
 
-  <!-- Audio -->
+  <!-- Background Music -->
   <audio id="bg-music" autoplay loop>
     <source src="nights.mp3" type="audio/mpeg" />
   </audio>
 
-  <!-- Particles.js -->
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-  <script>
-    particlesJS("particles-js", {
-      particles: {
-        number: { value: 150 },
-        size: { value: 3 },
-        color: { value: "#ffffff" },
-        opacity: { value: 0.7 },
-        move: { enable: true, speed: 1.5 },
-        line_linked: { enable: false }
-      },
-      interactivity: {
-        detect_on: "canvas",
-        events: {
-          onhover: { enable: true, mode: "repulse" },
-          onclick: { enable: false }
-        }
-      }
-    });
-  </script>
-
-  <!-- Typewriter -->
+  <!-- Typewriter Effect -->
   <script>
     const messages = [
       "You're staged lol!",
@@ -223,7 +187,7 @@
     type();
   </script>
 
-  <!-- RGB Glitch Follow Mouse -->
+  <!-- Glitch RGB Follow Mouse -->
   <script>
     const glitchR = document.querySelector(".glitch-r");
     const glitchG = document.querySelector(".glitch-g");
@@ -232,35 +196,16 @@
     document.addEventListener("mousemove", (e) => {
       const centerX = window.innerWidth / 2;
       const centerY = window.innerHeight / 2;
-
       const offsetX = (e.clientX - centerX) / 100;
       const offsetY = (e.clientY - centerY) / 100;
 
-      glitchR.style.transform = translate(${-offsetX}px, ${-offsetY}px);
-      glitchG.style.transform = translate(${offsetX}px, ${offsetY}px);
-      glitchB.style.transform = translate(${-offsetY}px, ${offsetX}px);
+      glitchR.style.transform = `translate(${-offsetX}px, ${-offsetY}px)`;
+      glitchG.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      glitchB.style.transform = `translate(${-offsetY}px, ${offsetX}px)`;
     });
   </script>
 
-</body>
-</html>
-<!DOCTYPE html>
-<html>
-<head>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background: black;
-    }
-    canvas {
-      display: block;
-    }
-  </style>
-</head>
-<body>
-  <canvas id="canvas"></canvas>
+  <!-- White Particles Repelled by Mouse -->
   <script>
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
@@ -333,7 +278,6 @@
       canvas.height = window.innerHeight;
     });
   </script>
+
 </body>
 </html>
-
-
