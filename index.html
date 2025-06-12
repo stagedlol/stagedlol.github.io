@@ -65,9 +65,20 @@
       pointer-events: none;
     }
 
-    .glitch-r { color: red; mix-blend-mode: screen; }
-    .glitch-g { color: lime; mix-blend-mode: screen; }
-    .glitch-b { color: blue; mix-blend-mode: screen; }
+    .glitch-r {
+      color: red;
+      mix-blend-mode: screen;
+    }
+
+    .glitch-g {
+      color: lime;
+      mix-blend-mode: screen;
+    }
+
+    .glitch-b {
+      color: blue;
+      mix-blend-mode: screen;
+    }
 
     #typewriter {
       font-size: 1.4em;
@@ -82,19 +93,20 @@
       margin-top: 25px;
       display: flex;
       justify-content: center;
-      gap: 25px;
+      gap: 30px;
     }
 
-    .social-icons img {
+    .social-icons a img {
       width: 50px;
       height: 50px;
-      filter: drop-shadow(0 0 5px white) drop-shadow(0 0 15px white);
-      transition: transform 0.3s ease;
+      filter: drop-shadow(0 0 10px white);
+      transition: transform 0.3s ease, filter 0.3s ease;
       border-radius: 12px;
     }
 
-    .social-icons img:hover {
+    .social-icons a:hover img {
       transform: scale(1.1);
+      filter: drop-shadow(0 0 20px white);
     }
 
     audio {
@@ -122,106 +134,16 @@
       <span>Staged</span>
     </div>
     <div id="typewriter"></div>
-
-    <!-- White 3D Social Logos -->
+    
+    <!-- Custom Social Logos -->
     <div class="social-icons">
-      <a href="https://www.roblox.com" target="_blank">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Roblox_icon_-_white.svg/512px-Roblox_icon_-_white.svg.png" alt="Roblox">
-      </a>
       <a href="https://www.tiktok.com" target="_blank">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/TikTok_icon_white.svg/512px-TikTok_icon_white.svg.png" alt="TikTok">
+        <img src="tiktok.webp" alt="TikTok">
       </a>
       <a href="https://www.youtube.com" target="_blank">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/YouTube_social_white_squircle_%282017%29.svg/512px-YouTube_social_white_squircle_%282017%29.svg.png" alt="YouTube">
+        <img src="youtube.png" alt="YouTube">
       </a>
-    </div>
-  </div>
-
-  <!-- Audio -->
-  <audio id="bg-music" autoplay loop>
-    <source src="nights.mp3" type="audio/mpeg" />
-  </audio>
-
-  <!-- Particles.js -->
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-  <script>
-    particlesJS("particles-js", {
-      particles: {
-        number: { value: 150 },
-        size: { value: 3 },
-        color: { value: "#ffffff" },
-        opacity: { value: 0.7 },
-        move: { enable: true, speed: 1.5 },
-        line_linked: { enable: false }
-      },
-      interactivity: {
-        detect_on: "canvas",
-        events: {
-          onhover: { enable: true, mode: "repulse" },
-          onclick: { enable: false }
-        }
-      }
-    });
-  </script>
-
-  <!-- Typewriter -->
-  <script>
-    const messages = [
-      "You're staged lol!",
-      "Fuck you S0cial",
-      "all my links below",
-      "follow the snow..."
-    ];
-
-    let i = 0, j = 0, isDeleting = false;
-    const target = document.getElementById("typewriter");
-    const speed = 60;
-    const pause = 1400;
-
-    function type() {
-      let txt = messages[i].substring(0, j);
-      target.textContent = txt;
-
-      if (!isDeleting) {
-        if (j < messages[i].length) {
-          j++;
-        } else {
-          isDeleting = true;
-          setTimeout(type, pause);
-          return;
-        }
-      } else {
-        if (j > 0) {
-          j--;
-        } else {
-          isDeleting = false;
-          i = (i + 1) % messages.length;
-        }
-      }
-      setTimeout(type, isDeleting ? speed / 2 : speed);
-    }
-
-    type();
-  </script>
-
-  <!-- RGB Glitch Follow Mouse -->
-  <script>
-    const glitchR = document.querySelector(".glitch-r");
-    const glitchG = document.querySelector(".glitch-g");
-    const glitchB = document.querySelector(".glitch-b");
-
-    document.addEventListener("mousemove", (e) => {
-      const centerX = window.innerWidth / 2;
-      const centerY = window.innerHeight / 2;
-
-      const offsetX = (e.clientX - centerX) / 100;
-      const offsetY = (e.clientY - centerY) / 100;
-
-      glitchR.style.transform = `translate(${-offsetX}px, ${-offsetY}px)`;
-      glitchG.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-      glitchB.style.transform = `translate(${-offsetY}px, ${offsetX}px)`;
-    });
-  </script>
-
-</body>
-</html>
+      <a href="https://www.roblox.com" target="_blank">
+        <img src="roblox.webp" alt="Roblox">
+      </a>
+      <a href
