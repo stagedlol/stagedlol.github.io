@@ -7,6 +7,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Staged was here!</title>
   <style>
+    .social-icons-inside {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+}
+
+.social-icons-inside a img {
+  width: 45px;
+  height: 45px;
+  filter: drop-shadow(0 0 8px white);
+  transition: transform 0.3s ease, filter 0.3s ease;
+  border-radius: 14px;
+}
+
+.social-icons-inside a:hover img {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 18px white);
+}
+
     html, body {
       margin: 0;
       padding: 0;
@@ -91,6 +111,23 @@
       border-right: 2px solid rgba(255,255,255,0.75);
     }
 
+    <!-- Social Icons Inside the Glass Box -->
+<div class="social-icons-inside">
+  <a href="https://www.tiktok.com" target="_blank">
+    <img src="tiktok.webp" alt="TikTok" />
+  </a>
+  <a href="https://www.youtube.com" target="_blank">
+    <img src="youtube.png" alt="YouTube" />
+  </a>
+  <a href="https://www.roblox.com" target="_blank">
+    <img src="roblox.webp" alt="Roblox" />
+  </a>
+  <a href="https://www.instagram.com" target="_blank">
+    <img src="insta.webp" alt="Instagram" />
+  </a>
+</div>
+
+
     audio {
       display: none;
     }
@@ -108,37 +145,6 @@
   <div id="particles-js"></div>
 
   <!-- Glass UI -->
-  <!-- Place this at the very end of your HTML file -->
-<div class="social-icons" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 3;">
-  <a href="https://www.tiktok.com" target="_blank">
-    <img src="tiktok.webp" alt="TikTok" />
-  </a>
-  <a href="https://www.youtube.com" target="_blank">
-    <img src="youtube.png" alt="YouTube" />
-  </a>
-  <a href="https://www.roblox.com" target="_blank">
-    <img src="roblox.webp" alt="Roblox" />
-  </a>
-  <a href="https://www.instagram.com" target="_blank">
-    <img src="insta.webp" alt="Instagram" />
-  </a>
-</div>
-
-<style>
-  .social-icons a img {
-    width: 55px;
-    height: 55px;
-    filter: drop-shadow(0 0 12px white);
-    transition: transform 0.3s ease, filter 0.3s ease;
-    border-radius: 14px;
-  }
-
-  .social-icons a:hover img {
-    transform: scale(1.1);
-    filter: drop-shadow(0 0 25px white);
-  }
-</style>
-
   <div class="glass-box">
     <div class="glitch-text" id="glitch">
       <span class="glitch-layer glitch-r">Staged</span>
@@ -183,6 +189,7 @@
       "Fuck you S0cial",
       "all my links below",
       "follow the snow..."
+      
     ];
 
     let i = 0, j = 0, isDeleting = false;
@@ -342,3 +349,5 @@
   </script>
 </body>
 </html>
+
+
