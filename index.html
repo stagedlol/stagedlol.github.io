@@ -21,14 +21,14 @@
       width: 100vw;
       height: 100vh;
       object-fit: cover;
-      z-index: -1;
+      z-index: -2;
     }
 
     #particles-js {
       position: fixed;
       width: 100%;
       height: 100%;
-      z-index: 0;
+      z-index: -1;
     }
 
     .glass-box {
@@ -46,8 +46,25 @@
       z-index: 2;
     }
 
+    .glitch-text {
+      position: relative;
+      font-size: 3.5em;
+      font-weight: bold;
+      color: white;
+      text-align: center;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      text-shadow:
+        0 0 10px red,
+        0 0 20px green,
+        0 0 30px blue;
+      transition: text-shadow 0.1s ease;
+      z-index: 2;
+    }
+
     #typewriter {
       font-size: 1.4em;
+      margin-top: 20px;
       text-shadow: 0 0 8px white, 0 0 20px #00f0ff;
       white-space: nowrap;
       overflow: hidden;
@@ -61,26 +78,27 @@
 </head>
 <body>
 
-  <!-- ✅ Background Video -->
+  <!-- Background Video -->
   <video autoplay loop muted playsinline id="bg-video">
-    <source src="background.mp4" type="video/mp4">
+    <source src="vid.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
-  <!-- ✅ Snow Particles -->
+  <!-- Snow Particles -->
   <div id="particles-js"></div>
 
-  <!-- ✅ Frosted Glass Typewriter Text Box -->
+  <!-- Glass Text Box -->
   <div class="glass-box">
+    <h1 class="glitch-text" data-text="Staged">Staged</h1>
     <div id="typewriter"></div>
   </div>
 
-  <!-- ✅ Background Music -->
+  <!-- Background Music -->
   <audio id="bg-music" autoplay loop>
     <source src="nights.mp3" type="audio/mpeg" />
   </audio>
 
-  <!-- ✅ Particle JS Library -->
+  <!-- Particle JS Library -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
     particlesJS("particles-js", {
@@ -102,12 +120,12 @@
     });
   </script>
 
-  <!-- ✅ Typewriter Script -->
+  <!-- Typewriter Script -->
   <script>
     const messages = [
       "You're staged lol!",
       "Fuck you S0cial",
-      "all my links bellow",
+      "all my links below",
       "follow the snow..."
     ];
 
@@ -142,10 +160,21 @@
     type();
   </script>
 
-  <!-- ✅ Enable Music After First Click (browser autoplay block workaround) -->
+  <!-- RGB Glow Follows Opposite of Mouse -->
   <script>
-    const audio = document.getElementById("bg-music");
-    window.addEventListener('click', () => audio.play());
+    const text = document.querySelector('.glitch-text');
+
+    document.addEventListener('mousemove', (e) => {
+      const { innerWidth, innerHeight } = window;
+      const x = (e.clientX / innerWidth - 0.5) * -100;
+      const y = (e.clientY / innerHeight - 0.5) * -100;
+
+      text.style.textShadow = `
+        ${x}px ${y}px 5px red,
+        ${-x}px ${-y}px 10px green,
+        ${x}px ${-y}px 15px blue
+      `;
+    });
   </script>
 
 </body>
