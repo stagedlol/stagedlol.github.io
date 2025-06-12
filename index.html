@@ -9,12 +9,12 @@
   <style>
     @font-face {
       font-family: 'MostWanted';
-      src: url('mostwanted(1).ttf') format('truetype');
+      src: url('assets/mostwanted(1).ttf') format('truetype');
     }
 
     @font-face {
       font-family: 'CodeFont';
-      src: url('Code.ttf') format('truetype');
+      src: url('assets/Code.ttf') format('truetype');
     }
 
     html, body {
@@ -77,11 +77,16 @@
 
     .glitch-text {
       position: relative;
-      font-size: 3.5em;
+      font-size: 3.8em;
       font-weight: bold;
       letter-spacing: 4px;
       text-transform: uppercase;
       font-family: 'MostWanted', sans-serif;
+      transition: color 0.3s ease;
+    }
+
+    .glitch-text:hover {
+      color: black;
     }
 
     .glitch-layer {
@@ -148,16 +153,16 @@
     </div>
     <div id="typewriter"></div>
     <div class="social-icons-inside">
-      <a href="https://www.tiktok.com" target="_blank"><img src="tiktok.webp" alt="TikTok" /></a>
-      <a href="https://www.youtube.com" target="_blank"><img src="youtube.png" alt="YouTube" /></a>
-      <a href="https://www.roblox.com/users/3675540/profile" target="_blank"><img src="roblox.webp" alt="Roblox" /></a>
-      <a href="https://www.instagram.com" target="_blank"><img src="insta.webp" alt="Instagram" /></a>
+      <a href="https://www.tiktok.com" target="_blank"><img src="assets/tiktok.webp" alt="TikTok" /></a>
+      <a href="https://www.youtube.com" target="_blank"><img src="assets/youtube.png" alt="YouTube" /></a>
+      <a href="https://www.roblox.com/users/3675540/profile" target="_blank"><img src="assets/roblox.webp" alt="Roblox" /></a>
+      <a href="https://www.instagram.com" target="_blank"><img src="assets/insta.webp" alt="Instagram" /></a>
     </div>
   </div>
 
   <!-- Background Music -->
   <audio id="bg-music" autoplay loop>
-    <source src="nights.mp3" type="audio/mpeg">
+    <source src="assets/nights.mp3" type="audio/mpeg">
   </audio>
 
   <script>
@@ -272,10 +277,10 @@
 
       if (!isDeleting && j < current.length) {
         j++;
-        setTimeout(type, 100);
+        setTimeout(type, 120); // slower typing
       } else if (isDeleting && j > 0) {
         j--;
-        setTimeout(type, 80);
+        setTimeout(type, 100); // slower deleting
       } else {
         if (!isDeleting) {
           isDeleting = true;
