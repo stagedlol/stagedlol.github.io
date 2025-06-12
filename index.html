@@ -45,19 +45,23 @@
     }
 
     .card {
-      position: absolute;
+      position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       width: 90%;
       max-width: 500px;
-      padding: 40px;
+      padding: 2rem;
       border-radius: 30px;
       background: rgba(255, 255, 255, 0.05);
       backdrop-filter: blur(14px);
       text-align: center;
       z-index: 2;
       box-shadow: 0 0 25px rgba(0, 255, 255, 0.2);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
 
     .name {
@@ -87,29 +91,8 @@
   <!-- Background Video -->
   <video autoplay loop muted id="bg-video">
     <source src="vid.mp4" type="video/mp4">
+    Your browser does not support the video tag.
   </video>
-
-  <!-- Background Music -->
-  <audio id="bg-music" autoplay loop>
-    <source src="nights.mp3" type="audio/mp3">
-    Your browser does not support the audio element.
-  </audio>
-
-  <!-- Fallback: play music on first user interaction -->
-  <script>
-    const music = document.getElementById('bg-music');
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        music.play().catch(() => {
-          const unlockAudio = () => {
-            music.play();
-            document.removeEventListener('click', unlockAudio);
-          };
-          document.addEventListener('click', unlockAudio);
-        });
-      }, 100);
-    });
-  </script>
 
   <!-- Particle Background -->
   <div id="particles-js"></div>
@@ -120,10 +103,32 @@
     <div class="typewriter" id="typewriter"></div>
   </div>
 
-  <!-- Scripts -->
+  <!-- Background Music -->
+  <audio id="bg-music" autoplay loop>
+    <source src="nights.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+  </audio>
+
+  <!-- JS to Force Music to Play -->
+  <script>
+    const music = document.getElementById('bg-music');
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        music.play().catch(() => {
+          const unlockAudio = () => {
+            music.play().catch(err => console.error("Audio play failed:", err));
+            document.removeEventListener('click', unlockAudio);
+          };
+          document.addEventListener('click', unlockAudio);
+        });
+      }, 500);
+    });
+  </script>
+
+  <!-- Particle.js Script -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
-    // Particle effect: snow that follows the mouse
     particlesJS("particles-js", {
       particles: {
         number: { value: 180 },
@@ -152,8 +157,10 @@
       },
       retina_detect: true
     });
+  </script>
 
-    // Typewriter typing + deleting
+  <!-- Typewriter JS -->
+  <script>
     const messages = [
       "Welcome to my world...",
       "Creating cool digital things.",
