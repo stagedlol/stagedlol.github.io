@@ -15,10 +15,10 @@
       cursor: default;
     }
 
-    #particles-js {
+    canvas {
       position: fixed;
-      width: 100%;
-      height: 100%;
+      top: 0;
+      left: 0;
       z-index: -2;
     }
 
@@ -55,20 +55,9 @@
       pointer-events: none;
     }
 
-    .glitch-r {
-      color: red;
-      mix-blend-mode: screen;
-    }
-
-    .glitch-g {
-      color: lime;
-      mix-blend-mode: screen;
-    }
-
-    .glitch-b {
-      color: blue;
-      mix-blend-mode: screen;
-    }
+    .glitch-r { color: red; mix-blend-mode: screen; }
+    .glitch-g { color: lime; mix-blend-mode: screen; }
+    .glitch-b { color: blue; mix-blend-mode: screen; }
 
     #typewriter {
       font-size: 1.4em;
@@ -86,10 +75,8 @@
 </head>
 <body>
 
-  <!-- Removed Background Video -->
-
-  <!-- Particles -->
-  <div id="particles-js"></div>
+  <!-- Canvas Particles -->
+  <canvas id="canvas"></canvas>
 
   <!-- Glass UI -->
   <div class="glass-box">
@@ -107,25 +94,22 @@
     <source src="nights.mp3" type="audio/mpeg" />
   </audio>
 
-  <!-- Particles.js -->
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <!-- RGB Mouse Follow -->
   <script>
-    particlesJS("particles-js", {
-      particles: {
-        number: { value: 150 },
-        size: { value: 3 },
-        color: { value: "#ffffff" },
-        opacity: { value: 0.7 },
-        move: { enable: true, speed: 1.5 },
-        line_linked: { enable: false }
-      },
-      interactivity: {
-        detect_on: "canvas",
-        events: {
-          onhover: { enable: true, mode: "repulse" },
-          onclick: { enable: false }
-        }
-      }
+    const glitchR = document.querySelector(".glitch-r");
+    const glitchG = document.querySelector(".glitch-g");
+    const glitchB = document.querySelector(".glitch-b");
+
+    document.addEventListener("mousemove", (e) => {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+
+      const offsetX = (e.clientX - centerX) / 100;
+      const offsetY = (e.clientY - centerY) / 100;
+
+      glitchR.style.transform = `translate(${-offsetX}px, ${-offsetY}px)`;
+      glitchG.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      glitchB.style.transform = `translate(${-offsetY}px, ${offsetX}px)`;
     });
   </script>
 
@@ -169,22 +153,74 @@
     type();
   </script>
 
-  <!-- RGB Glitch Follow Mouse -->
+  <!-- Custom RGB Particles that Repel from Mouse -->
   <script>
-    const glitchR = document.querySelector(".glitch-r");
-    const glitchG = document.querySelector(".glitch-g");
-    const glitchB = document.querySelector(".glitch-b");
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-    document.addEventListener("mousemove", (e) => {
-      const centerX = window.innerWidth / 2;
-      const centerY = window.innerHeight / 2;
+    const mouse = { x: null, y: null };
+    window.addEventListener("mousemove", e => {
+      mouse.x = e.x;
+      mouse.y = e.y;
+    });
 
-      const offsetX = (e.clientX - centerX) / 100;
-      const offsetY = (e.clientY - centerY) / 100;
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 1;
+        this.baseX = this.x;
+        this.baseY = this.y;
+        this.density = Math.random() * 20 + 5;
+        this.color = `rgb(${Math.random()*255}, ${Math.random()*255}, ${Math.random()*255})`;
+      }
 
-      glitchR.style.transform = `translate(${-offsetX}px, ${-offsetY}px)`;
-      glitchG.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-      glitchB.style.transform = `translate(${-offsetY}px, ${offsetX}px)`;
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      update() {
+        const dx = mouse.x - this.x;
+        const dy = mouse.y - this.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const maxDist = 100;
+
+        if (dist < maxDist) {
+          const force = (maxDist - dist) / maxDist;
+          const dirX = dx / dist;
+          const dirY = dy / dist;
+          this.x -= dirX * force * this.density;
+          this.y -= dirY * force * this.density;
+        } else {
+          this.x += (this.baseX - this.x) / 10;
+          this.y += (this.baseY - this.y) / 10;
+        }
+
+        this.draw();
+      }
+    }
+
+    const particles = [];
+    for (let i = 0; i < 200; i++) {
+      particles.push(new Particle());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let p of particles) p.update();
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     });
   </script>
 
