@@ -51,15 +51,78 @@
       font-size: 3.5em;
       font-weight: bold;
       color: white;
-      text-align: center;
       letter-spacing: 4px;
       text-transform: uppercase;
-      text-shadow:
-        0 0 10px red,
-        0 0 20px green,
-        0 0 30px blue;
-      transition: text-shadow 0.1s ease;
+      text-align: center;
       z-index: 2;
+    }
+
+    .glitch-text::before,
+    .glitch-text::after {
+      content: attr(data-text);
+      position: absolute;
+      left: 0;
+      width: 100%;
+      overflow: hidden;
+      color: white;
+    }
+
+    .glitch-text::before {
+      animation: glitchTop 2s infinite linear alternate-reverse;
+      color: red;
+      z-index: -1;
+    }
+
+    .glitch-text::after {
+      animation: glitchBottom 2s infinite linear alternate-reverse;
+      color: blue;
+      z-index: -2;
+    }
+
+    @keyframes glitchTop {
+      0% {
+        clip: rect(0, 9999px, 0, 0);
+        transform: translate(0, 0);
+      }
+      10% {
+        clip: rect(0, 9999px, 20px, 0);
+        transform: translate(-2px, -2px);
+      }
+      20% {
+        clip: rect(0, 9999px, 10px, 0);
+        transform: translate(2px, -1px);
+      }
+      30% {
+        clip: rect(0, 9999px, 20px, 0);
+        transform: translate(-2px, 1px);
+      }
+      100% {
+        clip: rect(0, 9999px, 0, 0);
+        transform: translate(0, 0);
+      }
+    }
+
+    @keyframes glitchBottom {
+      0% {
+        clip: rect(0, 9999px, 0, 0);
+        transform: translate(0, 0);
+      }
+      10% {
+        clip: rect(20px, 9999px, 40px, 0);
+        transform: translate(2px, 2px);
+      }
+      20% {
+        clip: rect(10px, 9999px, 30px, 0);
+        transform: translate(-2px, 1px);
+      }
+      30% {
+        clip: rect(20px, 9999px, 40px, 0);
+        transform: translate(2px, -1px);
+      }
+      100% {
+        clip: rect(0, 9999px, 0, 0);
+        transform: translate(0, 0);
+      }
     }
 
     #typewriter {
@@ -80,7 +143,7 @@
 
   <!-- Background Video -->
   <video autoplay loop muted playsinline id="bg-video">
-    <source src="vid.mp4" type="video/mp4">
+    <source src="background.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
@@ -98,7 +161,7 @@
     <source src="nights.mp3" type="audio/mpeg" />
   </audio>
 
-  <!-- Particle JS Library -->
+  <!-- Particles.js Library -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
     particlesJS("particles-js", {
@@ -158,23 +221,6 @@
     }
 
     type();
-  </script>
-
-  <!-- RGB Glow Follows Opposite of Mouse -->
-  <script>
-    const text = document.querySelector('.glitch-text');
-
-    document.addEventListener('mousemove', (e) => {
-      const { innerWidth, innerHeight } = window;
-      const x = (e.clientX / innerWidth - 0.5) * -100;
-      const y = (e.clientY / innerHeight - 0.5) * -100;
-
-      text.style.textShadow = `
-        ${x}px ${y}px 5px red,
-        ${-x}px ${-y}px 10px green,
-        ${x}px ${-y}px 15px blue
-      `;
-    });
   </script>
 
 </body>
