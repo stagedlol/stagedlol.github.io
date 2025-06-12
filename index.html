@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Staged was here!</title>
 
-  <!-- Custom Fonts -->
+  <!-- Load custom fonts -->
   <style>
     @font-face {
       font-family: 'MostWanted';
-      src: url('mostwanted(1).ttf') format('truetype');
+      src: url('MostWanted(1).ttf') format('truetype');
     }
 
     @font-face {
@@ -23,7 +23,7 @@
       height: 100%;
       background: transparent;
       overflow: hidden;
-      font-family: 'CodeFont', monospace;
+      font-family: 'CodeFont', sans-serif;
     }
 
     #bg-video {
@@ -59,15 +59,24 @@
       color: white;
       text-align: center;
       z-index: 2;
+      min-width: 400px;
+      max-width: 400px;
+      min-height: 300px;
     }
 
     .glitch-text {
       position: relative;
-      font-size: 3.5em;
+      font-size: 4.5em;
       font-weight: bold;
       letter-spacing: 4px;
       text-transform: uppercase;
       font-family: 'MostWanted', sans-serif;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .glitch-text:hover {
+      color: black;
     }
 
     .glitch-layer {
@@ -90,7 +99,6 @@
       white-space: nowrap;
       overflow: hidden;
       border-right: 2px solid rgba(255,255,255,0.75);
-      font-family: 'CodeFont', monospace;
     }
 
     .social-icons-inside {
@@ -121,6 +129,11 @@
     <source src="https://r2.guns.lol/f3c69b42-b442-42c2-abab-3ba82161eb27.mp4" type="video/mp4">
   </video>
 
+  <!-- Background audio -->
+  <audio autoplay loop>
+    <source src="nights.mp3" type="audio/mpeg">
+  </audio>
+
   <!-- Snow canvas -->
   <canvas id="snow-canvas"></canvas>
 
@@ -140,25 +153,6 @@
       <a href="#"><img src="insta.webp" alt="Instagram" /></a>
     </div>
   </div>
-
-  <!-- Background Music -->
-  <audio id="bg-music" autoplay loop>
-    <source src="nights.mp3" type="audio/mpeg">
-  </audio>
-
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      const audio = document.getElementById("bg-music");
-      const playPromise = audio.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          document.body.addEventListener('click', () => {
-            audio.play();
-          }, { once: true });
-        });
-      }
-    });
-  </script>
 
   <!-- Snow particles -->
   <script>
@@ -264,7 +258,7 @@
         if (!isDeleting) i = (i + 1) % messages.length;
       }
 
-      const speed = isDeleting ? 100 : 80; // slower deletion
+      const speed = isDeleting ? 160 : 60;
       setTimeout(type, speed);
     }
     type();
