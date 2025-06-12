@@ -2,83 +2,56 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>staged.lol</title>
-
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
-  <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
-
-  <!-- Styles -->
   <style>
-    * {
+    html, body {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-      cursor: url('https://cur.cursors-4u.net/games/gam-14/gam1397.cur'), auto;
-    }
-
-    html, body {
       height: 100%;
       overflow: hidden;
-      font-family: 'Minecraft', sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       background: black;
-      color: white;
     }
 
-    video#bg-video {
+    #bg-video {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
       object-fit: cover;
-      z-index: -3;
-      filter: brightness(0.2);
+      z-index: -1;
     }
 
     #particles-js {
       position: fixed;
       width: 100%;
       height: 100%;
-      z-index: -2;
+      z-index: 0;
     }
 
-    .card {
-      position: fixed;
+    .glass-box {
+      position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 90%;
-      max-width: 500px;
-      padding: 2rem;
-      border-radius: 30px;
       background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(14px);
+      backdrop-filter: blur(12px);
+      border-radius: 30px;
+      padding: 30px 40px;
+      box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+      color: white;
       text-align: center;
       z-index: 2;
-      box-shadow: 0 0 25px rgba(0, 255, 255, 0.2);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
     }
 
-    .name {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 2.5rem;
-      color: #fff;
-      text-shadow: 0 0 15px cyan;
-    }
-
-    .typewriter {
-      font-size: 1.2rem;
-      margin-top: 15px;
-      height: 40px;
+    #typewriter {
+      font-size: 1.4em;
+      text-shadow: 0 0 8px white, 0 0 20px #00f0ff;
       white-space: nowrap;
       overflow: hidden;
-      border-right: 2px solid #fff;
-      text-shadow: 0 0 8px cyan;
+      border-right: 2px solid rgba(255,255,255,0.75);
     }
 
     audio {
@@ -89,83 +62,53 @@
 <body>
 
   <!-- Background Video -->
-  <video autoplay loop muted id="bg-video">
+  <video autoplay loop muted playsinline id="bg-video">
     <source src="vid.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
-  <!-- Particle Background -->
+  <!-- Snow Particles -->
   <div id="particles-js"></div>
 
-  <!-- Frosted Glass Profile Card -->
-  <div class="card">
-    <div class="name">staged.lol</div>
-    <div class="typewriter" id="typewriter"></div>
+  <!-- Glass Text Box -->
+  <div class="glass-box">
+    <div id="typewriter"></div>
   </div>
 
   <!-- Background Music -->
   <audio id="bg-music" autoplay loop>
-    <source src="nights.mp3" type="audio/mp3">
-    Your browser does not support the audio element.
+    <source src="nights.mp3" type="audio/mpeg" />
   </audio>
 
-  <!-- JS to Force Music to Play -->
-  <script>
-    const music = document.getElementById('bg-music');
-
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        music.play().catch(() => {
-          const unlockAudio = () => {
-            music.play().catch(err => console.error("Audio play failed:", err));
-            document.removeEventListener('click', unlockAudio);
-          };
-          document.addEventListener('click', unlockAudio);
-        });
-      }, 500);
-    });
-  </script>
-
-  <!-- Particle.js Script -->
+  <!-- Particle JS Library -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
     particlesJS("particles-js", {
       particles: {
-        number: { value: 180 },
-        size: { value: 2.5 },
+        number: { value: 150 },
+        size: { value: 3 },
         color: { value: "#ffffff" },
-        opacity: { value: 0.8 },
-        move: {
-          enable: true,
-          speed: 1.5,
-          direction: "bottom",
-          out_mode: "out"
-        },
+        opacity: { value: 0.7 },
+        move: { enable: true, speed: 1.5 },
         line_linked: { enable: false }
       },
       interactivity: {
         detect_on: "canvas",
         events: {
-          onhover: { enable: true, mode: "grab" },
-          onclick: { enable: true, mode: "repulse" },
-          resize: true
-        },
-        modes: {
-          grab: { distance: 120, line_linked: { opacity: 0.5 } },
-          repulse: { distance: 100 }
+          onhover: { enable: true, mode: "repulse" },
+          onclick: { enable: false }
         }
-      },
-      retina_detect: true
+      }
     });
   </script>
 
-  <!-- Typewriter JS -->
+  <!-- Typewriter Script -->
   <script>
     const messages = [
-      "Welcome to my world...",
-      "Creating cool digital things.",
-      "Snow falls. Music flows.",
-      "You found the right place."
+      "hi, i'm staged",
+      "discord.gg/yourserver",
+      "guns.lol/staged",
+      "follow the snow..."
     ];
 
     let i = 0, j = 0, isDeleting = false;
@@ -198,5 +141,12 @@
 
     type();
   </script>
+
+  <!-- Enable Music After First User Interaction -->
+  <script>
+    const audio = document.getElementById("bg-music");
+    window.addEventListener('click', () => audio.play());
+  </script>
+
 </body>
 </html>
