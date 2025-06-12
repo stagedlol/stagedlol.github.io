@@ -1,6 +1,4 @@
 <!DOCTYPE html>
-<html>
-  <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -91,6 +89,26 @@
       border-right: 2px solid rgba(255,255,255,0.75);
     }
 
+    .social-icons-inside {
+      margin-top: 25px;
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+    }
+
+    .social-icons-inside a img {
+      width: 45px;
+      height: 45px;
+      filter: drop-shadow(0 0 8px white);
+      transition: transform 0.3s ease, filter 0.3s ease;
+      border-radius: 14px;
+    }
+
+    .social-icons-inside a:hover img {
+      transform: scale(1.1);
+      filter: drop-shadow(0 0 18px white);
+    }
+
     audio {
       display: none;
     }
@@ -116,6 +134,22 @@
       <span>Staged</span>
     </div>
     <div id="typewriter"></div>
+
+    <!-- Social Icons Inside Glass Box -->
+    <div class="social-icons-inside">
+      <a href="https://www.tiktok.com" target="_blank">
+        <img src="tiktok.webp" alt="TikTok" />
+      </a>
+      <a href="https://www.youtube.com" target="_blank">
+        <img src="youtube.png" alt="YouTube" />
+      </a>
+      <a href="https://www.roblox.com" target="_blank">
+        <img src="roblox.webp" alt="Roblox" />
+      </a>
+      <a href="https://www.instagram.com" target="_blank">
+        <img src="insta.webp" alt="Instagram" />
+      </a>
+    </div>
   </div>
 
   <!-- Audio -->
@@ -206,21 +240,7 @@
 
 </body>
 </html>
-
-<head>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background: black;
-    }
-    canvas {
-      display: block;
-    }
-  </style>
 <!DOCTYPE html>
-<html<!DOCTYPE html>
 <html>
 <head>
   <style>
