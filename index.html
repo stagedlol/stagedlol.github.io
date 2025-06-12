@@ -4,14 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Staged was here!</title>
+
+  <!-- Custom Fonts -->
   <style>
+    @font-face {
+      font-family: 'MostWanted';
+      src: url('mostwanted(1).ttf') format('truetype');
+    }
+
+    @font-face {
+      font-family: 'CodeFont';
+      src: url('Code.ttf') format('truetype');
+    }
+
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
       background: transparent;
       overflow: hidden;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'CodeFont', monospace;
     }
 
     #bg-video {
@@ -55,6 +67,7 @@
       font-weight: bold;
       letter-spacing: 4px;
       text-transform: uppercase;
+      font-family: 'MostWanted', sans-serif;
     }
 
     .glitch-layer {
@@ -77,6 +90,7 @@
       white-space: nowrap;
       overflow: hidden;
       border-right: 2px solid rgba(255,255,255,0.75);
+      font-family: 'CodeFont', monospace;
     }
 
     .social-icons-inside {
@@ -133,7 +147,6 @@
   </audio>
 
   <script>
-    // Attempt to autoplay music on load
     window.addEventListener('DOMContentLoaded', () => {
       const audio = document.getElementById("bg-music");
       const playPromise = audio.play();
@@ -237,9 +250,11 @@
     ];
     let i = 0, j = 0, isDeleting = false;
     const target = document.getElementById("typewriter");
+
     function type() {
       const txt = messages[i].substring(0, j);
       target.textContent = txt;
+
       if (!isDeleting && j < messages[i].length) {
         j++;
       } else if (isDeleting && j > 0) {
@@ -248,7 +263,9 @@
         isDeleting = !isDeleting;
         if (!isDeleting) i = (i + 1) % messages.length;
       }
-      setTimeout(type, isDeleting ? 40 : 80);
+
+      const speed = isDeleting ? 100 : 80; // slower deletion
+      setTimeout(type, speed);
     }
     type();
   </script>
