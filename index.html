@@ -1,153 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Staged was here!</title>
+<!-- HEAD AND STYLING OMITTED FOR BREVITY -->
+<!-- INSERT YOUR <head> FROM THE LAST VERSION (it’s fine, no changes needed) -->
 
-  <!-- Custom Fonts -->
-  <style>
-    @font-face {
-      font-family: 'MostWanted';
-      src: url('mostwanted(1).ttf') format('truetype');
-    }
-
-    @font-face {
-      font-family: 'CodeFont';
-      src: url('Code.ttf') format('truetype');
-    }
-
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      background: transparent;
-      overflow: hidden;
-      font-family: 'CodeFont', monospace;
-    }
-
-    #bg-video {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -1;
-    }
-
-    #snow-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    .glass-box {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(12px);
-      border-radius: 30px;
-      padding: 30px 40px;
-      width: 420px;
-      max-width: 90%;
-      box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
-      color: white;
-      text-align: center;
-      z-index: 2;
-    }
-
-    .glitch-text {
-      position: relative;
-      font-size: 3.8em;
-      font-weight: bold;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      font-family: 'MostWanted', sans-serif;
-    }
-
-    .glitch-layer {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      color: white;
-      pointer-events: none;
-    }
-
-    .glitch-r { color: red; mix-blend-mode: screen; }
-    .glitch-g { color: lime; mix-blend-mode: screen; }
-    .glitch-b { color: blue; mix-blend-mode: screen; }
-
-    #typewriter {
-      font-size: 1.4em;
-      margin-top: 20px;
-      text-shadow: 0 0 8px white, 0 0 20px #00f0ff;
-      white-space: nowrap;
-      overflow: hidden;
-      border-right: 2px solid rgba(255,255,255,0.75);
-      font-family: 'CodeFont', monospace;
-    }
-
-    .social-icons-inside {
-      margin-top: 25px;
-      display: flex;
-      justify-content: center;
-      gap: 25px;
-    }
-
-    .social-icons-inside a img {
-      width: 45px;
-      height: 45px;
-      filter: drop-shadow(0 0 8px white);
-      transition: transform 0.3s ease, filter 0.3s ease;
-      border-radius: 14px;
-    }
-
-    .social-icons-inside a:hover img {
-      transform: scale(1.1);
-      filter: drop-shadow(0 0 18px white);
-    }
-
-    /* Discord box */
-    .discord-status {
-      margin-top: 25px;
-      font-family: 'CodeFont', monospace;
-      font-size: 1em;
-      color: white;
-    }
-
-    .status-dot {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      margin-right: 6px;
-    }
-
-    .online { background: #43b581; }
-    .idle { background: #faa61a; }
-    .dnd { background: #f04747; }
-    .offline { background: #747f8d; }
-  </style>
-</head>
 <body>
-
-  <!-- Background video -->
   <video id="bg-video" autoplay muted loop playsinline>
     <source src="https://r2.guns.lol/f3c69b42-b442-42c2-abab-3ba82161eb27.mp4" type="video/mp4">
   </video>
 
-  <!-- Snow canvas -->
   <canvas id="snow-canvas"></canvas>
 
-  <!-- Main content box -->
   <div class="glass-box">
     <div class="glitch-text" id="glitch">
       <span class="glitch-layer glitch-r">Staged</span>
@@ -156,26 +16,19 @@
       <span>Staged</span>
     </div>
     <div id="typewriter"></div>
-
     <div class="social-icons-inside">
-      <a href="https://www.tiktok.com/@yourusername" target="_blank"><img src="tiktok.webp" alt="TikTok" /></a>
-      <a href="https://www.youtube.com/@yourusername" target="_blank"><img src="youtube.png" alt="YouTube" /></a>
-      <a href="https://www.roblox.com/users/3675540/profile" target="_blank"><img src="roblox.webp" alt="Roblox" /></a>
-      <a href="https://www.instagram.com/yourusername" target="_blank"><img src="insta.webp" alt="Instagram" /></a>
-    </div>
-
-    <!-- Discord Status -->
-    <div class="discord-status">
-      <strong>Status:</strong> <span class="status-dot" id="status-dot"></span><span id="status">Loading...</span><br>
-      <strong>Activity:</strong> <span id="activity">None</span>
+      <a href="https://www.tiktok.com" target="_blank"><img src="tiktok.webp" alt="TikTok" /></a>
+      <a href="https://www.youtube.com" target="_blank"><img src="youtube.png" alt="YouTube" /></a>
+      <a href="https://www.roblox.com" target="_blank"><img src="roblox.webp" alt="Roblox" /></a>
+      <a href="https://www.instagram.com" target="_blank"><img src="insta.webp" alt="Instagram" /></a>
     </div>
   </div>
 
-  <!-- Background Music -->
   <audio id="bg-music" autoplay loop>
     <source src="nights.mp3" type="audio/mpeg">
   </audio>
 
+  <!-- MUSIC AUTOPLAY FIX -->
   <script>
     window.addEventListener('DOMContentLoaded', () => {
       const audio = document.getElementById("bg-music");
@@ -190,7 +43,61 @@
     });
   </script>
 
-  <!-- Snow particles -->
+  <!-- GLITCH FOLLOW -->
+  <script>
+    const glitchR = document.querySelector(".glitch-r");
+    const glitchG = document.querySelector(".glitch-g");
+    const glitchB = document.querySelector(".glitch-b");
+
+    document.addEventListener("mousemove", (e) => {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+
+      const offsetX = (e.clientX - centerX) / 200;
+      const offsetY = (e.clientY - centerY) / 200;
+
+      glitchR.style.transform = `translate(${-offsetX}px, ${-offsetY}px)`;
+      glitchG.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      glitchB.style.transform = `translate(${offsetY}px, ${-offsetX}px)`;
+    });
+  </script>
+
+  <!-- TYPEWRITER -->
+  <script>
+    const messages = [
+      "You're staged lol!",
+      "all my links below",
+      "follow the snow..."
+    ];
+    let i = 0, j = 0, isDeleting = false;
+    const target = document.getElementById("typewriter");
+
+    function type() {
+      const current = messages[i];
+      const displayed = current.substring(0, j);
+      target.textContent = displayed;
+
+      if (!isDeleting && j < current.length) {
+        j++;
+        setTimeout(type, 100);
+      } else if (isDeleting && j > 0) {
+        j--;
+        setTimeout(type, 80);
+      } else {
+        if (!isDeleting) {
+          isDeleting = true;
+          setTimeout(type, 5000);
+        } else {
+          isDeleting = false;
+          i = (i + 1) % messages.length;
+          setTimeout(type, 400);
+        }
+      }
+    }
+    type();
+  </script>
+
+  <!-- SNOW PARTICLE EFFECT -->
   <script>
     const canvas = document.getElementById("snow-canvas");
     const ctx = canvas.getContext("2d");
@@ -208,7 +115,7 @@
         this.reset();
         this.baseX = this.x;
         this.baseY = this.y;
-        this.density = Math.random() * 20 + 1;
+        this.density = Math.random() * 30 + 1;
       }
 
       reset() {
@@ -230,7 +137,7 @@
         let dist = Math.sqrt(dx * dx + dy * dy);
         let forceDirX = dx / dist;
         let forceDirY = dy / dist;
-        let maxDist = 100;
+        let maxDist = 120;
         let force = (maxDist - dist) / maxDist;
         let directionX = forceDirX * force * this.density;
         let directionY = forceDirY * force * this.density;
@@ -270,93 +177,5 @@
       canvas.height = window.innerHeight;
     });
   </script>
-
-  <!-- Typewriter -->
-  <script>
-    const messages = [
-      "You're staged lol!",
-      "all my links below",
-      "follow the snow..."
-    ];
-    let i = 0, j = 0, isDeleting = false, pause = false;
-    const target = document.getElementById("typewriter");
-
-    function type() {
-      const txt = messages[i].substring(0, j);
-      target.textContent = txt;
-
-      if (!isDeleting && j < messages[i].length) {
-        j++;
-      } else if (isDeleting && j > 0) {
-        j--;
-      } else if (!pause) {
-        pause = true;
-        setTimeout(() => {
-          isDeleting = !isDeleting;
-          if (!isDeleting) i = (i + 1) % messages.length;
-          pause = false;
-          type();
-        }, 2000);
-        return;
-      }
-
-      const speed = isDeleting ? 100 : 120;
-      setTimeout(type, speed);
-    }
-    type();
-  </script>
-
-  <!-- Glitch movement -->
-  <script>
-    const glitchR = document.querySelector(".glitch-r");
-    const glitchG = document.querySelector(".glitch-g");
-    const glitchB = document.querySelector(".glitch-b");
-
-    document.addEventListener("mousemove", (e) => {
-      const centerX = window.innerWidth / 2;
-      const centerY = window.innerHeight / 2;
-
-      const offsetX = (e.clientX - centerX) / 80;
-      const offsetY = (e.clientY - centerY) / 80;
-
-      glitchR.style.transform = `translate(${-offsetX}px, ${-offsetY}px)`;
-      glitchG.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-      glitchB.style.transform = `translate(${offsetY}px, ${-offsetX}px)`;
-    });
-  </script>
-
-  <!-- Discord status fetch -->
-  <script>
-    async function updatePresence() {
-      try {
-        const res = await fetch("https://presence.skyra.pw/users/726243505785143296");
-        const data = await res.json();
-
-        if (!data.success) {
-          document.getElementById("status").textContent = "Unavailable";
-          return;
-        }
-
-        const user = data.data;
-        const status = user.discord_status || "offline";
-
-        document.getElementById("status").textContent = status;
-        document.getElementById("status-dot").className = "status-dot " + status;
-
-        const activity = user.activities?.find(a => a.type === 0);
-        document.getElementById("activity").textContent = activity
-          ? `${activity.name}${activity.details ? ' - ' + activity.details : ''}`
-          : "None";
-
-      } catch (err) {
-        document.getElementById("status").textContent = "Error";
-        document.getElementById("activity").textContent = "-";
-      }
-    }
-
-    updatePresence();
-    setInterval(updatePresence, 15000);
-  </script>
-
 </body>
 </html>
