@@ -12,7 +12,6 @@
       overflow: hidden;
       font-family: 'Segoe UI', sans-serif;
       background: black;
-      cursor: default;
     }
 
     #bg-video {
@@ -47,42 +46,8 @@
       z-index: 2;
     }
 
-    .glitch-text {
-      position: relative;
-      font-size: 3.5em;
-      font-weight: bold;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      text-align: center;
-    }
-
-    .glitch-layer {
-      position: absolute;
-      top: 0;
-      left: 0;
-      color: white;
-      width: 100%;
-      pointer-events: none;
-    }
-
-    .glitch-r {
-      color: red;
-      mix-blend-mode: screen;
-    }
-
-    .glitch-g {
-      color: lime;
-      mix-blend-mode: screen;
-    }
-
-    .glitch-b {
-      color: blue;
-      mix-blend-mode: screen;
-    }
-
     #typewriter {
       font-size: 1.4em;
-      margin-top: 20px;
       text-shadow: 0 0 8px white, 0 0 20px #00f0ff;
       white-space: nowrap;
       overflow: hidden;
@@ -98,81 +63,25 @@
 
   <!-- Background Video -->
   <video autoplay loop muted playsinline id="bg-video">
-    <source src="background.mp4" type="video/mp4">
-    Your browser does not support the video tag.
+    <source src="background.mp4" type="video/mp4" />
   </video>
 
-  <!-- Particles -->
+  <!-- Snow Particles -->
   <div id="particles-js"></div>
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-<script>
-  particlesJS("particles-js", {
-    particles: {
-      number: { value: 150 },
-      size: { value: 3 },
-      color: { value: "#ffffff" },
-      opacity: { value: 0.7 },
-      move: { enable: true, speed: 1.5 },
-      line_linked: { enable: false }
-    },
-    interactivity: {
-      detect_on: "canvas",
-      events: {
-        onhover: { enable: true, mode: "repulse" },
-        onclick: { enable: false }
-      }
-    }
-  });
-  #particles-js {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  z-index: -2;
-}
 
-</script>
-
-
-  <!-- Glass UI -->
+  <!-- Glass Text Box -->
   <div class="glass-box">
-    <div class="glitch-text" id="glitch">
-      <span class="glitch-layer glitch-r">Staged.lol</span>
-      <span class="glitch-layer glitch-g">Staged.lol</span>
-      <span class="glitch-layer glitch-b">Staged.lol</span>
-      <span>Staged.lol</span>
-    </div>
     <div id="typewriter"></div>
   </div>
 
-  <!-- Audio -->
+  <!-- Background Music -->
   <audio id="bg-music" autoplay loop>
     <source src="nights.mp3" type="audio/mpeg" />
   </audio>
 
-  <!-- Particles.js -->
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <!-- Scripts -->
   <script>
-    particlesJS("particles-js", {
-      particles: {
-        number: { value: 150 },
-        size: { value: 3 },
-        color: { value: "#ffffff" },
-        opacity: { value: 0.7 },
-        move: { enable: true, speed: 1.5 },
-        line_linked: { enable: false }
-      },
-      interactivity: {
-        detect_on: "canvas",
-        events: {
-          onhover: { enable: true, mode: "repulse" },
-          onclick: { enable: false }
-        }
-      }
-    });
-  </script>
-
-  <!-- Typewriter -->
-  <script>
+    // Typewriter effect
     const messages = [
       "You're staged lol!",
       "Fuck you S0cial",
@@ -211,22 +120,31 @@
     type();
   </script>
 
-  <!-- RGB Glitch Follow Mouse -->
+  <!-- Enable Music Autoplay (in case browser blocks it) -->
   <script>
-    const glitchR = document.querySelector(".glitch-r");
-    const glitchG = document.querySelector(".glitch-g");
-    const glitchB = document.querySelector(".glitch-b");
+    const audio = document.getElementById("bg-music");
+    window.addEventListener('click', () => audio.play());
+  </script>
 
-    document.addEventListener("mousemove", (e) => {
-      const centerX = window.innerWidth / 2;
-      const centerY = window.innerHeight / 2;
-
-      const offsetX = (e.clientX - centerX) / 100;
-      const offsetY = (e.clientY - centerY) / 100;
-
-      glitchR.style.transform = `translate(${-offsetX}px, ${-offsetY}px)`;
-      glitchG.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-      glitchB.style.transform = `translate(${-offsetY}px, ${offsetX}px)`;
+  <!-- Particle JS Library -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 150 },
+        size: { value: 3 },
+        color: { value: "#ffffff" },
+        opacity: { value: 0.7 },
+        move: { enable: true, speed: 1.5 },
+        line_linked: { enable: false }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "repulse" },
+          onclick: { enable: false }
+        }
+      }
     });
   </script>
 
