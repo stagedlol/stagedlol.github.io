@@ -26,7 +26,7 @@
       color: white;
     }
 
-    #bg-video {
+    video#bg-video {
       position: fixed;
       top: 0;
       left: 0;
@@ -34,48 +34,48 @@
       height: 100vh;
       object-fit: cover;
       z-index: -3;
-      filter: brightness(0.3);
+      filter: brightness(0.2);
     }
 
     #particles-js {
       position: fixed;
-      top: 0;
-      left: 0;
       width: 100%;
       height: 100%;
       z-index: -2;
     }
 
-    .glass-box {
+    .card {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      padding: 30px 40px;
+      width: 90%;
+      max-width: 500px;
+      padding: 40px;
       border-radius: 30px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(14px);
       text-align: center;
-      z-index: 1;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      z-index: 2;
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.2);
     }
 
     .name {
       font-family: 'Orbitron', sans-serif;
-      font-size: 3rem;
+      font-size: 2.5rem;
       color: #fff;
-      text-shadow: 0 0 20px cyan, 0 0 30px cyan;
+      text-shadow: 0 0 15px cyan;
     }
 
     .typewriter {
-      font-size: 1.5rem;
-      margin-top: 10px;
+      font-size: 1.2rem;
+      margin-top: 15px;
       height: 40px;
       white-space: nowrap;
       overflow: hidden;
-      border-right: 2px solid white;
-      text-shadow: 0 0 10px cyan;
+      border-right: 2px solid #fff;
+      text-shadow: 0 0 8px cyan;
     }
 
     audio {
@@ -88,20 +88,18 @@
   <!-- Background Video -->
   <video autoplay loop muted id="bg-video">
     <source src="https://cdn.pixabay.com/video/2017/08/09/12268-232282929_large.mp4" type="video/mp4">
-    Your browser does not support HTML5 video.
   </video>
 
   <!-- Background Music -->
   <audio autoplay loop>
     <source src="https://files.catbox.moe/your-song.mp3" type="audio/mp3">
-    Your browser does not support the audio element.
   </audio>
 
-  <!-- Snow Particles -->
+  <!-- Particle Background -->
   <div id="particles-js"></div>
 
-  <!-- Centered Content Box -->
-  <div class="glass-box">
+  <!-- Frosted Glass Profile Card -->
+  <div class="card">
     <div class="name">staged.lol</div>
     <div class="typewriter" id="typewriter"></div>
   </div>
@@ -109,16 +107,16 @@
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
-    // Particle Setup (snow following mouse)
+    // Particle effect: snow that follows the mouse
     particlesJS("particles-js", {
       particles: {
-        number: { value: 150 },
-        size: { value: 3 },
+        number: { value: 180 },
+        size: { value: 2.5 },
         color: { value: "#ffffff" },
-        opacity: { value: 0.7 },
+        opacity: { value: 0.8 },
         move: {
           enable: true,
-          speed: 1.2,
+          speed: 1.5,
           direction: "bottom",
           out_mode: "out"
         },
@@ -128,51 +126,54 @@
         detect_on: "canvas",
         events: {
           onhover: { enable: true, mode: "grab" },
-          onclick: { enable: true, mode: "push" },
+          onclick: { enable: true, mode: "repulse" },
           resize: true
         },
         modes: {
           grab: { distance: 120, line_linked: { opacity: 0.5 } },
-          push: { particles_nb: 4 }
+          repulse: { distance: 100 }
         }
       },
       retina_detect: true
     });
 
-    // Typewriter with Deleting
-    const descriptions = [
-      "Welcome to my domain...",
-      "I build cool digital stuff.",
-      "Snow falls, music flows.",
-      "You're not lost. You're here."
+    // Typewriter typing + deleting
+    const messages = [
+      "Welcome to my world...",
+      "Creating cool digital things.",
+      "Snow falls. Music flows.",
+      "You found the right place."
     ];
 
     let i = 0, j = 0, isDeleting = false;
-    const speed = 70;
-    const wait = 1600;
-    const typeTarget = document.getElementById("typewriter");
+    const target = document.getElementById("typewriter");
+    const speed = 60;
+    const pause = 1400;
 
-    function typeLoop() {
-      const current = descriptions[i];
+    function type() {
+      let txt = messages[i].substring(0, j);
+      target.textContent = txt;
+
       if (!isDeleting) {
-        typeTarget.textContent = current.substring(0, j++);
-        if (j > current.length) {
+        if (j < messages[i].length) {
+          j++;
+        } else {
           isDeleting = true;
-          setTimeout(typeLoop, wait);
+          setTimeout(type, pause);
           return;
         }
       } else {
-        typeTarget.textContent = current.substring(0, j--);
-        if (j === 0) {
+        if (j > 0) {
+          j--;
+        } else {
           isDeleting = false;
-          i = (i + 1) % descriptions.length;
+          i = (i + 1) % messages.length;
         }
       }
-      setTimeout(typeLoop, isDeleting ? speed / 2 : speed);
+      setTimeout(type, isDeleting ? speed / 2 : speed);
     }
 
-    typeLoop();
+    type();
   </script>
-
 </body>
 </html>
