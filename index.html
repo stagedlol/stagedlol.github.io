@@ -22,15 +22,14 @@
       width: 100vw;
       height: 100vh;
       object-fit: cover;
-      z-index: -4;
+      z-index: -3;
     }
 
-    #canvas {
+    #particles-js {
       position: fixed;
-      top: 0;
-      left: 0;
-      z-index: -3;
-      display: block;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
     }
 
     .glass-box {
@@ -66,9 +65,20 @@
       pointer-events: none;
     }
 
-    .glitch-r { color: red; mix-blend-mode: screen; }
-    .glitch-g { color: lime; mix-blend-mode: screen; }
-    .glitch-b { color: blue; mix-blend-mode: screen; }
+    .glitch-r {
+      color: red;
+      mix-blend-mode: screen;
+    }
+
+    .glitch-g {
+      color: lime;
+      mix-blend-mode: screen;
+    }
+
+    .glitch-b {
+      color: blue;
+      mix-blend-mode: screen;
+    }
 
     #typewriter {
       font-size: 1.4em;
@@ -112,10 +122,10 @@
     Your browser does not support the video tag.
   </video>
 
-  <!-- Canvas Particles -->
-  <canvas id="canvas"></canvas>
+  <!-- Particles -->
+  <div id="particles-js"></div>
 
-  <!-- Frosted Glass UI -->
+  <!-- Glass UI -->
   <div class="glass-box">
     <div class="glitch-text" id="glitch">
       <span class="glitch-layer glitch-r">Staged</span>
@@ -125,12 +135,20 @@
     </div>
     <div id="typewriter"></div>
 
-    <!-- Social Icons -->
+    <!-- Social Icons Inside Glass Box -->
     <div class="social-icons-inside">
-      <a href="https://www.tiktok.com" target="_blank"><img src="tiktok.webp" alt="TikTok" /></a>
-      <a href="https://www.youtube.com" target="_blank"><img src="youtube.png" alt="YouTube" /></a>
-      <a href="https://www.roblox.com" target="_blank"><img src="roblox.webp" alt="Roblox" /></a>
-      <a href="https://www.instagram.com" target="_blank"><img src="insta.webp" alt="Instagram" /></a>
+      <a href="https://www.tiktok.com" target="_blank">
+        <img src="tiktok.webp" alt="TikTok" />
+      </a>
+      <a href="https://www.youtube.com" target="_blank">
+        <img src="youtube.png" alt="YouTube" />
+      </a>
+      <a href="https://www.roblox.com" target="_blank">
+        <img src="roblox.webp" alt="Roblox" />
+      </a>
+      <a href="https://www.instagram.com" target="_blank">
+        <img src="insta.webp" alt="Instagram" />
+      </a>
     </div>
   </div>
 
@@ -139,10 +157,110 @@
     <source src="nights.mp3" type="audio/mpeg" />
   </audio>
 
-  <!-- JS: Canvas Particles -->
+  <!-- Particles.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 150 },
+        size: { value: 3 },
+        color: { value: "#ffffff" },
+        opacity: { value: 0.7 },
+        move: { enable: true, speed: 1.5 },
+        line_linked: { enable: false }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "repulse" },
+          onclick: { enable: false }
+        }
+      }
+    });
+  </script>
+
+  <!-- Typewriter -->
+  <script>
+    const messages = [
+      "You're staged lol!",
+      "Fuck you S0cial",
+      "all my links below",
+      "follow the snow..."
+    ];
+
+    let i = 0, j = 0, isDeleting = false;
+    const target = document.getElementById("typewriter");
+    const speed = 60;
+    const pause = 1400;
+
+    function type() {
+      let txt = messages[i].substring(0, j);
+      target.textContent = txt;
+
+      if (!isDeleting) {
+        if (j < messages[i].length) {
+          j++;
+        } else {
+          isDeleting = true;
+          setTimeout(type, pause);
+          return;
+        }
+      } else {
+        if (j > 0) {
+          j--;
+        } else {
+          isDeleting = false;
+          i = (i + 1) % messages.length;
+        }
+      }
+      setTimeout(type, isDeleting ? speed / 2 : speed);
+    }
+
+    type();
+  </script>
+
+  <!-- RGB Glitch Follow Mouse -->
+  <script>
+    const glitchR = document.querySelector(".glitch-r");
+    const glitchG = document.querySelector(".glitch-g");
+    const glitchB = document.querySelector(".glitch-b");
+
+    document.addEventListener("mousemove", (e) => {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+
+      const offsetX = (e.clientX - centerX) / 100;
+      const offsetY = (e.clientY - centerY) / 100;
+
+      glitchR.style.transform = translate(${-offsetX}px, ${-offsetY}px);
+      glitchG.style.transform = translate(${offsetX}px, ${offsetY}px);
+      glitchB.style.transform = translate(${-offsetY}px, ${offsetX}px);
+    });
+  </script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: black;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
   <script>
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
+
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
@@ -198,7 +316,9 @@
 
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let p of particles) p.update();
+      for (let p of particles) {
+        p.update();
+      }
       requestAnimationFrame(animate);
     }
 
@@ -209,64 +329,8 @@
       canvas.height = window.innerHeight;
     });
   </script>
-
-  <!-- JS: Typewriter -->
-  <script>
-    const messages = [
-      "You're staged lol!",
-      "Fuck you S0cial",
-      "all my links below",
-      "follow the snow..."
-    ];
-    let i = 0, j = 0, isDeleting = false;
-    const target = document.getElementById("typewriter");
-    const speed = 60;
-    const pause = 1400;
-
-    function type() {
-      let txt = messages[i].substring(0, j);
-      target.textContent = txt;
-
-      if (!isDeleting) {
-        if (j < messages[i].length) {
-          j++;
-        } else {
-          isDeleting = true;
-          setTimeout(type, pause);
-          return;
-        }
-      } else {
-        if (j > 0) {
-          j--;
-        } else {
-          isDeleting = false;
-          i = (i + 1) % messages.length;
-        }
-      }
-      setTimeout(type, isDeleting ? speed / 2 : speed);
-    }
-
-    type();
-  </script>
-
-  <!-- JS: RGB Glitch -->
-  <script>
-    const glitchR = document.querySelector(".glitch-r");
-    const glitchG = document.querySelector(".glitch-g");
-    const glitchB = document.querySelector(".glitch-b");
-
-    document.addEventListener("mousemove", (e) => {
-      const centerX = window.innerWidth / 2;
-      const centerY = window.innerHeight / 2;
-
-      const offsetX = (e.clientX - centerX) / 100;
-      const offsetY = (e.clientY - centerY) / 100;
-
-      glitchR.style.transform = `translate(${-offsetX}px, ${-offsetY}px)`;
-      glitchG.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-      glitchB.style.transform = `translate(${-offsetY}px, ${offsetX}px)`;
-    });
-  </script>
-
 </body>
 </html>
+
+
+
