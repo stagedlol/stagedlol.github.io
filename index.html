@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -10,7 +10,9 @@
       padding: 0;
       height: 100%;
       overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
       background: black;
+      cursor: default;
     }
 
     #bg-video {
@@ -23,12 +25,92 @@
       z-index: -3;
     }
 
-    canvas {
+    #particles-js {
       position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+    }
+
+    .glass-box {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      border-radius: 30px;
+      padding: 30px 40px;
+      box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+      color: white;
+      text-align: center;
+      z-index: 2;
+    }
+
+    .glitch-text {
+      position: relative;
+      font-size: 3.5em;
+      font-weight: bold;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .glitch-layer {
+      position: absolute;
       top: 0;
       left: 0;
-      display: block;
-      z-index: -2;
+      color: white;
+      width: 100%;
+      pointer-events: none;
+    }
+
+    .glitch-r {
+      color: red;
+      mix-blend-mode: screen;
+    }
+
+    .glitch-g {
+      color: lime;
+      mix-blend-mode: screen;
+    }
+
+    .glitch-b {
+      color: blue;
+      mix-blend-mode: screen;
+    }
+
+    #typewriter {
+      font-size: 1.4em;
+      margin-top: 20px;
+      text-shadow: 0 0 8px white, 0 0 20px #00f0ff;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 2px solid rgba(255,255,255,0.75);
+    }
+
+    .social-icons-inside {
+      margin-top: 25px;
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+    }
+
+    .social-icons-inside a img {
+      width: 45px;
+      height: 45px;
+      filter: drop-shadow(0 0 8px white);
+      transition: transform 0.3s ease, filter 0.3s ease;
+      border-radius: 14px;
+    }
+
+    .social-icons-inside a:hover img {
+      transform: scale(1.1);
+      filter: drop-shadow(0 0 18px white);
+    }
+
+    audio {
+      display: none;
     }
   </style>
 </head>
@@ -40,16 +122,150 @@
     Your browser does not support the video tag.
   </video>
 
-  <!-- Canvas Particles -->
-  <canvas id="canvas"></canvas>
+  <!-- Particles -->
+  <div id="particles-js"></div>
 
+  <!-- Glass UI -->
+  <div class="glass-box">
+    <div class="glitch-text" id="glitch">
+      <span class="glitch-layer glitch-r">Staged</span>
+      <span class="glitch-layer glitch-g">Staged</span>
+      <span class="glitch-layer glitch-b">Staged</span>
+      <span>Staged</span>
+    </div>
+    <div id="typewriter"></div>
+
+    <!-- Social Icons Inside Glass Box -->
+    <div class="social-icons-inside">
+      <a href="https://www.tiktok.com" target="_blank">
+        <img src="tiktok.webp" alt="TikTok" />
+      </a>
+      <a href="https://www.youtube.com" target="_blank">
+        <img src="youtube.png" alt="YouTube" />
+      </a>
+      <a href="https://www.roblox.com" target="_blank">
+        <img src="roblox.webp" alt="Roblox" />
+      </a>
+      <a href="https://www.instagram.com" target="_blank">
+        <img src="insta.webp" alt="Instagram" />
+      </a>
+    </div>
+  </div>
+
+  <!-- Audio -->
+  <audio id="bg-music" autoplay loop>
+    <source src="nights.mp3" type="audio/mpeg" />
+  </audio>
+
+  <!-- Particles.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 150 },
+        size: { value: 3 },
+        color: { value: "#ffffff" },
+        opacity: { value: 0.7 },
+        move: { enable: true, speed: 1.5 },
+        line_linked: { enable: false }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "repulse" },
+          onclick: { enable: false }
+        }
+      }
+    });
+  </script>
+
+  <!-- Typewriter -->
+  <script>
+    const messages = [
+      "You're staged lol!",
+      "Fuck you S0cial",
+      "all my links below",
+      "follow the snow..."
+    ];
+
+    let i = 0, j = 0, isDeleting = false;
+    const target = document.getElementById("typewriter");
+    const speed = 60;
+    const pause = 1400;
+
+    function type() {
+      let txt = messages[i].substring(0, j);
+      target.textContent = txt;
+
+      if (!isDeleting) {
+        if (j < messages[i].length) {
+          j++;
+        } else {
+          isDeleting = true;
+          setTimeout(type, pause);
+          return;
+        }
+      } else {
+        if (j > 0) {
+          j--;
+        } else {
+          isDeleting = false;
+          i = (i + 1) % messages.length;
+        }
+      }
+      setTimeout(type, isDeleting ? speed / 2 : speed);
+    }
+
+    type();
+  </script>
+
+  <!-- RGB Glitch Follow Mouse -->
+  <script>
+    const glitchR = document.querySelector(".glitch-r");
+    const glitchG = document.querySelector(".glitch-g");
+    const glitchB = document.querySelector(".glitch-b");
+
+    document.addEventListener("mousemove", (e) => {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+
+      const offsetX = (e.clientX - centerX) / 100;
+      const offsetY = (e.clientY - centerY) / 100;
+
+      glitchR.style.transform = translate(${-offsetX}px, ${-offsetY}px);
+      glitchG.style.transform = translate(${offsetX}px, ${offsetY}px);
+      glitchB.style.transform = translate(${-offsetY}px, ${offsetX}px);
+    });
+  </script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: black;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
   <script>
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
+
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
     const mouse = { x: null, y: null };
+
     window.addEventListener("mousemove", e => {
       mouse.x = e.x;
       mouse.y = e.y;
@@ -113,6 +329,7 @@
       canvas.height = window.innerHeight;
     });
   </script>
-
 </body>
 </html>
+
+
