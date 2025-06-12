@@ -1,6 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <video autoplay muted loop playsinline id="bgvid" style="position: fixed; top: 0; left: 0; min-width: 100%; min-height: 100%; object-fit: cover; z-index: -999;">
+  <source src="https://r2.guns.lol/f3c69b42-b442-42c2-abab-3ba82161eb27.mp4" type="video/mp4" />
+</video>
+<script>
+  const vid = document.createElement('video');
+  vid.src = "https://r2.guns.lol/f3c69b42-b442-42c2-abab-3ba82161eb27.mp4";
+  vid.autoplay = true;
+  vid.muted = true;
+  vid.loop = true;
+  vid.playsInline = true;
+  Object.assign(vid.style, {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    minWidth: "100%",
+    minHeight: "100%",
+    objectFit: "cover",
+    zIndex: "-999"
+  });
+  document.documentElement.appendChild(vid);
+</script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Staged was here!</title>
