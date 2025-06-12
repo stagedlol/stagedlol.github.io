@@ -86,6 +86,8 @@
 </head>
 <body>
 
+  <!-- Removed Background Video -->
+
   <!-- Particles -->
   <div id="particles-js"></div>
 
@@ -101,4 +103,90 @@
   </div>
 
   <!-- Audio -->
-  <audio i
+  <audio id="bg-music" autoplay loop>
+    <source src="nights.mp3" type="audio/mpeg" />
+  </audio>
+
+  <!-- Particles.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 150 },
+        size: { value: 3 },
+        color: { value: "#ffffff" },
+        opacity: { value: 0.7 },
+        move: { enable: true, speed: 1.5 },
+        line_linked: { enable: false }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "repulse" },
+          onclick: { enable: false }
+        }
+      }
+    });
+  </script>
+
+  <!-- Typewriter -->
+  <script>
+    const messages = [
+      "You're staged lol!",
+      "Fuck you S0cial",
+      "all my links below",
+      "follow the snow..."
+    ];
+
+    let i = 0, j = 0, isDeleting = false;
+    const target = document.getElementById("typewriter");
+    const speed = 60;
+    const pause = 1400;
+
+    function type() {
+      let txt = messages[i].substring(0, j);
+      target.textContent = txt;
+
+      if (!isDeleting) {
+        if (j < messages[i].length) {
+          j++;
+        } else {
+          isDeleting = true;
+          setTimeout(type, pause);
+          return;
+        }
+      } else {
+        if (j > 0) {
+          j--;
+        } else {
+          isDeleting = false;
+          i = (i + 1) % messages.length;
+        }
+      }
+      setTimeout(type, isDeleting ? speed / 2 : speed);
+    }
+
+    type();
+  </script>
+
+  <!-- RGB Glitch Follow Mouse -->
+  <script>
+    const glitchR = document.querySelector(".glitch-r");
+    const glitchG = document.querySelector(".glitch-g");
+    const glitchB = document.querySelector(".glitch-b");
+
+    document.addEventListener("mousemove", (e) => {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+
+      const offsetX = (e.clientX - centerX) / 100;
+      const offsetY = (e.clientY - centerY) / 100;
+
+      glitchR.style.transform = `translate(${-offsetX}px, ${-offsetY}px)`;
+      glitchG.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      glitchB.style.transform = `translate(${-offsetY}px, ${offsetX}px)`;
+    });
+  </script>
+
+</body>
+</html>
