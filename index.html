@@ -1,14 +1,237 @@
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  overflow: hidden;
-  font-family: 'Segoe UI', sans-serif;
-  background: black;
-  cursor: default;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Staged was here!</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      background: black;
+      cursor: default;
+    }
 
-  /* ADD FLEXBOX CENTERING */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    #bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -3;
+    }
+
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+    }
+
+    .glass-box {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      border-radius: 30px;
+      padding: 30px 40px;
+      box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+      color: white;
+      text-align: center;
+      z-index: 2;
+    }
+
+    .glitch-text {
+      position: relative;
+      font-size: 3.5em;
+      font-weight: bold;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .glitch-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: white;
+      width: 100%;
+      pointer-events: none;
+    }
+
+    .glitch-r {
+      color: red;
+      mix-blend-mode: screen;
+    }
+
+    .glitch-g {
+      color: lime;
+      mix-blend-mode: screen;
+    }
+
+    .glitch-b {
+      color: blue;
+      mix-blend-mode: screen;
+    }
+
+    #typewriter {
+      font-size: 1.4em;
+      margin-top: 20px;
+      text-shadow: 0 0 8px white, 0 0 20px #00f0ff;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 2px solid rgba(255,255,255,0.75);
+    }
+
+    .social-icons {
+      margin-top: 25px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .social-icons img {
+      width: 50px;
+      height: 50px;
+      filter: drop-shadow(0 0 5px white) drop-shadow(0 0 15px white);
+      transition: transform 0.3s ease;
+    }
+
+    .social-icons img:hover {
+      transform: scale(1.15);
+    }
+
+    audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Video -->
+  <video autoplay loop muted playsinline id="bg-video">
+    <source src="background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <!-- Particles -->
+  <div id="particles-js"></div>
+
+  <!-- Glass UI -->
+  <div class="glass-box">
+    <div class="glitch-text" id="glitch">
+      <span class="glitch-layer glitch-r">Staged</span>
+      <span class="glitch-layer glitch-g">Staged</span>
+      <span class="glitch-layer glitch-b">Staged</span>
+      <span>Staged</span>
+    </div>
+    <div id="typewriter"></div>
+
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a href="https://www.roblox.com" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/48/Roblox_Logo_2022.svg" alt="Roblox">
+      </a>
+      <a href="https://www.tiktok.com" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/en/0/0a/TikTok_logo.svg" alt="TikTok">
+      </a>
+      <a href="https://www.youtube.com" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg" alt="YouTube">
+      </a>
+    </div>
+  </div>
+
+  <!-- Audio -->
+  <audio id="bg-music" autoplay loop>
+    <source src="nights.mp3" type="audio/mpeg" />
+  </audio>
+
+  <!-- Particles.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 150 },
+        size: { value: 3 },
+        color: { value: "#ffffff" },
+        opacity: { value: 0.7 },
+        move: { enable: true, speed: 1.5 },
+        line_linked: { enable: false }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "repulse" },
+          onclick: { enable: false }
+        }
+      }
+    });
+  </script>
+
+  <!-- Typewriter -->
+  <script>
+    const messages = [
+      "You're staged lol!",
+      "Fuck you S0cial",
+      "all my links below",
+      "follow the snow..."
+    ];
+
+    let i = 0, j = 0, isDeleting = false;
+    const target = document.getElementById("typewriter");
+    const speed = 60;
+    const pause = 1400;
+
+    function type() {
+      let txt = messages[i].substring(0, j);
+      target.textContent = txt;
+
+      if (!isDeleting) {
+        if (j < messages[i].length) {
+          j++;
+        } else {
+          isDeleting = true;
+          setTimeout(type, pause);
+          return;
+        }
+      } else {
+        if (j > 0) {
+          j--;
+        } else {
+          isDeleting = false;
+          i = (i + 1) % messages.length;
+        }
+      }
+      setTimeout(type, isDeleting ? speed / 2 : speed);
+    }
+
+    type();
+  </script>
+
+  <!-- RGB Glitch Follow Mouse -->
+  <script>
+    const glitchR = document.querySelector(".glitch-r");
+    const glitchG = document.querySelector(".glitch-g");
+    const glitchB = document.querySelector(".glitch-b");
+
+    document.addEventListener("mousemove", (e) => {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+
+      const offsetX = (e.clientX - centerX) / 100;
+      const offsetY = (e.clientY - centerY) / 100;
+
+      glitchR.style.transform = `translate(${-offsetX}px, ${-offsetY}px)`;
+      glitchG.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      glitchB.style.transform = `translate(${-offsetY}px, ${offsetX}px)`;
+    });
+  </script>
+
+</body>
+</html>
