@@ -61,26 +61,26 @@
 </head>
 <body>
 
-  <!-- Background Video -->
+  <!-- ✅ Background Video -->
   <video autoplay loop muted playsinline id="bg-video">
     <source src="vid.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
-  <!-- Snow Particles -->
+  <!-- ✅ Snow Particles -->
   <div id="particles-js"></div>
 
-  <!-- Glass Text Box -->
+  <!-- ✅ Frosted Glass Typewriter Text Box -->
   <div class="glass-box">
     <div id="typewriter"></div>
   </div>
 
-  <!-- Background Music -->
+  <!-- ✅ Background Music -->
   <audio id="bg-music" autoplay loop>
     <source src="nights.mp3" type="audio/mpeg" />
   </audio>
 
-  <!-- Particle JS Library -->
+  <!-- ✅ Particle JS Library -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
     particlesJS("particles-js", {
@@ -102,7 +102,7 @@
     });
   </script>
 
-  <!-- Typewriter Script -->
+  <!-- ✅ Typewriter Script -->
   <script>
     const messages = [
       "You're staged lol!",
@@ -142,7 +142,7 @@
     type();
   </script>
 
-  <!-- Enable Music After First User Interaction -->
+  <!-- ✅ Enable Music After First Click (browser autoplay block workaround) -->
   <script>
     const audio = document.getElementById("bg-music");
     window.addEventListener('click', () => audio.play());
