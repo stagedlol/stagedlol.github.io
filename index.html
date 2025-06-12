@@ -310,3 +310,58 @@
   </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .icon-bar {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 40px;
+      z-index: 10;
+    }
+
+    .icon-bar a i,
+    .icon-bar a svg {
+      font-size: 32px;
+      color: white;
+      filter: drop-shadow(0 0 6px white);
+      transition: transform 0.2s ease;
+    }
+
+    .icon-bar a:hover i,
+    .icon-bar a:hover svg {
+      transform: scale(1.2);
+    }
+  </style>
+
+  <!-- Font Awesome for TikTok and YouTube -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- Icon Bar -->
+  <div class="icon-bar">
+    <a href="https://tiktok.com" target="_blank"><i class="fab fa-tiktok"></i></a>
+    <a href="https://youtube.com" target="_blank"><i class="fab fa-youtube"></i></a>
+    <a href="https://roblox.com" target="_blank">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 250" width="32" height="32" fill="white">
+        <path d="M83.9 18L18 83.9 52.5 232 232 197.5 197.5 18 83.9 18zM132 132l-47.9-9.6 9.6 47.9 47.9 9.6L132 132z"/>
+      </svg>
+    </a>
+  </div>
+
+</body>
+</html>
