@@ -219,6 +219,20 @@
       display: block;
     }
   </style>
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: black;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
 </head>
 <body>
   <canvas id="canvas"></canvas>
@@ -244,11 +258,10 @@
         this.baseX = this.x;
         this.baseY = this.y;
         this.density = Math.random() * 20 + 5;
-        this.color = `rgb(${Math.random()*255}, ${Math.random()*255}, ${Math.random()*255})`;
       }
 
       draw() {
-        ctx.fillStyle = this.color;
+        ctx.fillStyle = "white";
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
@@ -267,7 +280,6 @@
           this.x -= dirX * force * this.density;
           this.y -= dirY * force * this.density;
         } else {
-          // return to original position
           this.x += (this.baseX - this.x) / 10;
           this.y += (this.baseY - this.y) / 10;
         }
