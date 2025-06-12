@@ -44,7 +44,22 @@
       z-index: -2;
     }
 
-    
+    .card {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 500px;
+      padding: 40px;
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(14px);
+      text-align: center;
+      z-index: 2;
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.2);
+    }
+
     .name {
       font-family: 'Orbitron', sans-serif;
       font-size: 2.5rem;
@@ -75,9 +90,26 @@
   </video>
 
   <!-- Background Music -->
-  <audio autoplay loop>
-    <source src="https://files.catbox.moe/your-song.mp3" type="audio/mp3">
+  <audio id="bg-music" autoplay loop>
+    <source src="nights.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
   </audio>
+
+  <!-- Fallback: play music on first user interaction -->
+  <script>
+    const music = document.getElementById('bg-music');
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        music.play().catch(() => {
+          const unlockAudio = () => {
+            music.play();
+            document.removeEventListener('click', unlockAudio);
+          };
+          document.addEventListener('click', unlockAudio);
+        });
+      }, 100);
+    });
+  </script>
 
   <!-- Particle Background -->
   <div id="particles-js"></div>
