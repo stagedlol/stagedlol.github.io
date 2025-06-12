@@ -18,7 +18,7 @@
       cursor: url('https://cur.cursors-4u.net/games/gam-14/gam1397.cur'), auto;
     }
 
-    body, html {
+    html, body {
       height: 100%;
       overflow: hidden;
       font-family: 'Minecraft', sans-serif;
@@ -39,25 +39,33 @@
 
     #particles-js {
       position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      z-index: -1;
+      z-index: -2;
     }
 
-    .content {
+    .glass-box {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 30px 40px;
+      border-radius: 30px;
       text-align: center;
       z-index: 1;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
     }
 
     .name {
       font-family: 'Orbitron', sans-serif;
       font-size: 3rem;
       color: #fff;
-      text-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff, 0 0 40px #00ffff;
+      text-shadow: 0 0 20px cyan, 0 0 30px cyan;
     }
 
     .typewriter {
@@ -67,12 +75,7 @@
       white-space: nowrap;
       overflow: hidden;
       border-right: 2px solid white;
-      animation: blink .75s step-end infinite;
       text-shadow: 0 0 10px cyan;
-    }
-
-    @keyframes blink {
-      50% { border-color: transparent }
     }
 
     audio {
@@ -97,8 +100,8 @@
   <!-- Snow Particles -->
   <div id="particles-js"></div>
 
-  <!-- Centered Content -->
-  <div class="content">
+  <!-- Centered Content Box -->
+  <div class="glass-box">
     <div class="name">staged.lol</div>
     <div class="typewriter" id="typewriter"></div>
   </div>
@@ -106,18 +109,18 @@
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
-    // Snow Particles Config
+    // Particle Setup (snow following mouse)
     particlesJS("particles-js", {
       particles: {
-        number: { value: 200 },
+        number: { value: 150 },
         size: { value: 3 },
         color: { value: "#ffffff" },
         opacity: { value: 0.7 },
         move: {
           enable: true,
-          speed: 1,
+          speed: 1.2,
           direction: "bottom",
-          straight: false
+          out_mode: "out"
         },
         line_linked: { enable: false }
       },
@@ -125,43 +128,50 @@
         detect_on: "canvas",
         events: {
           onhover: { enable: true, mode: "grab" },
-          onclick: { enable: true, mode: "repulse" }
+          onclick: { enable: true, mode: "push" },
+          resize: true
         },
         modes: {
-          grab: { distance: 140, line_linked: { opacity: 0.5 }},
-          repulse: { distance: 100 }
+          grab: { distance: 120, line_linked: { opacity: 0.5 } },
+          push: { particles_nb: 4 }
         }
-      }
+      },
+      retina_detect: true
     });
 
-    // Typewriter with Changing Text
+    // Typewriter with Deleting
     const descriptions = [
       "Welcome to my domain...",
-      "I make cool stuff.",
-      "Snow falls, music plays.",
+      "I build cool digital stuff.",
+      "Snow falls, music flows.",
       "You're not lost. You're here."
     ];
 
-    let index = 0;
-    let char = 0;
-    let element = document.getElementById("typewriter");
+    let i = 0, j = 0, isDeleting = false;
+    const speed = 70;
+    const wait = 1600;
+    const typeTarget = document.getElementById("typewriter");
 
-    function typeEffect() {
-      if (char < descriptions[index].length) {
-        element.innerHTML += descriptions[index].charAt(char);
-        char++;
-        setTimeout(typeEffect, 75);
+    function typeLoop() {
+      const current = descriptions[i];
+      if (!isDeleting) {
+        typeTarget.textContent = current.substring(0, j++);
+        if (j > current.length) {
+          isDeleting = true;
+          setTimeout(typeLoop, wait);
+          return;
+        }
       } else {
-        setTimeout(() => {
-          element.innerHTML = '';
-          char = 0;
-          index = (index + 1) % descriptions.length;
-          setTimeout(typeEffect, 400);
-        }, 1800);
+        typeTarget.textContent = current.substring(0, j--);
+        if (j === 0) {
+          isDeleting = false;
+          i = (i + 1) % descriptions.length;
+        }
       }
+      setTimeout(typeLoop, isDeleting ? speed / 2 : speed);
     }
 
-    typeEffect();
+    typeLoop();
   </script>
 
 </body>
