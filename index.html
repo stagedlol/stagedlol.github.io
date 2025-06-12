@@ -24,9 +24,6 @@
       background: transparent;
       overflow: hidden;
       font-family: 'CodeFont', monospace;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     #bg-video {
@@ -50,21 +47,25 @@
     }
 
     .glass-box {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       background: rgba(255, 255, 255, 0.05);
       backdrop-filter: blur(12px);
       border-radius: 30px;
       padding: 30px 40px;
+      width: 420px;
+      max-width: 90%;
       box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
       color: white;
       text-align: center;
       z-index: 2;
-      transition: transform 1.2s ease;
-      width: 380px;
     }
 
     .glitch-text {
       position: relative;
-      font-size: 3.5em;
+      font-size: 3.8em;
       font-weight: bold;
       letter-spacing: 4px;
       text-transform: uppercase;
@@ -114,44 +115,26 @@
       filter: drop-shadow(0 0 18px white);
     }
 
-    .status-box {
-      margin-top: 30px;
-      background: rgba(255, 255, 255, 0.07);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      padding: 15px 20px;
-      text-align: left;
-      font-size: 0.9em;
+    /* Discord box */
+    .discord-status {
+      margin-top: 25px;
+      font-family: 'CodeFont', monospace;
+      font-size: 1em;
       color: white;
     }
 
-    .status-box .avatar {
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      margin-right: 10px;
-      vertical-align: middle;
-    }
-
-    .status-box .status-dot {
+    .status-dot {
       display: inline-block;
-      width: 12px;
-      height: 12px;
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
       margin-right: 6px;
     }
 
-    .fade-in {
-      transform: scaleY(0);
-      transform-origin: top;
-      animation: unfold 1.4s ease forwards;
-    }
-
-    @keyframes unfold {
-      to {
-        transform: scaleY(1);
-      }
-    }
+    .online { background: #43b581; }
+    .idle { background: #faa61a; }
+    .dnd { background: #f04747; }
+    .offline { background: #747f8d; }
   </style>
 </head>
 <body>
@@ -165,7 +148,7 @@
   <canvas id="snow-canvas"></canvas>
 
   <!-- Main content box -->
-  <div class="glass-box fade-in">
+  <div class="glass-box">
     <div class="glitch-text" id="glitch">
       <span class="glitch-layer glitch-r">Staged</span>
       <span class="glitch-layer glitch-g">Staged</span>
@@ -173,13 +156,19 @@
       <span>Staged</span>
     </div>
     <div id="typewriter"></div>
+
     <div class="social-icons-inside">
-      <a href="https://tiktok.com" target="_blank"><img src="tiktok.webp" alt="TikTok" /></a>
-      <a href="https://youtube.com" target="_blank"><img src="youtube.png" alt="YouTube" /></a>
-      <a href="https://roblox.com" target="_blank"><img src="roblox.webp" alt="Roblox" /></a>
-      <a href="https://instagram.com" target="_blank"><img src="insta.webp" alt="Instagram" /></a>
+      <a href="https://www.tiktok.com/@yourusername" target="_blank"><img src="tiktok.webp" alt="TikTok" /></a>
+      <a href="https://www.youtube.com/@yourusername" target="_blank"><img src="youtube.png" alt="YouTube" /></a>
+      <a href="https://www.roblox.com/users/yourid/profile" target="_blank"><img src="roblox.webp" alt="Roblox" /></a>
+      <a href="https://www.instagram.com/yourusername" target="_blank"><img src="insta.webp" alt="Instagram" /></a>
     </div>
-    <div class="status-box" id="discordStatus">Loading Discord status...</div>
+
+    <!-- Discord Status -->
+    <div class="discord-status">
+      <strong>Status:</strong> <span class="status-dot" id="status-dot"></span><span id="status">Loading...</span><br>
+      <strong>Activity:</strong> <span id="activity">None</span>
+    </div>
   </div>
 
   <!-- Background Music -->
@@ -188,7 +177,6 @@
   </audio>
 
   <script>
-    // Autoplay fix
     window.addEventListener('DOMContentLoaded', () => {
       const audio = document.getElementById("bg-music");
       const playPromise = audio.play();
@@ -200,15 +188,19 @@
         });
       }
     });
+  </script>
 
-    // Snow particles
+  <!-- Snow particles -->
+  <script>
     const canvas = document.getElementById("snow-canvas");
     const ctx = canvas.getContext("2d");
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+
     const mouse = { x: null, y: null };
     window.addEventListener("mousemove", e => {
-      mouse.x = e.x; mouse.y = e.y;
+      mouse.x = e.x;
+      mouse.y = e.y;
     });
 
     class Particle {
@@ -216,51 +208,77 @@
         this.reset();
         this.baseX = this.x;
         this.baseY = this.y;
-        this.density = Math.random() * 30 + 1;
+        this.density = Math.random() * 20 + 1;
       }
+
       reset() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
         this.size = Math.random() * 2 + 1;
       }
+
       draw() {
         ctx.fillStyle = "white";
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
       }
+
       update() {
-        let dx = mouse.x - this.x, dy = mouse.y - this.y;
+        let dx = mouse.x - this.x;
+        let dy = mouse.y - this.y;
         let dist = Math.sqrt(dx * dx + dy * dy);
-        let force = (120 - dist) / 120;
-        let dirX = dx / dist, dirY = dy / dist;
-        if (dist < 120) {
-          this.x -= dirX * force * this.density;
-          this.y -= dirY * force * this.density;
+        let forceDirX = dx / dist;
+        let forceDirY = dy / dist;
+        let maxDist = 100;
+        let force = (maxDist - dist) / maxDist;
+        let directionX = forceDirX * force * this.density;
+        let directionY = forceDirY * force * this.density;
+
+        if (dist < maxDist) {
+          this.x -= directionX;
+          this.y -= directionY;
         } else {
-          if (this.x !== this.baseX) this.x -= (this.x - this.baseX) / 10;
-          if (this.y !== this.baseY) this.y -= (this.y - this.baseY) / 10;
+          if (this.x !== this.baseX) {
+            let dx = this.x - this.baseX;
+            this.x -= dx / 10;
+          }
+          if (this.y !== this.baseY) {
+            let dy = this.y - this.baseY;
+            this.y -= dy / 10;
+          }
         }
+
         this.draw();
       }
     }
 
     const particlesArray = [];
-    for (let i = 0; i < 200; i++) particlesArray.push(new Particle());
+    for (let i = 0; i < 200; i++) {
+      particlesArray.push(new Particle());
+    }
+
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       particlesArray.forEach(p => p.update());
       requestAnimationFrame(animate);
     }
     animate();
+
     window.addEventListener("resize", () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     });
+  </script>
 
-    // Typewriter
-    const messages = ["You're staged lol!", "all my links below", "follow the snow..."];
-    let i = 0, j = 0, isDeleting = false, waitTime = 0;
+  <!-- Typewriter -->
+  <script>
+    const messages = [
+      "You're staged lol!",
+      "all my links below",
+      "follow the snow..."
+    ];
+    let i = 0, j = 0, isDeleting = false, pause = false;
     const target = document.getElementById("typewriter");
 
     function type() {
@@ -271,70 +289,73 @@
         j++;
       } else if (isDeleting && j > 0) {
         j--;
-      } else {
-        if (!isDeleting) {
-          waitTime = 5;
-        }
-        isDeleting = !isDeleting;
-        if (!isDeleting) i = (i + 1) % messages.length;
+      } else if (!pause) {
+        pause = true;
+        setTimeout(() => {
+          isDeleting = !isDeleting;
+          if (!isDeleting) i = (i + 1) % messages.length;
+          pause = false;
+          type();
+        }, 2000);
+        return;
       }
 
-      const speed = isDeleting ? 100 : 80;
-      setTimeout(type, waitTime-- > 0 ? 1000 : speed);
+      const speed = isDeleting ? 100 : 120;
+      setTimeout(type, speed);
     }
     type();
+  </script>
 
-    // Glitch movement
+  <!-- Glitch movement -->
+  <script>
     const glitchR = document.querySelector(".glitch-r");
     const glitchG = document.querySelector(".glitch-g");
     const glitchB = document.querySelector(".glitch-b");
+
     document.addEventListener("mousemove", (e) => {
-      const centerX = window.innerWidth / 2, centerY = window.innerHeight / 2;
-      const offsetX = (e.clientX - centerX) / 90;
-      const offsetY = (e.clientY - centerY) / 90;
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+
+      const offsetX = (e.clientX - centerX) / 80;
+      const offsetY = (e.clientY - centerY) / 80;
+
       glitchR.style.transform = `translate(${-offsetX}px, ${-offsetY}px)`;
       glitchG.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
       glitchB.style.transform = `translate(${offsetY}px, ${-offsetX}px)`;
     });
+  </script>
 
-    // Discord Status
-    async function loadDiscordStatus() {
-      const box = document.getElementById('discordStatus');
+  <!-- Discord status fetch -->
+  <script>
+    async function updatePresence() {
       try {
-        const res = await fetch('https://api.lanyard.rest/v1/users/726243505785143296');
+        const res = await fetch("https://presence.skyra.pw/users/726243505785143296");
         const data = await res.json();
-        if (!data.success) return box.innerText = "Could not fetch Discord status.";
+
+        if (!data.success) {
+          document.getElementById("status").textContent = "Unavailable";
+          return;
+        }
 
         const user = data.data;
-        const avatar = `https://cdn.discordapp.com/avatars/${user.discord_user.id}/${user.discord_user.avatar}.png`;
-        const statusColor = {
-          online: '#43b581',
-          dnd: '#f04747',
-          idle: '#faa61a',
-          offline: '#747f8d'
-        }[user.discord_status];
+        const status = user.discord_status || "offline";
 
-        let content = `<img class="avatar" src="${avatar}" />
-        <span class="status-dot" style="background:${statusColor}"></span>
-        ${user.discord_user.username} is <b>${user.discord_status}</b><br>`;
+        document.getElementById("status").textContent = status;
+        document.getElementById("status-dot").className = "status-dot " + status;
 
-        if (user.listening_to_spotify) {
-          content += `🎧 Listening to <b>${user.spotify.song}</b> by ${user.spotify.artist}<br>`;
-        }
+        const activity = user.activities?.find(a => a.type === 0);
+        document.getElementById("activity").textContent = activity
+          ? `${activity.name}${activity.details ? ' - ' + activity.details : ''}`
+          : "None";
 
-        if (user.activities.some(a => a.type === 0)) {
-          const game = user.activities.find(a => a.type === 0);
-          content += `🎮 Playing <b>${game.name}</b>`;
-        }
-
-        box.innerHTML = content;
       } catch (err) {
-        box.innerText = "Error loading Discord status.";
+        document.getElementById("status").textContent = "Error";
+        document.getElementById("activity").textContent = "-";
       }
     }
 
-    loadDiscordStatus();
-    setInterval(loadDiscordStatus, 15000); // Refresh every 15 sec
+    updatePresence();
+    setInterval(updatePresence, 15000);
   </script>
 
 </body>
