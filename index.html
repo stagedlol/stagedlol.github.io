@@ -5,26 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Staged was here!</title>
 
-  <!-- Background Video Script -->
-  <script>
-    const vid = document.createElement("video");
-    vid.src = "https://r2.guns.lol/f3c69b42-b442-42c2-abab-3ba82161eb27.mp4";
-    vid.autoplay = true;
-    vid.muted = true;
-    vid.loop = true;
-    vid.playsInline = true;
-    Object.assign(vid.style, {
-      position: "fixed",
-      top: 0,
-      left: 0,
-      minWidth: "100%",
-      minHeight: "100%",
-      objectFit: "cover",
-      zIndex: "-999"
-    });
-    document.documentElement.appendChild(vid);
-  </script>
-
   <style>
     html, body {
       margin: 0;
@@ -33,7 +13,6 @@
       overflow: hidden;
       font-family: 'Segoe UI', sans-serif;
       background: black;
-      cursor: default;
     }
 
     #particles-js {
@@ -41,6 +20,14 @@
       width: 100%;
       height: 100%;
       z-index: -2;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: block;
+      z-index: -1;
     }
 
     .glass-box {
@@ -64,7 +51,6 @@
       font-weight: bold;
       letter-spacing: 4px;
       text-transform: uppercase;
-      text-align: center;
     }
 
     .glitch-layer {
@@ -110,23 +96,35 @@
     }
 
     audio { display: none; }
-
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      display: block;
-      z-index: -1;
-    }
   </style>
 </head>
-
 <body>
-  <!-- Particle Background -->
+
+  <!-- Background Video -->
+  <script>
+    const vid = document.createElement("video");
+    vid.src = "https://r2.guns.lol/f3c69b42-b442-42c2-abab-3ba82161eb27.mp4";
+    vid.autoplay = true;
+    vid.muted = true;
+    vid.loop = true;
+    vid.playsInline = true;
+    Object.assign(vid.style, {
+      position: "fixed",
+      top: 0,
+      left: 0,
+      minWidth: "100%",
+      minHeight: "100%",
+      objectFit: "cover",
+      zIndex: "-999"
+    });
+    document.documentElement.appendChild(vid);
+  </script>
+
+  <!-- Particles Background -->
   <div id="particles-js"></div>
   <canvas id="canvas"></canvas>
 
-  <!-- Frosted Glass UI -->
+  <!-- Glass Box Content -->
   <div class="glass-box">
     <div class="glitch-text" id="glitch">
       <span class="glitch-layer glitch-r">Staged</span>
@@ -136,7 +134,6 @@
     </div>
     <div id="typewriter"></div>
 
-    <!-- Social Icons -->
     <div class="social-icons-inside">
       <a href="https://www.tiktok.com" target="_blank"><img src="tiktok.webp" alt="TikTok" /></a>
       <a href="https://www.youtube.com" target="_blank"><img src="youtube.png" alt="YouTube" /></a>
@@ -145,12 +142,12 @@
     </div>
   </div>
 
-  <!-- Audio -->
-  <audio id="bg-music" autoplay loop>
+  <!-- Music -->
+  <audio autoplay loop>
     <source src="nights.mp3" type="audio/mpeg" />
   </audio>
 
-  <!-- Particles.js -->
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
     particlesJS("particles-js", {
@@ -172,7 +169,7 @@
     });
   </script>
 
-  <!-- Typewriter Effect -->
+  <!-- Typewriter -->
   <script>
     const messages = [
       "You're staged lol!",
@@ -180,65 +177,46 @@
       "all my links below",
       "follow the snow..."
     ];
-
     let i = 0, j = 0, isDeleting = false;
     const target = document.getElementById("typewriter");
-    const speed = 60;
-    const pause = 1400;
-
     function type() {
-      let txt = messages[i].substring(0, j);
+      const txt = messages[i].substring(0, j);
       target.textContent = txt;
-
-      if (!isDeleting) {
-        if (j < messages[i].length) {
-          j++;
-        } else {
-          isDeleting = true;
-          setTimeout(type, pause);
-          return;
-        }
+      if (!isDeleting && j < messages[i].length) {
+        j++;
+      } else if (isDeleting && j > 0) {
+        j--;
       } else {
-        if (j > 0) {
-          j--;
-        } else {
-          isDeleting = false;
-          i = (i + 1) % messages.length;
-        }
+        isDeleting = !isDeleting;
+        if (!isDeleting) i = (i + 1) % messages.length;
       }
-      setTimeout(type, isDeleting ? speed / 2 : speed);
+      setTimeout(type, isDeleting ? 50 : 80);
     }
-
     type();
   </script>
 
-  <!-- Glitch RGB Follow Mouse -->
+  <!-- Glitch Movement -->
   <script>
     const glitchR = document.querySelector(".glitch-r");
     const glitchG = document.querySelector(".glitch-g");
     const glitchB = document.querySelector(".glitch-b");
-
     document.addEventListener("mousemove", (e) => {
       const centerX = window.innerWidth / 2;
       const centerY = window.innerHeight / 2;
-
       const offsetX = (e.clientX - centerX) / 100;
       const offsetY = (e.clientY - centerY) / 100;
-
       glitchR.style.transform = `translate(${-offsetX}px, ${-offsetY}px)`;
       glitchG.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
       glitchB.style.transform = `translate(${-offsetY}px, ${offsetX}px)`;
     });
   </script>
 
-  <!-- Repelling Particle Canvas -->
+  <!-- Canvas Particle Snow (Repel) -->
   <script>
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
-
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-
     const mouse = { x: null, y: null };
 
     window.addEventListener("mousemove", e => {
@@ -255,14 +233,46 @@
         this.baseY = this.y;
         this.density = Math.random() * 20 + 5;
       }
-
       draw() {
         ctx.fillStyle = "white";
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
       }
-
       update() {
         const dx = mouse.x - this.x;
         const dy = mouse.y - this.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const maxDist = 100;
+        if (dist < maxDist) {
+          const force = (maxDist - dist) / maxDist;
+          const dirX = dx / dist;
+          const dirY = dy / dist;
+          this.x -= dirX * force * this.density;
+          this.y -= dirY * force * this.density;
+        } else {
+          this.x += (this.baseX - this.x) / 10;
+          this.y += (this.baseY - this.y) / 10;
+        }
+        this.draw();
+      }
+    }
+
+    const particles = [];
+    for (let i = 0; i < 200; i++) particles.push(new Particle());
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let p of particles) p.update();
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
