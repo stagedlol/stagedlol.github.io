@@ -1,269 +1,470 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Wic was here!</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wic was here!</title>
 
-  <!-- Custom Fonts -->
-  <style>
-    @font-face {
-      font-family: 'MostWanted';
-      src: url('mostwanted(1).ttf') format('truetype');
-    }
+<style>
+@font-face {
+  font-family: 'MostWanted';
+  src: url('mostwanted(1).ttf') format('truetype');
+}
 
-    @font-face {
-      font-family: 'CodeFont';
-      src: url('Code.ttf') format('truetype');
-    }
+@font-face {
+  font-family: 'CodeFont';
+  src: url('Code.ttf') format('truetype');
+}
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      background: transparent;
-      overflow: hidden;
-      font-family: 'CodeFont', monospace;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+* {
+  box-sizing: border-box;
+}
 
-    #bg-video {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -1;
-    }
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  font-family: 'CodeFont', monospace;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-    #snow-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
-    }
+/* BACKGROUND VIDEO */
+#bg-video {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}
 
-    .glass-box {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(12px);
-      border-radius: 30px;
-      padding: 30px 40px;
-      box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
-      color: white;
-      text-align: center;
-      z-index: 2;
-      transition: transform 1.2s ease;
-      width: 380px;
-    }
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.25);
+  z-index: -1;
+  pointer-events: none;
+}
 
-    .glitch-text {
-      position: relative;
-      font-size: 3.5em;
-      font-weight: bold;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      font-family: 'MostWanted', sans-serif;
-    }
+/* SNOW */
+#snow-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
 
-    .glitch-layer {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      color: white;
-      pointer-events: none;
-    }
+/* CARD CONTAINER */
+.card-container {
+  perspective: 1200px;
+  z-index: 2;
+  padding: 20px;
+}
 
-    .glitch-r { color: red; mix-blend-mode: screen; }
-    .glitch-g { color: lime; mix-blend-mode: screen; }
-    .glitch-b { color: blue; mix-blend-mode: screen; }
+/* GLASS CARD */
+.glass-box {
+  position: relative;
+  width: 380px;
+  padding: 40px;
+  text-align: center;
+  color: white;
+  border-radius: 25px;
 
-    #typewriter {
-      font-size: 1.4em;
-      margin-top: 20px;
-      text-shadow: 0 0 8px white, 0 0 20px #00f0ff;
-      white-space: nowrap;
-      overflow: hidden;
-      border-right: 2px solid rgba(255,255,255,0.75);
-      font-family: 'CodeFont', monospace;
-    }
+  background: rgba(255,255,255,0.055);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
 
-    .social-icons-inside {
-      margin-top: 25px;
-      display: flex;
-      justify-content: center;
-      gap: 25px;
-    }
+  border: 1px solid rgba(255,255,255,0.18);
 
-    .social-icons-inside a img {
-      width: 45px;
-      height: 45px;
-      filter: drop-shadow(0 0 8px white);
-      transition: transform 0.3s ease, filter 0.3s ease;
-      border-radius: 14px;
-    }
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.5),
+    inset 0 0 20px rgba(255,255,255,0.04);
 
-    .social-icons-inside a:hover img {
-      transform: scale(1.1);
-      filter: drop-shadow(0 0 18px white);
-    }
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out;
+  overflow: hidden;
+  animation: unfold 1.3s ease forwards;
+}
 
-    .fade-in {
-      transform: scaleY(0);
-      transform-origin: top;
-      animation: unfold 1.4s ease forwards;
-    }
+/* MOUSE LIGHT REFLECTION */
+.glass-box::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255,255,255,0.24),
+    transparent 55%
+  );
+  opacity: 0.8;
+  pointer-events: none;
+  z-index: 0;
+}
 
-    @keyframes unfold {
-      to {
-        transform: scaleY(1);
-      }
-    }
-  </style>
+/* CARD CONTENT */
+.card-content {
+  position: relative;
+  z-index: 2;
+  transform: translateZ(35px);
+}
+
+/* GLITCH TITLE */
+.glitch-text {
+  position: relative;
+  font-size: 3.5em;
+  font-weight: bold;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-family: 'MostWanted', sans-serif;
+}
+
+.glitch-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+}
+
+.glitch-r {
+  color: red;
+  mix-blend-mode: screen;
+}
+
+.glitch-g {
+  color: lime;
+  mix-blend-mode: screen;
+}
+
+.glitch-b {
+  color: blue;
+  mix-blend-mode: screen;
+}
+
+/* TYPEWRITER */
+#typewriter {
+  font-size: 1.2em;
+  margin-top: 20px;
+  min-height: 25px;
+  text-shadow: 0 0 8px white, 0 0 20px #00f0ff;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 2px solid white;
+  font-family: 'CodeFont', monospace;
+}
+
+/* SOCIAL ICONS */
+.social-icons-inside {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.social-icons-inside a img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px white);
+  transition: 0.3s ease;
+  border-radius: 12px;
+}
+
+.social-icons-inside a:hover img {
+  transform: translateY(-7px) scale(1.15);
+  filter: drop-shadow(0 0 18px white);
+}
+
+/* ANIMATION */
+@keyframes unfold {
+  from {
+    opacity: 0;
+    transform: rotateX(-15deg) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: rotateX(0deg) scale(1);
+  }
+}
+
+/* MOBILE */
+@media (max-width: 500px) {
+  .glass-box {
+    width: min(380px, 85vw);
+    padding: 30px 20px;
+  }
+
+  .glitch-text {
+    font-size: 2.7em;
+  }
+
+  .social-icons-inside {
+    gap: 15px;
+  }
+
+  .social-icons-inside a img {
+    width: 36px;
+    height: 36px;
+  }
+}
+</style>
 </head>
+
 <body>
 
-  <!-- Background video -->
-  <video id="bg-video" autoplay muted loop playsinline>
-    <source src="https://r2.guns.lol/f3c69b42-b442-42c2-abab-3ba82161eb27.mp4" type="video/mp4">
-  </video>
+<!-- BACKGROUND VIDEO -->
+<video id="bg-video" autoplay muted loop playsinline>
+  <source src="background.mp4" type="video/mp4">
+</video>
 
-  <!-- Snow canvas -->
-  <canvas id="snow-canvas"></canvas>
+<!-- SNOW -->
+<canvas id="snow-canvas"></canvas>
 
-  <!-- Main content box -->
-  <div class="glass-box fade-in">
-    <div class="glitch-text" id="glitch">
-      <span class="glitch-layer glitch-r">Staged</span>
-      <span class="glitch-layer glitch-g">Staged</span>
-      <span class="glitch-layer glitch-b">Staged</span>
-      <span>Staged</span>
-    </div>
-    <div id="typewriter"></div>
-    <div class="social-icons-inside">
-      <a href="www.tiktok.com/@h8x1" target="_blank"><img src="tiktok.webp" alt="TikTok" /></a>
-      <a href="https://www.youtube.com/@wic.001" target="_blank"><img src="youtube.png" alt="YouTube" /></a>
-      <a href="https://www.roblox.com/users/3675540/profile" target="_blank"><img src="roblox.webp" alt="Roblox" /></a>
-      <a href=https://www.instagram.com/wic.001/" target="_blank"><img src="insta.webp" alt="Instagram" /></a>
+<!-- CARD -->
+<div class="card-container">
+  <div class="glass-box" id="card">
+
+    <div class="card-content">
+
+      <div class="glitch-text">
+        <span class="glitch-layer glitch-r">Staged</span>
+        <span class="glitch-layer glitch-g">Staged</span>
+        <span class="glitch-layer glitch-b">Staged</span>
+        <span>Staged</span>
+      </div>
+
+      <div id="typewriter"></div>
+
+      <div class="social-icons-inside">
+
+        <a href="https://www.tiktok.com/@h8x1" target="_blank" rel="noopener noreferrer">
+          <img src="tiktok.webp" alt="TikTok">
+        </a>
+
+        <a href="https://www.youtube.com/@wic.001" target="_blank" rel="noopener noreferrer">
+          <img src="youtube.png" alt="YouTube">
+        </a>
+
+        <a href="https://www.roblox.com/users/3675540/profile" target="_blank" rel="noopener noreferrer">
+          <img src="roblox.webp" alt="Roblox">
+        </a>
+
+        <a href="https://www.instagram.com/wic.001/" target="_blank" rel="noopener noreferrer">
+          <img src="insta.webp" alt="Instagram">
+        </a>
+
+      </div>
+
     </div>
   </div>
+</div>
 
-  <!-- Background Music -->
-  <audio id="bg-music" autoplay loop>
-    <source src="nights.mp3" type="audio/mpeg">
-  </audio>
+<!-- MUSIC -->
+<audio id="bg-music" autoplay loop>
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
 
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      const audio = document.getElementById("bg-music");
-      const playPromise = audio.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          document.body.addEventListener('click', () => {
-            audio.play();
-          }, { once: true });
-        });
-      }
-    });
+<script>
 
-    const canvas = document.getElementById("snow-canvas");
-    const ctx = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    const mouse = { x: null, y: null };
-    window.addEventListener("mousemove", e => {
-      mouse.x = e.x; mouse.y = e.y;
-    });
+/* MUSIC AUTOPLAY */
+const audio = document.getElementById("bg-music");
 
-    class Particle {
-      constructor() {
-        this.reset();
-        this.baseX = this.x;
-        this.baseY = this.y;
-        this.density = Math.random() * 30 + 1;
-      }
-      reset() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2 + 1;
-      }
-      draw() {
-        ctx.fillStyle = "white";
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      update() {
-        let dx = mouse.x - this.x, dy = mouse.y - this.y;
-        let dist = Math.sqrt(dx * dx + dy * dy);
-        let force = (120 - dist) / 120;
-        let dirX = dx / dist, dirY = dy / dist;
-        if (dist < 120) {
-          this.x -= dirX * force * this.density;
-          this.y -= dirY * force * this.density;
-        } else {
-          if (this.x !== this.baseX) this.x -= (this.x - this.baseX) / 10;
-          if (this.y !== this.baseY) this.y -= (this.y - this.baseY) / 10;
-        }
-        this.draw();
-      }
-    }
+function startMusic() {
+  audio.play().catch(() => {});
+}
 
-    const particlesArray = [];
-    for (let i = 0; i < 200; i++) particlesArray.push(new Particle());
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particlesArray.forEach(p => p.update());
-      requestAnimationFrame(animate);
-    }
-    animate();
-    window.addEventListener("resize", () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
+window.addEventListener("load", startMusic);
+document.addEventListener("click", startMusic, { once: true });
 
-    const messages = ["Fuck you S0cial!", "QUÉBECOIS CERTIFIED!!", "all my links bellow"];
-    let i = 0, j = 0, isDeleting = false, waitTime = 0;
-    const target = document.getElementById("typewriter");
+/* 3D MOUSE CARD EFFECT */
+const card = document.getElementById("card");
+const container = document.querySelector(".card-container");
 
-    function type() {
-      const txt = messages[i].substring(0, j);
-      target.textContent = txt;
+let rect;
 
-      if (!isDeleting && j < messages[i].length) {
-        j++;
-      } else if (isDeleting && j > 0) {
-        j--;
+container.addEventListener("mousemove", (e) => {
+  rect = card.getBoundingClientRect();
+
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 2;
+
+  const rotateX = ((y - centerY) / centerY) * -12;
+  const rotateY = ((x - centerX) / centerX) * 12;
+
+  card.style.transform =
+    `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.04,1.04,1.04)`;
+
+  card.style.setProperty("--mouse-x", `${x}px`);
+  card.style.setProperty("--mouse-y", `${y}px`);
+});
+
+container.addEventListener("mouseleave", () => {
+  card.style.transform =
+    "rotateX(0deg) rotateY(0deg) scale3d(1,1,1)";
+
+  card.style.setProperty("--mouse-x", "50%");
+  card.style.setProperty("--mouse-y", "50%");
+});
+
+/* SNOW PARTICLES */
+const canvas = document.getElementById("snow-canvas");
+const ctx = canvas.getContext("2d");
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+const mouse = { x: null, y: null };
+
+window.addEventListener("mousemove", e => {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+});
+
+window.addEventListener("mouseout", e => {
+  if (!e.relatedTarget) {
+    mouse.x = null;
+    mouse.y = null;
+  }
+});
+
+class Particle {
+  constructor() {
+    this.reset();
+    this.baseX = this.x;
+    this.baseY = this.y;
+    this.density = Math.random() * 30 + 1;
+  }
+
+  reset() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.size = Math.random() * 2 + 1;
+  }
+
+  draw() {
+    ctx.fillStyle = "white";
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  update() {
+    if (mouse.x !== null && mouse.y !== null) {
+      const dx = mouse.x - this.x;
+      const dy = mouse.y - this.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < 120 && dist > 0) {
+        const force = (120 - dist) / 120;
+        this.x -= (dx / dist) * force * this.density;
+        this.y -= (dy / dist) * force * this.density;
       } else {
-        if (!isDeleting) {
-          waitTime = 5;
-        }
-        isDeleting = !isDeleting;
-        if (!isDeleting) i = (i + 1) % messages.length;
+        this.x += (this.baseX - this.x) / 10;
+        this.y += (this.baseY - this.y) / 10;
       }
-
-      const speed = isDeleting ? 100 : 80;
-      setTimeout(type, waitTime-- > 0 ? 1000 : speed);
+    } else {
+      this.x += (this.baseX - this.x) / 10;
+      this.y += (this.baseY - this.y) / 10;
     }
-    type();
 
-    const glitchR = document.querySelector(".glitch-r");
-    const glitchG = document.querySelector(".glitch-g");
-    const glitchB = document.querySelector(".glitch-b");
-    document.addEventListener("mousemove", (e) => {
-      const centerX = window.innerWidth / 2, centerY = window.innerHeight / 2;
-      const offsetX = (e.clientX - centerX) / 90;
-      const offsetY = (e.clientY - centerY) / 90;
-      glitchR.style.transform = `translate(${-offsetX}px, ${-offsetY}px)`;
-      glitchG.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-      glitchB.style.transform = `translate(${offsetY}px, ${-offsetX}px)`;
-    });
-  </script>
+    this.draw();
+  }
+}
+
+const particlesArray = [];
+
+for (let i = 0; i < 200; i++) {
+  particlesArray.push(new Particle());
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particlesArray.forEach(p => p.update());
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+/* TYPEWRITER */
+const messages = [
+  "Fuck you S0cial!",
+  "QUÉBECOIS CERTIFIED!!",
+  "all my links below"
+];
+
+let i = 0;
+let j = 0;
+let isDeleting = false;
+let waitTime = 0;
+
+const target = document.getElementById("typewriter");
+
+function type() {
+  const txt = messages[i].substring(0, j);
+  target.textContent = txt;
+
+  if (!isDeleting && j < messages[i].length) {
+    j++;
+  } else if (isDeleting && j > 0) {
+    j--;
+  } else {
+    if (!isDeleting) waitTime = 5;
+
+    isDeleting = !isDeleting;
+
+    if (!isDeleting) {
+      i = (i + 1) % messages.length;
+    }
+  }
+
+  const speed = isDeleting ? 100 : 80;
+
+  setTimeout(type, waitTime-- > 0 ? 1000 : speed);
+}
+
+type();
+
+/* GLITCH MOUSE MOVEMENT */
+const glitchR = document.querySelector(".glitch-r");
+const glitchG = document.querySelector(".glitch-g");
+const glitchB = document.querySelector(".glitch-b");
+
+document.addEventListener("mousemove", e => {
+  const centerX = window.innerWidth / 2;
+  const centerY = window.innerHeight / 2;
+
+  const offsetX = (e.clientX - centerX) / 90;
+  const offsetY = (e.clientY - centerY) / 90;
+
+  glitchR.style.transform =
+    `translate(${-offsetX}px, ${-offsetY}px)`;
+
+  glitchG.style.transform =
+    `translate(${offsetX}px, ${offsetY}px)`;
+
+  glitchB.style.transform =
+    `translate(${offsetY}px, ${-offsetX}px)`;
+});
+
+</script>
+
 </body>
 </html>
