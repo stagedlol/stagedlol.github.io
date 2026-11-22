@@ -23,11 +23,17 @@
   box-sizing: border-box;
 }
 
+:root {
+  --panel: rgba(8, 8, 8, .91);
+  --border: rgba(255,255,255,.075);
+  --muted: rgba(255,255,255,.48);
+}
+
 body {
   min-height: 100vh;
-  overflow: hidden;
-  background: #080808;
-  color: white;
+  overflow-x: hidden;
+  background: #050505;
+  color: #eee;
   font-family: CodeFont, monospace;
   display: flex;
   align-items: center;
@@ -43,214 +49,330 @@ body {
   height: 100%;
   object-fit: cover;
   z-index: 0;
-  background: #080808;
-  filter: brightness(.85) contrast(1.08);
+  background: #050505;
+  filter: brightness(.35);
 }
 
-.overlay {
+.background-shade {
   position: fixed;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(0,0,0,.04),
-    rgba(0,0,0,.48)
-  );
+  background: rgba(0,0,0,.62);
 }
-
-/* SNOW */
 
 #snow-canvas {
   position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 2;
   pointer-events: none;
+  z-index: 5;
 }
 
-/* SCENE */
+/* PROFILE LAYOUT */
 
-.scene {
-  position: relative;
-  z-index: 3;
+.profile {
+  width: min(560px, calc(100vw - 32px));
+  margin: 90px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
   perspective: 1000px;
-}
-
-/* FLOATING CONTENT */
-
-.floating {
   position: relative;
-  min-width: 380px;
-  padding: 55px 50px;
-  text-align: center;
+  z-index: 2;
   transform-style: preserve-3d;
   will-change: transform;
-  opacity: 0;
-  animation: entrance 1.5s cubic-bezier(.16,1,.3,1) forwards;
 }
 
-/* LIQUID GLASS */
+/* CARDS */
 
-.glass {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: 45px;
-  pointer-events: none;
-
-  background:
-    radial-gradient(
-      circle at var(--mx, 50%) var(--my, 50%),
-      rgba(255,255,255,.20),
-      rgba(255,255,255,.035) 35%,
-      transparent 70%
-    ),
-    rgba(255,255,255,.025);
-
-  backdrop-filter: blur(14px) saturate(160%);
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
-
-  border: 1px solid rgba(255,255,255,.13);
-
-  box-shadow:
-    inset 0 1px 1px rgba(255,255,255,.18),
-    0 15px 80px rgba(0,0,0,.18);
-
-  transition: background .15s ease;
-}
-
-/* TITLE */
-
-.glitch-text {
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 24px;
   position: relative;
-  display: inline-block;
-  font-family: MostWanted, sans-serif;
-  font-size: clamp(65px, 10vw, 88px);
-  letter-spacing: 5px;
-  line-height: 1;
-  text-transform: uppercase;
-  transform: translateZ(65px);
-  text-shadow: 0 0 30px rgba(255,255,255,.15);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 12px 45px rgba(0,0,0,.25);
+
+  transform-style: preserve-3d;
+  will-change: transform;
+
+  transition:
+    transform .22s ease-out,
+    border-color .4s ease,
+    background .4s ease;
+
+  overflow: hidden;
+  isolation: isolate;
 }
 
-.glitch-layer {
+/* SMOKY GLASS REFLECTION */
+
+.panel::before {
+  content: "";
   position: absolute;
   inset: 0;
+  z-index: 0;
   pointer-events: none;
+
+  background: radial-gradient(
+    300px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(210, 220, 230, .075),
+    rgba(170, 180, 190, .025) 35%,
+    transparent 75%
+  );
+
+  opacity: var(--glow, 0);
+  transition: opacity .3s ease;
 }
 
-.glitch-r {
-  color: red;
-  mix-blend-mode: screen;
+.panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+
+  background: linear-gradient(
+    125deg,
+    rgba(255,255,255,.025),
+    transparent 35%,
+    rgba(255,255,255,.012) 70%,
+    transparent
+  );
+
+  opacity: .6;
 }
 
-.glitch-g {
-  color: lime;
-  mix-blend-mode: screen;
+/* KEEP CONTENT ABOVE REFLECTION */
+
+.panel > * {
+  position: relative;
+  z-index: 1;
 }
 
-.glitch-b {
-  color: #278bff;
-  mix-blend-mode: screen;
+/* MAIN PROFILE */
+
+.main-panel {
+  min-height: 235px;
+  padding: 27px;
+  overflow: hidden;
+}
+
+.profile-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 27px;
+}
+
+.profile-name {
+  font-family: MostWanted, sans-serif;
+  font-size: 36px;
+  letter-spacing: 2px;
+  text-shadow: 0 0 18px rgba(255,255,255,.13);
+}
+
+.profile-meta {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  color: var(--muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.meta-item svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
 }
 
 /* TYPEWRITER */
 
 #typewriter {
-  margin-top: 23px;
   min-height: 22px;
-  font-size: 12px;
-  letter-spacing: 2px;
-  color: rgba(255,255,255,.85);
-  text-shadow: 0 0 15px rgba(255,255,255,.3);
-  transform: translateZ(45px);
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  color: rgba(255,255,255,.8);
+  margin-top: 10px;
 }
 
-/* SOCIAL LINKS */
+/* SOCIAL ICONS */
 
 .socials {
-  margin-top: 38px;
   display: flex;
   justify-content: center;
-  gap: 17px;
-  transform: translateZ(75px);
+  align-items: center;
+  gap: 30px;
+  margin-top: 30px;
 }
 
 .socials a {
-  width: 49px;
-  height: 49px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 17px;
+  background: transparent;
+  border: none;
   text-decoration: none;
-  background: rgba(255,255,255,.055);
-  border: 1px solid rgba(255,255,255,.13);
-
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-
-  box-shadow: inset 0 1px 1px rgba(255,255,255,.13);
-
-  transition: .35s cubic-bezier(.16,1,.3,1);
+  transition: transform .35s cubic-bezier(.16,1,.3,1);
 }
 
 .socials img {
-  width: 24px;
-  height: 24px;
+  width: 27px;
+  height: 27px;
   object-fit: contain;
   filter: grayscale(100%) brightness(1.5);
   transition: .35s ease;
 }
 
 .socials a:hover {
-  transform: translateY(-8px) scale(1.15);
-  background: rgba(255,255,255,.19);
-  border-color: rgba(255,255,255,.5);
-
-  box-shadow:
-    0 0 20px rgba(255,255,255,.2),
-    0 0 40px rgba(255,255,255,.1);
+  transform: translateY(-7px) scale(1.35);
 }
 
 .socials a:hover img {
-  filter: grayscale(0%) brightness(1.3)
-    drop-shadow(0 0 9px white);
+  filter: grayscale(0%) brightness(1.4)
+    drop-shadow(0 0 12px white);
 }
 
-/* FOOTER */
+/* STATUS PANEL */
 
-.footer {
-  margin-top: 34px;
-  font-size: 9px;
-  letter-spacing: 3px;
-  color: rgba(255,255,255,.4);
-  transform: translateZ(35px);
+.status-panel {
+  min-height: 85px;
+  padding: 17px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
-/* MUSIC BUTTON */
-
-.music {
-  position: fixed;
-  bottom: 25px;
-  right: 25px;
-  z-index: 10;
+.status-indicator {
   width: 43px;
   height: 43px;
   border-radius: 50%;
-  background: rgba(255,255,255,.09);
+  background: radial-gradient(circle at 35% 30%, #444, #101010 70%);
+  border: 1px solid rgba(255,255,255,.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: MostWanted, sans-serif;
+  font-size: 19px;
   color: white;
-  border: 1px solid rgba(255,255,255,.2);
-  backdrop-filter: blur(15px);
-  cursor: pointer;
-  transition: .3s;
+  flex-shrink: 0;
 }
 
-.music:hover {
-  background: rgba(255,255,255,.25);
-  box-shadow: 0 0 25px rgba(255,255,255,.25);
+.status-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.status-title {
+  font-family: MostWanted, sans-serif;
+  font-size: 17px;
+  letter-spacing: 1px;
+}
+
+.status-description {
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+/* MUSIC PLAYER */
+
+.music-panel {
+  min-height: 85px;
+  padding: 17px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.music-cover {
+  width: 43px;
+  height: 43px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #333, #111);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.music-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.music-title {
+  font-family: MostWanted, sans-serif;
+  font-size: 17px;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.music-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.time {
+  color: var(--muted);
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+#progress {
+  flex: 1;
+  min-width: 30px;
+  height: 3px;
+  appearance: none;
+  background: rgba(255,255,255,.23);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+#progress::-webkit-slider-thumb {
+  appearance: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+}
+
+#progress::-moz-range-thumb {
+  width: 8px;
+  height: 8px;
+  border: none;
+  border-radius: 50%;
+  background: white;
+}
+
+#play-button {
+  color: white;
+  background: transparent;
+  border: none;
+  font-size: 19px;
+  cursor: pointer;
+  padding: 3px;
+  transition: .2s;
+}
+
+#play-button:hover {
+  text-shadow: 0 0 12px white;
+  transform: scale(1.2);
 }
 
 /* ENTRY SCREEN */
@@ -259,13 +381,12 @@ body {
   position: fixed;
   inset: 0;
   z-index: 20;
+  background: rgba(0,0,0,.65);
   display: flex;
-  align-items: center;
   justify-content: center;
-  background: rgba(0,0,0,.18);
-  backdrop-filter: blur(3px);
+  align-items: center;
   cursor: pointer;
-  transition: opacity .65s ease, visibility .65s ease;
+  transition: opacity .5s ease, visibility .5s ease;
 }
 
 #start-screen.hidden {
@@ -274,62 +395,44 @@ body {
   pointer-events: none;
 }
 
-.start-content {
-  text-align: center;
-  animation: startPulse 2s infinite;
-}
-
-.start-content p {
+.start-text {
   font-size: 11px;
   letter-spacing: 5px;
-  color: rgba(255,255,255,.85);
+  animation: pulse 2s infinite;
 }
 
-.start-line {
-  width: 35px;
-  height: 1px;
-  background: white;
-  margin: 18px auto;
-  box-shadow: 0 0 15px white;
+@keyframes pulse {
+  50% { opacity: .35; }
 }
 
-/* ANIMATIONS */
+/* RESPONSIVE */
 
-@keyframes entrance {
-  from {
-    opacity: 0;
-    transform: translateY(30px) scale(.9);
-    filter: blur(12px);
+@media(max-width: 550px) {
+  .profile {
+    margin: 50px auto;
   }
 
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    filter: blur(0);
-  }
-}
-
-@keyframes startPulse {
-  50% {
-    opacity: .45;
-  }
-}
-
-/* MOBILE */
-
-@media(max-width: 500px) {
-  .floating {
-    min-width: 0;
-    width: calc(100vw - 35px);
-    padding: 45px 20px;
+  .main-panel {
+    padding: 22px;
   }
 
-  .glitch-text {
-    font-size: 65px;
+  .profile-meta {
+    font-size: 9px;
+    gap: 9px;
+  }
+
+  .profile-name {
+    font-size: 29px;
   }
 
   .socials {
-    gap: 12px;
+    gap: 25px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    transition: none;
   }
 }
 </style>
@@ -338,242 +441,347 @@ body {
 <body>
 
 <!-- BACKGROUND VIDEO -->
+
 <video id="bg-video" autoplay muted loop playsinline preload="auto">
   <source src="/background.mp4" type="video/mp4">
 </video>
 
-<div class="overlay"></div>
+<div class="background-shade"></div>
 <canvas id="snow-canvas"></canvas>
 
-<!-- MAIN CONTENT -->
+<!-- PROFILE -->
 
-<main class="scene" id="scene">
-  <div class="floating" id="floating">
+<main class="profile" id="profile">
 
-    <div class="glass"></div>
+  <!-- MAIN CARD -->
 
-    <div class="glitch-text">
-      <span class="glitch-layer glitch-r">Staged</span>
-      <span class="glitch-layer glitch-g">Staged</span>
-      <span class="glitch-layer glitch-b">Staged</span>
-      <span>Staged</span>
+  <section class="panel main-panel">
+
+    <div class="profile-top">
+
+      <div class="profile-name">Staged</div>
+
+      <div class="profile-meta">
+
+        <div class="meta-item">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 5c-5.5 0-10 7-10 7s4.5 7 10 7 10-7 10-7-4.5-7-10-7zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/>
+          </svg>
+          <span>421</span>
+        </div>
+
+        <div class="meta-item">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2a8 8 0 0 0-8 8c0 6 8 12 8 12s8-6 8-12a8 8 0 0 0-8-8zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+          </svg>
+          <span>CANADA</span>
+        </div>
+
+      </div>
     </div>
 
     <div id="typewriter"></div>
 
     <div class="socials">
 
-      <a href="https://www.tiktok.com/@h8x1"
-         target="_blank" rel="noopener noreferrer">
+      <a href="https://www.tiktok.com/@h8x1" target="_blank" rel="noopener noreferrer">
         <img src="tiktok.webp" alt="TikTok">
       </a>
 
-      <a href="https://www.youtube.com/@wic.001"
-         target="_blank" rel="noopener noreferrer">
+      <a href="https://www.youtube.com/@wic.001" target="_blank" rel="noopener noreferrer">
         <img src="youtube.png" alt="YouTube">
       </a>
 
-      <a href="https://www.roblox.com/users/3675540/profile"
-         target="_blank" rel="noopener noreferrer">
+      <a href="https://www.roblox.com/users/3675540/profile" target="_blank" rel="noopener noreferrer">
         <img src="roblox.webp" alt="Roblox">
       </a>
 
-      <a href="https://www.instagram.com/wic.001/"
-         target="_blank" rel="noopener noreferrer">
+      <a href="https://www.instagram.com/wic.001/" target="_blank" rel="noopener noreferrer">
         <img src="insta.webp" alt="Instagram">
       </a>
 
     </div>
 
-    <div class="footer">WIC WAS HERE © 2026</div>
+  </section>
 
-  </div>
+  <!-- STATUS CARD -->
+
+  <section class="panel status-panel">
+
+    <div class="status-indicator">W</div>
+
+    <div class="status-info">
+      <div class="status-title">WIC</div>
+      <div class="status-description">WIC WAS HERE © 2026</div>
+    </div>
+
+  </section>
+
+  <!-- MUSIC CARD -->
+
+  <section class="panel music-panel">
+
+    <div class="music-cover">♫</div>
+
+    <div class="music-content">
+
+      <div class="music-title">song.mp3</div>
+
+      <div class="music-controls">
+
+        <span class="time" id="current-time">0:00</span>
+
+        <input type="range" id="progress" min="0" max="100" value="0">
+
+        <span class="time" id="duration">0:00</span>
+
+        <button id="play-button" aria-label="Play or pause">Ⅱ</button>
+
+      </div>
+
+    </div>
+
+  </section>
+
 </main>
 
-<!-- BACKGROUND MUSIC -->
+<!-- AUDIO -->
 
 <audio id="bg-music" loop preload="auto">
   <source src="/song.mp3" type="audio/mpeg">
 </audio>
 
-<button class="music" id="music" aria-label="Toggle music">♫</button>
-
-<!-- FIRST CLICK SCREEN -->
+<!-- ENTRY SCREEN -->
 
 <div id="start-screen">
-  <div class="start-content">
-    <p>CLICK TO ENTER</p>
-    <div class="start-line"></div>
-  </div>
+  <div class="start-text">CLICK TO ENTER</div>
 </div>
 
 <script>
 
-/* MEDIA ELEMENTS */
+/* FIRST CLICK: START VIDEO + MUSIC */
 
 const video = document.getElementById("bg-video");
 const audio = document.getElementById("bg-music");
 const startScreen = document.getElementById("start-screen");
-const musicButton = document.getElementById("music");
 
 let started = false;
-
-/* FIRST CLICK: START EVERYTHING */
 
 function startExperience() {
   if (started) return;
 
   started = true;
 
-  // Hide entry screen immediately.
+  // Hide immediately
   startScreen.classList.add("hidden");
 
-  // Start video and audio directly from the click.
+  // Start video and audio from the same user interaction
   video.muted = true;
 
-  video.play().catch(error => {
-    console.error("VIDEO PLAY ERROR:", error);
+  video.play().catch(e => {
+    console.error("Video playback error:", e);
   });
 
-  audio.play().then(() => {
-    musicButton.textContent = "♫";
-  }).catch(error => {
-    console.error("MUSIC PLAY ERROR:", error);
-    musicButton.textContent = "♪";
+  audio.play().catch(e => {
+    console.error("Audio playback error:", e);
   });
 }
 
 startScreen.addEventListener("click", startExperience, { once: true });
 
-/* MUSIC CONTROL */
+/* MUSIC PLAYER */
 
-musicButton.addEventListener("click", async () => {
+const playButton = document.getElementById("play-button");
+const progress = document.getElementById("progress");
+const currentTime = document.getElementById("current-time");
+const duration = document.getElementById("duration");
+
+function formatTime(seconds) {
+  if (!Number.isFinite(seconds)) return "0:00";
+
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+
+  return `${mins}:${String(secs).padStart(2, "0")}`;
+}
+
+playButton.addEventListener("click", async () => {
+
   if (audio.paused) {
+
     try {
       await audio.play();
-      musicButton.textContent = "♫";
-    } catch (error) {
-      console.error("MUSIC ERROR:", error);
+      playButton.textContent = "Ⅱ";
+    } catch (e) {
+      console.error("Audio error:", e);
     }
+
   } else {
+
     audio.pause();
-    musicButton.textContent = "♪";
+    playButton.textContent = "▶";
+
   }
+
 });
 
-/* MEDIA ERROR DETECTION */
-
-video.addEventListener("error", () => {
-  console.error(
-    "VIDEO FAILED:",
-    video.error,
-    video.currentSrc
-  );
+audio.addEventListener("loadedmetadata", () => {
+  duration.textContent = formatTime(audio.duration);
 });
 
-video.addEventListener("playing", () => {
-  console.log("Background video is playing.");
+audio.addEventListener("timeupdate", () => {
+
+  currentTime.textContent = formatTime(audio.currentTime);
+
+  if (Number.isFinite(audio.duration) && audio.duration > 0) {
+    progress.value = (audio.currentTime / audio.duration) * 100;
+  }
+
 });
 
-audio.addEventListener("error", () => {
-  console.error("MUSIC FAILED:", audio.error);
+progress.addEventListener("input", () => {
+
+  if (Number.isFinite(audio.duration)) {
+    audio.currentTime = (progress.value / 100) * audio.duration;
+  }
+
 });
 
-/* STRONG CURSOR MOVEMENT */
+audio.addEventListener("play", () => {
+  playButton.textContent = "Ⅱ";
+});
 
-const floating = document.getElementById("floating");
-const scene = document.getElementById("scene");
+audio.addEventListener("pause", () => {
+  playButton.textContent = "▶";
+});
 
-let targetX = 0;
-let targetY = 0;
-let targetMoveX = 0;
-let targetMoveY = 0;
+/* INDIVIDUAL 3D CARD TILT + SMOKY GLASS */
 
-let currentX = 0;
-let currentY = 0;
-let currentMoveX = 0;
-let currentMoveY = 0;
+const panels = document.querySelectorAll(".panel");
+
+let animationFrame;
 
 document.addEventListener("mousemove", e => {
 
-  // Move the entire composition toward the cursor.
-  const screenX = (e.clientX / window.innerWidth) - 0.5;
-  const screenY = (e.clientY / window.innerHeight) - 0.5;
+  if (animationFrame) {
+    cancelAnimationFrame(animationFrame);
+  }
 
-  targetMoveX = screenX * 130;
-  targetMoveY = screenY * 90;
+  animationFrame = requestAnimationFrame(() => {
 
-  // Strong 3D rotation based on cursor position over the content.
-  const rect = floating.getBoundingClientRect();
+    panels.forEach(panel => {
 
-  const mouseX =
-    (e.clientX - (rect.left + rect.width / 2)) /
-    (rect.width / 2);
+      const rect = panel.getBoundingClientRect();
 
-  const mouseY =
-    (e.clientY - (rect.top + rect.height / 2)) /
-    (rect.height / 2);
+      // Closest point on card to cursor
+      const closestX = Math.max(rect.left, Math.min(e.clientX, rect.right));
+      const closestY = Math.max(rect.top, Math.min(e.clientY, rect.bottom));
 
-  targetX = Math.max(-1, Math.min(1, mouseY)) * -28;
-  targetY = Math.max(-1, Math.min(1, mouseX)) * 28;
+      const dx = e.clientX - closestX;
+      const dy = e.clientY - closestY;
 
-  // Move the glass reflection with the cursor.
-  floating.style.setProperty(
-    "--mx",
-    `${e.clientX - rect.left}px`
-  );
+      const distance = Math.hypot(dx, dy);
 
-  floating.style.setProperty(
-    "--my",
-    `${e.clientY - rect.top}px`
-  );
+      // Effect reaches 150px outside the card
+      const influence = Math.max(0, 1 - distance / 150);
+
+      // Cursor position relative to card
+      const x = (e.clientX - rect.left) / rect.width;
+      const y = (e.clientY - rect.top) / rect.height;
+
+      const limitedX = Math.max(0, Math.min(1, x));
+      const limitedY = Math.max(0, Math.min(1, y));
+
+      // Gentle 3D rotation
+      const rotateY = (limitedX - .5) * 9 * influence;
+      const rotateX = (.5 - limitedY) * 9 * influence;
+
+      // Very small lift
+      const lift = influence * 2;
+
+      panel.style.transform = `
+        perspective(900px)
+        translateY(${-lift}px)
+        rotateX(${rotateX}deg)
+        rotateY(${rotateY}deg)
+      `;
+
+      // Smoky light follows cursor
+      panel.style.setProperty("--mouse-x", `${limitedX * 100}%`);
+      panel.style.setProperty("--mouse-y", `${limitedY * 100}%`);
+      panel.style.setProperty("--glow", influence * .8);
+
+    });
+
+  });
+
+});
+
+/* RESET CARD EFFECT */
+
+document.addEventListener("mouseleave", () => {
+
+  panels.forEach(panel => {
+
+    panel.style.transform = "";
+    panel.style.setProperty("--glow", "0");
+
+  });
+
+});
+
+/* SUBTLE PROFILE MOVEMENT */
+
+const profile = document.getElementById("profile");
+
+let targetX = 0;
+let targetY = 0;
+let currentX = 0;
+let currentY = 0;
+
+document.addEventListener("mousemove", e => {
+
+  const x = e.clientX / innerWidth - .5;
+  const y = e.clientY / innerHeight - .5;
+
+  targetX = x * 12;
+  targetY = y * 8;
+
 });
 
 document.addEventListener("mouseleave", () => {
   targetX = 0;
   targetY = 0;
-  targetMoveX = 0;
-  targetMoveY = 0;
-
-  floating.style.setProperty("--mx", "50%");
-  floating.style.setProperty("--my", "50%");
 });
 
-/* SMOOTH INERTIA */
+function animateProfile() {
 
-function animateCard() {
+  currentX += (targetX - currentX) * .08;
+  currentY += (targetY - currentY) * .08;
 
-  currentX += (targetX - currentX) * .10;
-  currentY += (targetY - currentY) * .10;
+  profile.style.transform =
+    `translate3d(${currentX}px, ${currentY}px, 0)`;
 
-  currentMoveX += (targetMoveX - currentMoveX) * .10;
-  currentMoveY += (targetMoveY - currentMoveY) * .10;
+  requestAnimationFrame(animateProfile);
 
-  floating.style.transform = `
-    translate3d(${currentMoveX}px, ${currentMoveY}px, 0)
-    rotateX(${currentX}deg)
-    rotateY(${currentY}deg)
-  `;
-
-  requestAnimationFrame(animateCard);
 }
 
-animateCard();
+animateProfile();
 
 /* RGB GLITCH */
 
-const r = document.querySelector(".glitch-r");
-const g = document.querySelector(".glitch-g");
-const b = document.querySelector(".glitch-b");
+const title = document.querySelector(".profile-name");
 
 document.addEventListener("mousemove", e => {
 
-  const x = (e.clientX - innerWidth / 2) / 90;
-  const y = (e.clientY - innerHeight / 2) / 90;
+  const x = (e.clientX / innerWidth - .5) * 5;
+  const y = (e.clientY / innerHeight - .5) * 5;
 
-  r.style.transform = `translate(${-x}px, ${-y}px)`;
-  g.style.transform = `translate(${x}px, ${y}px)`;
-  b.style.transform = `translate(${y}px, ${-x}px)`;
+  title.style.textShadow = `
+    ${-x}px ${y}px 0 rgba(255,0,0,.45),
+    ${x}px ${-y}px 0 rgba(0,100,255,.45),
+    0 0 18px rgba(255,255,255,.13)
+  `;
 
 });
 
@@ -585,38 +793,41 @@ const messages = [
   "all my links below"
 ];
 
-let i = 0;
-let j = 0;
+let messageIndex = 0;
+let charIndex = 0;
 let deleting = false;
-let pause = 0;
 
 const typeTarget = document.getElementById("typewriter");
 
 function type() {
 
-  const message = messages[i];
+  const message = messages[messageIndex];
 
-  typeTarget.textContent = message.substring(0, j);
+  typeTarget.textContent = message.substring(0, charIndex);
 
-  if (!deleting && j < message.length) {
-    j++;
-  } else if (deleting && j > 0) {
-    j--;
+  if (!deleting && charIndex < message.length) {
+
+    charIndex++;
+    setTimeout(type, 85);
+
+  } else if (deleting && charIndex > 0) {
+
+    charIndex--;
+    setTimeout(type, 45);
+
   } else {
+
     deleting = !deleting;
 
     if (!deleting) {
-      i = (i + 1) % messages.length;
+      messageIndex = (messageIndex + 1) % messages.length;
+      setTimeout(type, 500);
     } else {
-      pause = 12;
+      setTimeout(type, 1500);
     }
+
   }
 
-  const speed = pause > 0
-    ? (pause--, 1000)
-    : deleting ? 45 : 85;
-
-  setTimeout(type, speed);
 }
 
 type();
@@ -640,74 +851,57 @@ function resizeCanvas() {
   canvas.height = height * dpr;
 
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
 }
 
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 
-const mouse = {
-  x: -1000,
-  y: -1000
-};
+const particles = Array.from({length: 100}, () => ({
 
-document.addEventListener("mousemove", e => {
-  mouse.x = e.clientX;
-  mouse.y = e.clientY;
-});
+  x: Math.random() * innerWidth,
+  y: Math.random() * innerHeight,
+  size: Math.random() * 1.5 + .5,
+  speed: Math.random() * .6 + .2
 
-class Particle {
-
-  constructor() {
-    this.reset(true);
-    this.size = Math.random() * 1.5 + .5;
-    this.speed = Math.random() * .6 + .2;
-  }
-
-  reset(initial = false) {
-    this.x = Math.random() * width;
-    this.y = initial ? Math.random() * height : -5;
-  }
-
-  update() {
-
-    this.y += this.speed;
-
-    const dx = mouse.x - this.x;
-    const dy = mouse.y - this.y;
-    const dist = Math.hypot(dx, dy);
-
-    if (dist < 110 && dist > 0) {
-      const force = (110 - dist) / 110;
-      this.x -= dx / dist * force * 2;
-      this.y -= dy / dist * force * 2;
-    }
-
-    if (this.y > height + 5) {
-      this.reset();
-    }
-
-    ctx.fillStyle = "rgba(255,255,255,.65)";
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fill();
-  }
-}
-
-const particles = Array.from(
-  { length: 100 },
-  () => new Particle()
-);
+}));
 
 function animateSnow() {
 
   ctx.clearRect(0, 0, width, height);
 
-  particles.forEach(p => p.update());
+  particles.forEach(p => {
+
+    p.y += p.speed;
+
+    if (p.y > height) {
+      p.y = -5;
+      p.x = Math.random() * width;
+    }
+
+    ctx.fillStyle = "rgba(255,255,255,.6)";
+
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.fill();
+
+  });
 
   requestAnimationFrame(animateSnow);
+
 }
 
 animateSnow();
+
+/* MEDIA ERROR DETECTION */
+
+video.addEventListener("error", () => {
+  console.error("Video failed:", video.currentSrc, video.error);
+});
+
+audio.addEventListener("error", () => {
+  console.error("Audio failed:", audio.currentSrc, audio.error);
+});
 
 </script>
 
