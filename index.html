@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ps4.lol</title>
+<title>Seak is here!</title>
 
 <style>
 @font-face {
@@ -18,15 +18,16 @@
 
 html, body {
     width: 100%;
-    height: 100%;
+    min-height: 100%;
     margin: 0;
-    overflow: hidden;
-    background: black;
+    background: #000;
 }
 
 body {
+    min-height: 100vh;
     display: grid;
     place-items: center;
+    overflow-x: hidden;
 }
 
 /* BACKGROUND VIDEO */
@@ -40,83 +41,259 @@ body {
     z-index: 0;
 }
 
+/* GLOBAL STARS */
+
+#backgroundStars {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
 /* MAIN CONTENT */
 
 .content {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
-    padding: 20px;
+    padding: 30px 15px;
 }
 
-/* TITLE */
+/* RGB TITLE */
 
 .title-wrap {
     position: relative;
     display: grid;
     place-items: center;
-    margin-bottom: 30px;
-    perspective: 1000px;
+    margin-bottom: 28px;
+}
+
+.title-wrap h1,
+.rgb-layer {
+    grid-area: 1 / 1;
+    font-family: "MostWanted", sans-serif;
+    font-size: clamp(76px, 16vw, 220px);
+    font-weight: normal;
+    line-height: 1;
+    white-space: nowrap;
+    margin: 0;
+    pointer-events: none;
 }
 
 .title-wrap h1 {
-    grid-area: 1 / 1;
     z-index: 5;
-    margin: 0;
     color: white;
-    font-family: "MostWanted", sans-serif;
-    font-size: clamp(76px, 16vw, 220px);
-    font-weight: normal;
-    line-height: 1;
-    white-space: nowrap;
-    pointer-events: none;
     text-shadow: 0 5px 22px rgba(0,0,0,.4);
 }
 
-/* RGB TEXT LAYERS */
-
 .rgb-layer {
-    grid-area: 1 / 1;
-    position: relative;
     z-index: 2;
     opacity: 0;
-    font-family: "MostWanted", sans-serif;
-    font-size: clamp(76px, 16vw, 220px);
-    font-weight: normal;
-    line-height: 1;
-    white-space: nowrap;
-    pointer-events: none;
     transition:
         transform .35s cubic-bezier(.2,.8,.2,1),
         opacity .15s ease;
     will-change: transform;
 }
 
-/* FULL RGB COLORS */
-
 .rgb-red {
     color: #ff003c;
-    text-shadow:
-        0 0 12px #ff003c,
-        0 0 30px #ff003c;
+    text-shadow: 0 0 12px #ff003c, 0 0 30px #ff003c;
 }
 
 .rgb-green {
     color: #00ff55;
-    text-shadow:
-        0 0 12px #00ff55,
-        0 0 30px #00ff55;
+    text-shadow: 0 0 12px #00ff55, 0 0 30px #00ff55;
 }
 
 .rgb-blue {
     color: #0066ff;
-    text-shadow:
-        0 0 12px #0066ff,
-        0 0 30px #0066ff;
+    text-shadow: 0 0 12px #0066ff, 0 0 30px #0066ff;
+}
+
+/* iOS 26 LIQUID GLASS CARD */
+
+.id-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    width: min(420px, 90vw);
+    aspect-ratio: 85.6 / 54;
+
+    padding: 24px;
+    gap: 20px;
+    margin-bottom: 30px;
+
+    border-radius: 24px;
+
+    /* Almost invisible glass surface */
+    background: rgba(255, 255, 255, 0.025);
+
+    /* Liquid Glass */
+    backdrop-filter: blur(24px) saturate(180%) brightness(1.15);
+    -webkit-backdrop-filter: blur(24px) saturate(180%) brightness(1.15);
+
+    border: 1px solid rgba(255, 255, 255, 0.32);
+
+    box-shadow:
+        inset 0 1px 1px rgba(255, 255, 255, 0.45),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.12),
+        0 12px 40px rgba(0, 0, 0, 0.12);
+
+    overflow: hidden;
+    isolation: isolate;
+
+    transform-style: preserve-3d;
+    transform: perspective(1000px);
+
+    transition: transform .18s ease-out;
+}
+
+/* GLASS REFLECTION */
+
+.card-shine {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+
+    background: linear-gradient(
+        135deg,
+        rgba(255,255,255,.22) 0%,
+        rgba(255,255,255,.06) 18%,
+        transparent 42%,
+        transparent 72%,
+        rgba(255,255,255,.10) 100%
+    );
+}
+
+/* NO OPAQUE PATTERN */
+
+.card-pattern {
+    display: none;
+}
+
+/* CARD HEADER */
+
+.card-header {
+    position: absolute;
+    top: 15px;
+    left: 21px;
+    right: 21px;
+    z-index: 3;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    font-family: Arial, sans-serif;
+    font-size: 7px;
+    font-weight: 500;
+    letter-spacing: 2.5px;
+
+    color: rgba(255,255,255,.65);
+
+    transform: translateZ(15px);
+}
+
+/* PROFILE PICTURE */
+
+.card-avatar {
+    position: relative;
+    z-index: 3;
+    flex-shrink: 0;
+
+    width: 96px;
+    height: 96px;
+
+    border-radius: 50%;
+    overflow: hidden;
+
+    border: 1px solid rgba(255,255,255,.55);
+
+    box-shadow:
+        0 0 25px rgba(255,255,255,.12),
+        0 8px 25px rgba(0,0,0,.25);
+
+    transform: translateZ(35px);
+}
+
+.card-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* CARD TYPOGRAPHY */
+
+.card-info {
+    position: relative;
+    z-index: 3;
+
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+
+    color: white;
+    transform: translateZ(40px);
+}
+
+.card-label {
+    font-family: Arial, sans-serif;
+    font-size: 7px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,.65);
+}
+
+.card-name {
+    font-family: Arial, sans-serif;
+    font-size: 35px;
+    font-weight: 300;
+    letter-spacing: 4px;
+    line-height: 1;
+    color: rgba(255,255,255,.98);
+    text-shadow: 0 2px 12px rgba(0,0,0,.15);
+}
+
+.card-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    font-family: Arial, sans-serif;
+    font-size: 8px;
+    font-weight: 400;
+    letter-spacing: 2px;
+
+    color: rgba(255,255,255,.65);
+}
+
+.card-details b {
+    color: rgba(255,255,255,.98);
+    font-weight: 400;
+    letter-spacing: 1px;
+    margin-left: 7px;
+}
+
+/* CORNER SYMBOL */
+
+.card-symbol {
+    position: absolute;
+    z-index: 3;
+    right: 19px;
+    bottom: 15px;
+
+    font-size: 15px;
+    color: rgba(255,255,255,.65);
+
+    transform: translateZ(25px);
 }
 
 /* SOCIAL LOGOS */
@@ -131,10 +308,15 @@ body {
 .logo {
     display: grid;
     place-items: center;
+
     width: clamp(48px, 5.5vw, 68px);
     height: clamp(48px, 5.5vw, 68px);
+
     transform: translateY(0) scale(1);
     transition: transform .25s ease;
+
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .logo img {
@@ -144,8 +326,6 @@ body {
     user-select: none;
     -webkit-user-drag: none;
 }
-
-/* LOGO HOVER */
 
 .logo:hover {
     transform: translateY(-10px) scale(1.15);
@@ -159,6 +339,25 @@ body {
         font-size: clamp(66px, 17vw, 110px);
     }
 
+    .id-card {
+        width: min(360px, 92vw);
+        padding: 17px;
+        gap: 14px;
+    }
+
+    .card-avatar {
+        width: 76px;
+        height: 76px;
+    }
+
+    .card-name {
+        font-size: 29px;
+    }
+
+    .card-details {
+        font-size: 7px;
+    }
+
     .logos {
         gap: 22px;
     }
@@ -169,9 +368,12 @@ body {
     }
 }
 
+/* REDUCED MOTION */
+
 @media (prefers-reduced-motion: reduce) {
     .logo,
-    .rgb-layer {
+    .rgb-layer,
+    .id-card {
         transition: none;
     }
 }
@@ -181,48 +383,91 @@ body {
 <body>
 
 <!-- BACKGROUND VIDEO -->
+
 <video id="background" autoplay muted loop playsinline>
     <source src="background.mp4" type="video/mp4">
 </video>
 
+<!-- FULL SCREEN STARS -->
+
+<canvas id="backgroundStars"></canvas>
+
 <main class="content">
 
     <!-- RGB TITLE -->
-    <div class="title-wrap" id="titleWrap">
 
+    <div class="title-wrap" id="titleWrap">
         <span class="rgb-layer rgb-red">ps4.lol</span>
         <span class="rgb-layer rgb-green">ps4.lol</span>
         <span class="rgb-layer rgb-blue">ps4.lol</span>
-
-        <!-- ORIGINAL WHITE TEXT -->
         <h1>ps4.lol</h1>
+    </div>
+
+    <!-- LIQUID GLASS ID CARD -->
+
+    <div class="id-card" id="idCard">
+
+        <div class="card-shine"></div>
+        <div class="card-pattern"></div>
+
+        <div class="card-header">
+            <span>PERSONAL DIGITAL ID</span>
+            <span>SEAK • CA</span>
+        </div>
+
+        <div class="card-avatar">
+            <img src="pfp.webp" alt="Seak">
+        </div>
+
+        <div class="card-info">
+            <div class="card-label">IDENTITY</div>
+            <div class="card-name">Seak</div>
+
+            <div class="card-details">
+                <span>AGE <b>17</b></span>
+                <span>COUNTRY <b>Canada</b></span>
+            </div>
+        </div>
+
+        <div class="card-symbol">✦</div>
 
     </div>
 
-    <!-- YOUR ORIGINAL LOGOS -->
+    <!-- SOCIAL BUTTONS -->
+
     <div class="logos">
 
-        <div class="logo">
+        <a class="logo"
+           href="https://www.instagram.com/seakstoner/"
+           target="_blank"
+           rel="noopener noreferrer">
             <img src="insta.webp" alt="Instagram">
-        </div>
+        </a>
 
-        <div class="logo">
+        <a class="logo"
+           href="https://www.tiktok.com/@MS4wLjABAAAAdTBU2JtioniY3uGwoUt1tLPVNOzfChhAyBzja_IGb8tMxo2a3C1GcrOGeOCYaQy1?YO"
+           target="_blank"
+           rel="noopener noreferrer">
             <img src="tiktok.webp" alt="TikTok">
-        </div>
+        </a>
 
         <div class="logo">
             <img src="youtube.png" alt="YouTube">
         </div>
 
-        <div class="logo">
+        <a class="logo"
+           href="https://www.roblox.com/users/3675540/profile"
+           target="_blank"
+           rel="noopener noreferrer">
             <img src="roblox.webp" alt="Roblox">
-        </div>
+        </a>
 
     </div>
 
 </main>
 
 <!-- MUSIC -->
+
 <audio id="music" src="song.mp3" autoplay loop preload="auto"></audio>
 
 <script>
@@ -234,7 +479,6 @@ const music = document.getElementById("music");
 music.volume = 1;
 
 music.play().catch(() => {
-
     const resumeMusic = () => {
         music.play().catch(() => {});
 
@@ -246,11 +490,10 @@ music.play().catch(() => {
     window.addEventListener("pointerdown", resumeMusic);
     window.addEventListener("keydown", resumeMusic);
     window.addEventListener("touchstart", resumeMusic);
-
 });
 
 
-/* ADVANCED RGB MOUSE EFFECT */
+/* RGB MOUSE EFFECT */
 
 const title = document.getElementById("titleWrap");
 
@@ -282,45 +525,189 @@ window.addEventListener("pointermove", (event) => {
             layer.style.opacity = "0";
             layer.style.transform = "translate3d(0,0,0)";
         });
-
         return;
     }
 
-    // Full opacity and saturated RGB colors.
     const spread = intensity * maxSpread;
-
-    // Mouse direction changes the direction of separation.
     const angle = Math.atan2(dy, dx);
 
-    // Each RGB layer has an independent movement direction.
     const redAngle = angle + 2.1;
     const greenAngle = angle - 2.0;
     const blueAngle = angle + 4.1;
 
-    const redX = Math.cos(redAngle) * spread;
-    const redY = Math.sin(redAngle) * spread;
-
-    const greenX = Math.cos(greenAngle) * spread;
-    const greenY = Math.sin(greenAngle) * spread;
-
-    const blueX = Math.cos(blueAngle) * spread;
-    const blueY = Math.sin(blueAngle) * spread;
-
     red.style.transform =
-        `translate3d(${redX}px, ${redY}px, 0) rotate(-3deg)`;
+        `translate3d(${Math.cos(redAngle)*spread}px, ${Math.sin(redAngle)*spread}px, 0) rotate(-3deg)`;
 
     green.style.transform =
-        `translate3d(${greenX}px, ${greenY}px, 0) rotate(3deg)`;
+        `translate3d(${Math.cos(greenAngle)*spread}px, ${Math.sin(greenAngle)*spread}px, 0) rotate(3deg)`;
 
     blue.style.transform =
-        `translate3d(${blueX}px, ${blueY}px, 0) rotate(-2deg)`;
+        `translate3d(${Math.cos(blueAngle)*spread}px, ${Math.sin(blueAngle)*spread}px, 0) rotate(-2deg)`;
 
-    // Each color appears at 100% opacity.
     layers.forEach(layer => {
         layer.style.opacity = "1";
     });
 
 });
+
+
+/* 3D GLASS CARD */
+
+const idCard = document.getElementById("idCard");
+
+idCard.addEventListener("pointermove", (e) => {
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const rect = idCard.getBoundingClientRect();
+
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const dx = (x - rect.width / 2) / (rect.width / 2);
+    const dy = (y - rect.height / 2) / (rect.height / 2);
+
+    const rotateY = -dx * 12;
+    const rotateX = dy * 12;
+
+    const moveX = -dx * 9;
+    const moveY = -dy * 9;
+
+    idCard.style.transform = `
+        perspective(1000px)
+        translate3d(${moveX}px, ${moveY}px, 0)
+        rotateX(${rotateX}deg)
+        rotateY(${rotateY}deg)
+    `;
+
+});
+
+idCard.addEventListener("pointerleave", () => {
+
+    idCard.style.transform = `
+        perspective(1000px)
+        translate3d(0,0,0)
+        rotateX(0deg)
+        rotateY(0deg)
+    `;
+
+});
+
+
+/* GLOBAL INTERACTIVE STARS */
+
+const starCanvas = document.getElementById("backgroundStars");
+const starCtx = starCanvas.getContext("2d");
+
+let particles = [];
+
+let pointer = {
+    x: -1000,
+    y: -1000
+};
+
+function setupStars() {
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    starCanvas.width = window.innerWidth * dpr;
+    starCanvas.height = window.innerHeight * dpr;
+
+    starCanvas.style.width = "100%";
+    starCanvas.style.height = "100%";
+
+    starCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    const count = Math.min(
+        220,
+        Math.floor(window.innerWidth * window.innerHeight / 5500)
+    );
+
+    particles = Array.from({ length: count }, () => ({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        size: Math.random() * .85 + .2,
+        opacity: Math.random() * .35 + .08,
+        speed: Math.random() * .22 + .035,
+        phase: Math.random() * Math.PI * 2
+    }));
+
+}
+
+window.addEventListener("pointermove", e => {
+    pointer.x = e.clientX;
+    pointer.y = e.clientY;
+});
+
+window.addEventListener("pointerleave", () => {
+    pointer.x = -1000;
+    pointer.y = -1000;
+});
+
+function animateStars(time) {
+
+    starCtx.clearRect(
+        0,
+        0,
+        window.innerWidth,
+        window.innerHeight
+    );
+
+    particles.forEach(p => {
+
+        const dx = pointer.x - p.x;
+        const dy = pointer.y - p.y;
+
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        // Cursor repulsion
+
+        if (distance < 115) {
+            const force = (1 - distance / 115) * 1.3;
+
+            p.x -= (dx / (distance || 1)) * force;
+            p.y -= (dy / (distance || 1)) * force;
+        }
+
+        // Slow floating
+
+        p.y -= p.speed;
+
+        if (p.y < -3) {
+            p.y = window.innerHeight + 3;
+            p.x = Math.random() * window.innerWidth;
+        }
+
+        // Twinkle
+
+        const twinkle =
+            .7 + Math.sin(time * .001 + p.phase) * .3;
+
+        starCtx.beginPath();
+
+        starCtx.arc(
+            p.x,
+            p.y,
+            p.size,
+            0,
+            Math.PI * 2
+        );
+
+        starCtx.fillStyle =
+            `rgba(255,255,255,${p.opacity * twinkle})`;
+
+        starCtx.fill();
+
+    });
+
+    requestAnimationFrame(animateStars);
+
+}
+
+setupStars();
+requestAnimationFrame(animateStars);
+
+window.addEventListener("resize", setupStars);
 
 </script>
 
