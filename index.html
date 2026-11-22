@@ -11,15 +11,9 @@
   font-family: MostWanted;
   src: url("mostwanted(1).ttf") format("truetype");
 }
-
 @font-face {
   font-family: CodeFont;
   src: url("Code.ttf") format("truetype");
-}
-
-:root {
-  --mouse-x: 50%;
-  --mouse-y: 50%;
 }
 
 * {
@@ -30,9 +24,8 @@
 
 body {
   height: 100vh;
-  width: 100%;
   overflow: hidden;
-  background: #050505;
+  background: #080808;
   color: white;
   font-family: CodeFont, monospace;
   display: flex;
@@ -40,7 +33,7 @@ body {
   justify-content: center;
 }
 
-/* BACKGROUND VIDEO */
+/* VIDEO BACKGROUND */
 
 #bg-video {
   position: fixed;
@@ -48,29 +41,21 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: -3;
-  filter: brightness(.55) contrast(1.1);
+  z-index: 0;
+  background: #080808;
+  filter: brightness(.85) contrast(1.08);
 }
 
-.background-overlay {
+.overlay {
   position: fixed;
   inset: 0;
-  z-index: -2;
-  background:
-    radial-gradient(ellipse at center, transparent 10%, rgba(0,0,0,.55) 100%),
-    linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.45));
-}
-
-/* FILM GRAIN */
-
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
+  z-index: 1;
   pointer-events: none;
-  z-index: 5;
-  opacity: .12;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E");
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0,0,0,.04),
+    rgba(0,0,0,.4)
+  );
 }
 
 /* SNOW */
@@ -80,134 +65,74 @@ body::after {
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 2;
   pointer-events: none;
 }
 
-/* MAIN */
+/* 3D SCENE */
 
-.main {
+.scene {
   position: relative;
   z-index: 3;
-  perspective: 1400px;
-  padding: 20px;
+  perspective: 1000px;
 }
 
-/* GLASS CARD */
+/* FLOATING CARD */
 
-.card {
+.floating {
   position: relative;
-  width: 410px;
-  max-width: calc(100vw - 40px);
-  padding: 48px 38px 35px;
-  border-radius: 28px;
-  overflow: hidden;
-
-  background: rgba(255,255,255,.075);
-
-  backdrop-filter: blur(28px) saturate(145%);
-  -webkit-backdrop-filter: blur(28px) saturate(145%);
-
-  border: 1px solid rgba(255,255,255,.19);
-
-  box-shadow:
-    0 30px 100px rgba(0,0,0,.65),
-    0 0 45px rgba(255,255,255,.045),
-    inset 0 1px 1px rgba(255,255,255,.25),
-    inset 0 -1px 1px rgba(255,255,255,.05);
-
+  min-width: 380px;
+  padding: 55px 50px;
+  text-align: center;
   transform-style: preserve-3d;
   will-change: transform;
-
   opacity: 0;
-  animation: cardEnter 1.5s cubic-bezier(.16,1,.3,1) forwards;
+
+  animation: entrance 1.5s cubic-bezier(.16,1,.3,1) forwards;
 }
 
-/* TOP GLASS REFLECTION */
+/* LIQUID GLASS */
 
-.card::before {
-  content: "";
+.glass {
   position: absolute;
   inset: 0;
-  border-radius: inherit;
+  z-index: -1;
+  border-radius: 45px;
   pointer-events: none;
 
-  background: radial-gradient(
-    circle at var(--mouse-x) var(--mouse-y),
-    rgba(255,255,255,.25),
-    rgba(255,255,255,.06) 20%,
-    transparent 55%
-  );
+  background:
+    radial-gradient(
+      circle at var(--mx, 50%) var(--my, 50%),
+      rgba(255,255,255,.20),
+      rgba(255,255,255,.035) 35%,
+      transparent 70%
+    ),
+    rgba(255,255,255,.025);
 
-  opacity: .9;
-  z-index: 1;
-}
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
 
-/* CARD BORDER LIGHT */
+  border: 1px solid rgba(255,255,255,.13);
 
-.card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.18),
+    0 15px 80px rgba(0,0,0,.18);
 
-  background: linear-gradient(
-    135deg,
-    rgba(255,255,255,.35),
-    transparent 25%,
-    transparent 70%,
-    rgba(255,255,255,.13)
-  );
-
-  opacity: .55;
-  z-index: 1;
-}
-
-.content {
-  position: relative;
-  z-index: 2;
-  transform: translateZ(40px);
-  text-align: center;
-}
-
-/* STATUS */
-
-.status {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  padding: 8px 13px;
-  margin-bottom: 27px;
-
-  font-size: 10px;
-  letter-spacing: 2px;
-  color: rgba(255,255,255,.75);
-
-  border: 1px solid rgba(255,255,255,.15);
-  border-radius: 30px;
-  background: rgba(255,255,255,.045);
-}
-
-.status-dot {
-  width: 6px;
-  height: 6px;
-  background: #baffd0;
-  border-radius: 50%;
-  box-shadow: 0 0 12px #8affb0;
-  animation: pulse 2s infinite;
+  transition: background .15s ease;
 }
 
 /* TITLE */
 
 .glitch-text {
   position: relative;
+  display: inline-block;
   font-family: MostWanted, sans-serif;
-  font-size: clamp(55px, 12vw, 75px);
+  font-size: clamp(65px, 10vw, 88px);
   letter-spacing: 5px;
   line-height: 1;
   text-transform: uppercase;
-  text-shadow: 0 0 30px rgba(255,255,255,.12);
+  transform: translateZ(65px);
+  text-shadow: 0 0 30px rgba(255,255,255,.15);
 }
 
 .glitch-layer {
@@ -216,217 +141,179 @@ body::after {
   pointer-events: none;
 }
 
-.glitch-r {
-  color: #ff3434;
-  mix-blend-mode: screen;
-}
-
-.glitch-g {
-  color: #53ff8b;
-  mix-blend-mode: screen;
-}
-
-.glitch-b {
-  color: #479eff;
-  mix-blend-mode: screen;
-}
-
-/* SEPARATOR */
-
-.separator {
-  width: 45px;
-  height: 1px;
-  background: rgba(255,255,255,.65);
-  margin: 23px auto;
-  box-shadow: 0 0 12px white;
-}
+.glitch-r { color: red; mix-blend-mode: screen; }
+.glitch-g { color: lime; mix-blend-mode: screen; }
+.glitch-b { color: #278bff; mix-blend-mode: screen; }
 
 /* TYPEWRITER */
 
 #typewriter {
-  min-height: 25px;
-  font-size: 13px;
-  letter-spacing: 1.5px;
+  margin-top: 23px;
+  min-height: 22px;
+  font-size: 12px;
+  letter-spacing: 2px;
   color: rgba(255,255,255,.85);
-  text-shadow: 0 0 15px rgba(255,255,255,.4);
-  white-space: nowrap;
-  overflow: hidden;
+  text-shadow: 0 0 15px rgba(255,255,255,.3);
+  transform: translateZ(45px);
 }
 
-/* SOCIAL SECTION */
+/* SOCIALS */
 
-.social-label {
-  margin-top: 36px;
-  margin-bottom: 17px;
-  font-size: 9px;
-  letter-spacing: 3px;
-  color: rgba(255,255,255,.45);
-}
-
-.social-icons {
+.socials {
+  margin-top: 38px;
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 14px;
+  gap: 17px;
+  transform: translateZ(75px);
 }
 
-.social-icons a {
-  position: relative;
-  width: 53px;
-  height: 53px;
+.socials a {
+  width: 49px;
+  height: 49px;
   display: flex;
   align-items: center;
   justify-content: center;
-
   border-radius: 17px;
-  border: 1px solid rgba(255,255,255,.14);
+  text-decoration: none;
 
-  background: rgba(255,255,255,.065);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255,255,255,.055);
+  border: 1px solid rgba(255,255,255,.13);
 
-  transition:
-    transform .4s cubic-bezier(.2,.8,.2,1),
-    background .4s ease,
-    box-shadow .4s ease,
-    border-color .4s ease;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
 
-  opacity: 0;
-  animation: iconEnter .8s ease forwards;
+  box-shadow: inset 0 1px 1px rgba(255,255,255,.13);
+
+  transition: .35s cubic-bezier(.16,1,.3,1);
 }
 
-.social-icons a:nth-child(1) { animation-delay: .7s; }
-.social-icons a:nth-child(2) { animation-delay: .85s; }
-.social-icons a:nth-child(3) { animation-delay: 1s; }
-.social-icons a:nth-child(4) { animation-delay: 1.15s; }
-
-.social-icons img {
-  width: 26px;
-  height: 26px;
+.socials img {
+  width: 24px;
+  height: 24px;
   object-fit: contain;
   filter: grayscale(100%) brightness(1.5);
-  transition: .4s ease;
+  transition: .35s ease;
 }
 
-.social-icons a:hover {
-  transform: translateY(-8px) scale(1.1);
-  background: rgba(255,255,255,.18);
-  border-color: rgba(255,255,255,.6);
-
+.socials a:hover {
+  transform: translateY(-8px) scale(1.15);
+  background: rgba(255,255,255,.19);
+  border-color: rgba(255,255,255,.5);
   box-shadow:
-    0 0 15px rgba(255,255,255,.2),
-    0 0 35px rgba(255,255,255,.13),
-    inset 0 0 15px rgba(255,255,255,.1);
+    0 0 20px rgba(255,255,255,.2),
+    0 0 40px rgba(255,255,255,.1);
 }
 
-.social-icons a:hover img {
-  filter: grayscale(0%) brightness(1.3) drop-shadow(0 0 8px white);
+.socials a:hover img {
+  filter: grayscale(0%) brightness(1.3)
+    drop-shadow(0 0 9px white);
 }
 
-/* BOTTOM */
+/* FOOTER */
 
-.bottom-text {
-  margin-top: 30px;
+.footer {
+  margin-top: 34px;
   font-size: 9px;
-  letter-spacing: 2px;
-  color: rgba(255,255,255,.3);
+  letter-spacing: 3px;
+  color: rgba(255,255,255,.4);
+  transform: translateZ(35px);
 }
 
-/* MEDIA CONTROLS */
+/* MUSIC */
 
-.media-controls {
+.music {
   position: fixed;
   bottom: 25px;
   right: 25px;
-  z-index: 8;
-  display: flex;
-  gap: 10px;
-}
-
-.media-button {
+  z-index: 10;
   width: 43px;
   height: 43px;
   border-radius: 50%;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-
-  color: white;
-  font-size: 15px;
-
   background: rgba(255,255,255,.09);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-
+  color: white;
   border: 1px solid rgba(255,255,255,.2);
-  box-shadow: 0 5px 25px rgba(0,0,0,.3);
-  transition: .3s ease;
+  backdrop-filter: blur(15px);
+  cursor: pointer;
+  transition: .3s;
 }
 
-.media-button:hover {
-  background: rgba(255,255,255,.22);
+.music:hover {
+  background: rgba(255,255,255,.25);
   box-shadow: 0 0 25px rgba(255,255,255,.25);
-  transform: translateY(-3px);
+}
+
+/* CLICK TO START */
+
+#start-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,.18);
+  backdrop-filter: blur(3px);
+  cursor: pointer;
+  transition: opacity .8s ease, visibility .8s ease;
+}
+
+#start-screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.start-content {
+  text-align: center;
+  animation: startPulse 2s infinite;
+}
+
+.start-content p {
+  font-size: 11px;
+  letter-spacing: 5px;
+  color: rgba(255,255,255,.85);
+}
+
+.start-line {
+  width: 35px;
+  height: 1px;
+  background: white;
+  margin: 18px auto;
+  box-shadow: 0 0 15px white;
 }
 
 /* ANIMATIONS */
 
-@keyframes cardEnter {
-  0% {
-    opacity: 0;
-    transform: translateY(40px) scale(.85) rotateX(12deg);
-    filter: blur(15px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1) rotateX(0);
-    filter: blur(0);
-  }
-}
-
-@keyframes iconEnter {
+@keyframes entrance {
   from {
     opacity: 0;
-    transform: translateY(15px);
-    filter: blur(5px);
+    transform: translateY(30px) scale(.9);
+    filter: blur(12px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
     filter: blur(0);
   }
 }
 
-@keyframes pulse {
-  50% { opacity: .35; }
+@keyframes startPulse {
+  50% { opacity: .45; }
 }
-
-/* MOBILE */
 
 @media(max-width: 500px) {
-  .card {
-    padding: 40px 20px 30px;
+  .floating {
+    min-width: 0;
+    width: calc(100vw - 35px);
+    padding: 45px 20px;
   }
 
-  .social-icons {
-    gap: 10px;
+  .glitch-text {
+    font-size: 65px;
   }
 
-  .social-icons a {
-    width: 48px;
-    height: 48px;
-  }
-
-  .media-controls {
-    bottom: 15px;
-    right: 15px;
-  }
-}
-
-@media(prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: .01ms !important;
-    transition-duration: .01ms !important;
+  .socials {
+    gap: 12px;
   }
 }
 </style>
@@ -439,63 +326,44 @@ body::after {
   <source src="./background.mp4" type="video/mp4">
 </video>
 
-<div class="background-overlay"></div>
-
+<div class="overlay"></div>
 <canvas id="snow-canvas"></canvas>
 
-<!-- MAIN CARD -->
-<main class="main">
-  <div class="card" id="card">
+<!-- MAIN CONTENT -->
+<main class="scene" id="scene">
+  <div class="floating" id="floating">
 
-    <div class="content">
+    <div class="glass"></div>
 
-      <div class="status">
-        <span class="status-dot"></span>
-        SYSTEM ONLINE
-      </div>
-
-      <div class="glitch-text">
-        <span class="glitch-layer glitch-r">Staged</span>
-        <span class="glitch-layer glitch-g">Staged</span>
-        <span class="glitch-layer glitch-b">Staged</span>
-        <span>Staged</span>
-      </div>
-
-      <div class="separator"></div>
-
-      <div id="typewriter"></div>
-
-      <div class="social-label">FIND ME ELSEWHERE</div>
-
-      <div class="social-icons">
-
-        <a href="https://www.tiktok.com/@h8x1"
-           target="_blank" rel="noopener noreferrer">
-          <img src="tiktok.webp" alt="TikTok">
-        </a>
-
-        <a href="https://www.youtube.com/@wic.001"
-           target="_blank" rel="noopener noreferrer">
-          <img src="youtube.png" alt="YouTube">
-        </a>
-
-        <a href="https://www.roblox.com/users/3675540/profile"
-           target="_blank" rel="noopener noreferrer">
-          <img src="roblox.webp" alt="Roblox">
-        </a>
-
-        <a href="https://www.instagram.com/wic.001/"
-           target="_blank" rel="noopener noreferrer">
-          <img src="insta.webp" alt="Instagram">
-        </a>
-
-      </div>
-
-      <div class="bottom-text">
-        WIC WAS HERE © 2026
-      </div>
-
+    <div class="glitch-text">
+      <span class="glitch-layer glitch-r">Staged</span>
+      <span class="glitch-layer glitch-g">Staged</span>
+      <span class="glitch-layer glitch-b">Staged</span>
+      <span>Staged</span>
     </div>
+
+    <div id="typewriter"></div>
+
+    <div class="socials">
+      <a href="https://www.tiktok.com/@h8x1" target="_blank" rel="noopener noreferrer">
+        <img src="tiktok.webp" alt="TikTok">
+      </a>
+
+      <a href="https://www.youtube.com/@wic.001" target="_blank" rel="noopener noreferrer">
+        <img src="youtube.png" alt="YouTube">
+      </a>
+
+      <a href="https://www.roblox.com/users/3675540/profile" target="_blank" rel="noopener noreferrer">
+        <img src="roblox.webp" alt="Roblox">
+      </a>
+
+      <a href="https://www.instagram.com/wic.001/" target="_blank" rel="noopener noreferrer">
+        <img src="insta.webp" alt="Instagram">
+      </a>
+    </div>
+
+    <div class="footer">WIC WAS HERE © 2026</div>
+
   </div>
 </main>
 
@@ -504,132 +372,176 @@ body::after {
   <source src="./song.mp3" type="audio/mpeg">
 </audio>
 
-<!-- MEDIA BUTTONS -->
-<div class="media-controls">
-  <button class="media-button" id="video-btn"
-          aria-label="Pause background video" title="Pause video">Ⅱ</button>
+<button class="music" id="music" aria-label="Toggle music">♫</button>
 
-  <button class="media-button" id="music-btn"
-          aria-label="Play music" title="Play music">♫</button>
+<!-- FIRST CLICK SCREEN -->
+<div id="start-screen">
+  <div class="start-content">
+    <p>CLICK TO ENTER</p>
+    <div class="start-line"></div>
+  </div>
 </div>
 
 <script>
 
-/* VIDEO PLAYBACK */
+/* FIRST CLICK: START VIDEO AND MUSIC */
 
 const video = document.getElementById("bg-video");
-const videoBtn = document.getElementById("video-btn");
+const audio = document.getElementById("bg-music");
+const startScreen = document.getElementById("start-screen");
+const musicButton = document.getElementById("music");
 
-async function playVideo() {
-  try {
-    await video.play();
-    videoBtn.textContent = "Ⅱ";
-    videoBtn.title = "Pause video";
-  } catch (error) {
-    console.warn("Video playback failed:", error);
+let started = false;
+
+async function startExperience() {
+  if (started) return;
+
+  started = true;
+
+  // Both playback calls happen directly inside the user click.
+  const videoPromise = video.play();
+  const audioPromise = audio.play();
+
+  const [videoResult, audioResult] = await Promise.allSettled([
+    videoPromise,
+    audioPromise
+  ]);
+
+  if (videoResult.status === "rejected") {
+    console.error("VIDEO ERROR:", videoResult.reason);
   }
+
+  if (audioResult.status === "rejected") {
+    console.error("MUSIC ERROR:", audioResult.reason);
+  }
+
+  musicButton.textContent = audio.paused ? "♪" : "♫";
+
+  startScreen.classList.add("hidden");
 }
 
-videoBtn.addEventListener("click", async () => {
-  if (video.paused) {
-    await playVideo();
-  } else {
-    video.pause();
-    videoBtn.textContent = "▶";
-    videoBtn.title = "Play video";
-  }
-});
+startScreen.addEventListener("click", startExperience, { once: true });
 
-// Retry muted autoplay after the first interaction.
-document.addEventListener("click", () => {
-  if (video.paused) playVideo();
-}, { once: true });
+/* MUSIC CONTROL */
 
-video.play().catch(error => {
-  console.warn("Autoplay blocked:", error);
-});
-
-/* MUSIC */
-
-const audio = document.getElementById("bg-music");
-const musicBtn = document.getElementById("music-btn");
-
-musicBtn.addEventListener("click", async () => {
+musicButton.addEventListener("click", async () => {
   if (audio.paused) {
     try {
       await audio.play();
-      musicBtn.textContent = "♫";
-      musicBtn.title = "Pause music";
+      musicButton.textContent = "♫";
     } catch (error) {
-      console.warn("Audio playback failed:", error);
+      console.error("Music error:", error);
     }
   } else {
     audio.pause();
-    musicBtn.textContent = "♪";
-    musicBtn.title = "Play music";
+    musicButton.textContent = "♪";
   }
 });
 
-/* 3D CARD */
+/* VIDEO ERROR DETECTION */
 
-const card = document.getElementById("card");
-const main = document.querySelector(".main");
+video.addEventListener("error", () => {
+  console.error(
+    "VIDEO FAILED TO LOAD:",
+    video.error?.message,
+    video.currentSrc
+  );
+});
 
-let cardRect;
+video.addEventListener("playing", () => {
+  console.log("Background video is playing.");
+});
+
+audio.addEventListener("error", () => {
+  console.error("MUSIC FAILED TO LOAD:", audio.error);
+});
+
+/* STRONGER 3D MOUSE MOVEMENT */
+
+const floating = document.getElementById("floating");
+const scene = document.getElementById("scene");
+
 let targetX = 0;
 let targetY = 0;
+let targetMoveX = 0;
+let targetMoveY = 0;
+
 let currentX = 0;
 let currentY = 0;
+let currentMoveX = 0;
+let currentMoveY = 0;
 
-main.addEventListener("mousemove", (e) => {
-  cardRect = card.getBoundingClientRect();
+scene.addEventListener("mousemove", (e) => {
+  const rect = scene.getBoundingClientRect();
 
-  const x = e.clientX - cardRect.left;
-  const y = e.clientY - cardRect.top;
+  const mouseX = (e.clientX - (rect.left + rect.width / 2))
+    / (rect.width / 2);
 
-  const centerX = cardRect.width / 2;
-  const centerY = cardRect.height / 2;
+  const mouseY = (e.clientY - (rect.top + rect.height / 2))
+    / (rect.height / 2);
 
-  targetX = ((y - centerY) / centerY) * -10;
-  targetY = ((x - centerX) / centerX) * 10;
+  // Much stronger rotation.
+  targetX = mouseY * -22;
+  targetY = mouseX * 22;
 
-  card.style.setProperty("--mouse-x", `${x}px`);
-  card.style.setProperty("--mouse-y", `${y}px`);
+  // Actual card movement follows cursor.
+  targetMoveX = mouseX * 45;
+  targetMoveY = mouseY * 35;
+
+  const cardRect = floating.getBoundingClientRect();
+
+  floating.style.setProperty(
+    "--mx",
+    `${e.clientX - cardRect.left}px`
+  );
+
+  floating.style.setProperty(
+    "--my",
+    `${e.clientY - cardRect.top}px`
+  );
+});
+
+scene.addEventListener("mouseleave", () => {
+  targetX = 0;
+  targetY = 0;
+  targetMoveX = 0;
+  targetMoveY = 0;
+
+  floating.style.setProperty("--mx", "50%");
+  floating.style.setProperty("--my", "50%");
 });
 
 function animateCard() {
-  currentX += (targetX - currentX) * .12;
-  currentY += (targetY - currentY) * .12;
+  // Smooth but responsive inertia.
+  currentX += (targetX - currentX) * .11;
+  currentY += (targetY - currentY) * .11;
+  currentMoveX += (targetMoveX - currentMoveX) * .11;
+  currentMoveY += (targetMoveY - currentMoveY) * .11;
 
-  card.style.transform =
-    `rotateX(${currentX}deg) rotateY(${currentY}deg)`;
+  floating.style.transform = `
+    translate3d(${currentMoveX}px, ${currentMoveY}px, 0)
+    rotateX(${currentX}deg)
+    rotateY(${currentY}deg)
+  `;
 
   requestAnimationFrame(animateCard);
 }
 
 animateCard();
 
-main.addEventListener("mouseleave", () => {
-  targetX = 0;
-  targetY = 0;
-
-  card.style.setProperty("--mouse-x", "50%");
-  card.style.setProperty("--mouse-y", "50%");
-});
-
 /* GLITCH */
 
-const glitchR = document.querySelector(".glitch-r");
-const glitchG = document.querySelector(".glitch-g");
-const glitchB = document.querySelector(".glitch-b");
+const r = document.querySelector(".glitch-r");
+const g = document.querySelector(".glitch-g");
+const b = document.querySelector(".glitch-b");
 
-document.addEventListener("mousemove", (e) => {
-  const x = (e.clientX - innerWidth / 2) / 100;
-  const y = (e.clientY - innerHeight / 2) / 100;
+document.addEventListener("mousemove", e => {
+  const x = (e.clientX - innerWidth / 2) / 90;
+  const y = (e.clientY - innerHeight / 2) / 90;
 
-  glitchR.style.transform = `translate(${-x}px, ${-y}px)`;
-  glitchG.style.transform = `translate(${x}px, ${y}px)`;
-  glitchB.style.transform = `translate(${y}px, ${-x}px)`;
+  r.style.transform = `translate(${-x}px, ${-y}px)`;
+  g.style.transform = `translate(${x}px, ${y}px)`;
+  b.style.transform = `translate(${y}px, ${-x}px)`;
 });
 
 /* TYPEWRITER */
@@ -640,17 +552,13 @@ const messages = [
   "all my links below"
 ];
 
-let i = 0;
-let j = 0;
-let deleting = false;
-let pause = 0;
+let i = 0, j = 0, deleting = false, pause = 0;
 
-const target = document.getElementById("typewriter");
+const typeTarget = document.getElementById("typewriter");
 
 function type() {
   const message = messages[i];
-
-  target.textContent = message.substring(0, j);
+  typeTarget.textContent = message.substring(0, j);
 
   if (!deleting && j < message.length) {
     j++;
@@ -666,32 +574,30 @@ function type() {
     }
   }
 
-  const speed = pause > 0 ? (pause--, 1000) : deleting ? 45 : 85;
+  const speed = pause > 0
+    ? (pause--, 1000)
+    : deleting ? 45 : 85;
 
   setTimeout(type, speed);
 }
 
 type();
 
-/* SNOW PARTICLES */
+/* SNOW */
 
 const canvas = document.getElementById("snow-canvas");
 const ctx = canvas.getContext("2d");
 
-let width;
-let height;
+let width, height;
 
 function resizeCanvas() {
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const dpr = Math.min(devicePixelRatio || 1, 2);
 
   width = innerWidth;
   height = innerHeight;
 
   canvas.width = width * dpr;
   canvas.height = height * dpr;
-
-  canvas.style.width = width + "px";
-  canvas.style.height = height + "px";
 
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
@@ -701,55 +607,52 @@ window.addEventListener("resize", resizeCanvas);
 
 const mouse = { x: -1000, y: -1000 };
 
-window.addEventListener("mousemove", e => {
+document.addEventListener("mousemove", e => {
   mouse.x = e.clientX;
   mouse.y = e.clientY;
 });
 
 class Particle {
   constructor() {
-    this.reset();
-    this.baseX = this.x;
-    this.baseY = this.y;
-    this.density = Math.random() * 20 + 2;
-  }
-
-  reset() {
     this.x = Math.random() * width;
     this.y = Math.random() * height;
-    this.size = Math.random() * 1.8 + .5;
+    this.baseX = this.x;
+    this.baseY = this.y;
+    this.size = Math.random() * 1.5 + .5;
+    this.speed = Math.random() * .15 + .04;
   }
 
   update() {
     const dx = mouse.x - this.x;
     const dy = mouse.y - this.y;
-    const dist = Math.sqrt(dx * dx + dy * dy);
+    const dist = Math.hypot(dx, dy);
 
     if (dist < 110 && dist > 0) {
       const force = (110 - dist) / 110;
-      this.x -= (dx / dist) * force * this.density;
-      this.y -= (dy / dist) * force * this.density;
+      this.x -= dx / dist * force * 2;
+      this.y -= dy / dist * force * 2;
     } else {
       this.x += (this.baseX - this.x) * .025;
       this.y += (this.baseY - this.y) * .025;
+      this.y += this.speed;
     }
 
-    this.draw();
-  }
+    if (this.y > height) {
+      this.y = 0;
+      this.baseY = Math.random() * height;
+    }
 
-  draw() {
-    ctx.fillStyle = "rgba(255,255,255,.75)";
+    ctx.fillStyle = "rgba(255,255,255,.65)";
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
     ctx.fill();
   }
 }
 
-const particles = [];
-
-for (let i = 0; i < 130; i++) {
-  particles.push(new Particle());
-}
+const particles = Array.from(
+  { length: 100 },
+  () => new Particle()
+);
 
 function animateSnow() {
   ctx.clearRect(0, 0, width, height);
