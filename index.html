@@ -11,6 +11,7 @@
   font-family: MostWanted;
   src: url("mostwanted(1).ttf") format("truetype");
 }
+
 @font-face {
   font-family: CodeFont;
   src: url("Code.ttf") format("truetype");
@@ -23,7 +24,7 @@
 }
 
 body {
-  height: 100vh;
+  min-height: 100vh;
   overflow: hidden;
   background: #080808;
   color: white;
@@ -33,7 +34,7 @@ body {
   justify-content: center;
 }
 
-/* VIDEO BACKGROUND */
+/* BACKGROUND VIDEO */
 
 #bg-video {
   position: fixed;
@@ -54,7 +55,7 @@ body {
   background: radial-gradient(
     ellipse at center,
     rgba(0,0,0,.04),
-    rgba(0,0,0,.4)
+    rgba(0,0,0,.48)
   );
 }
 
@@ -69,7 +70,7 @@ body {
   pointer-events: none;
 }
 
-/* 3D SCENE */
+/* SCENE */
 
 .scene {
   position: relative;
@@ -77,7 +78,7 @@ body {
   perspective: 1000px;
 }
 
-/* FLOATING CARD */
+/* FLOATING CONTENT */
 
 .floating {
   position: relative;
@@ -87,7 +88,6 @@ body {
   transform-style: preserve-3d;
   will-change: transform;
   opacity: 0;
-
   animation: entrance 1.5s cubic-bezier(.16,1,.3,1) forwards;
 }
 
@@ -141,9 +141,20 @@ body {
   pointer-events: none;
 }
 
-.glitch-r { color: red; mix-blend-mode: screen; }
-.glitch-g { color: lime; mix-blend-mode: screen; }
-.glitch-b { color: #278bff; mix-blend-mode: screen; }
+.glitch-r {
+  color: red;
+  mix-blend-mode: screen;
+}
+
+.glitch-g {
+  color: lime;
+  mix-blend-mode: screen;
+}
+
+.glitch-b {
+  color: #278bff;
+  mix-blend-mode: screen;
+}
 
 /* TYPEWRITER */
 
@@ -157,7 +168,7 @@ body {
   transform: translateZ(45px);
 }
 
-/* SOCIALS */
+/* SOCIAL LINKS */
 
 .socials {
   margin-top: 38px;
@@ -175,7 +186,6 @@ body {
   justify-content: center;
   border-radius: 17px;
   text-decoration: none;
-
   background: rgba(255,255,255,.055);
   border: 1px solid rgba(255,255,255,.13);
 
@@ -199,6 +209,7 @@ body {
   transform: translateY(-8px) scale(1.15);
   background: rgba(255,255,255,.19);
   border-color: rgba(255,255,255,.5);
+
   box-shadow:
     0 0 20px rgba(255,255,255,.2),
     0 0 40px rgba(255,255,255,.1);
@@ -219,7 +230,7 @@ body {
   transform: translateZ(35px);
 }
 
-/* MUSIC */
+/* MUSIC BUTTON */
 
 .music {
   position: fixed;
@@ -242,7 +253,7 @@ body {
   box-shadow: 0 0 25px rgba(255,255,255,.25);
 }
 
-/* CLICK TO START */
+/* ENTRY SCREEN */
 
 #start-screen {
   position: fixed;
@@ -254,7 +265,7 @@ body {
   background: rgba(0,0,0,.18);
   backdrop-filter: blur(3px);
   cursor: pointer;
-  transition: opacity .8s ease, visibility .8s ease;
+  transition: opacity .65s ease, visibility .65s ease;
 }
 
 #start-screen.hidden {
@@ -290,6 +301,7 @@ body {
     transform: translateY(30px) scale(.9);
     filter: blur(12px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -298,8 +310,12 @@ body {
 }
 
 @keyframes startPulse {
-  50% { opacity: .45; }
+  50% {
+    opacity: .45;
+  }
 }
+
+/* MOBILE */
 
 @media(max-width: 500px) {
   .floating {
@@ -323,13 +339,14 @@ body {
 
 <!-- BACKGROUND VIDEO -->
 <video id="bg-video" autoplay muted loop playsinline preload="auto">
-  <source src="./background.mp4" type="video/mp4">
+  <source src="/background.mp4" type="video/mp4">
 </video>
 
 <div class="overlay"></div>
 <canvas id="snow-canvas"></canvas>
 
 <!-- MAIN CONTENT -->
+
 <main class="scene" id="scene">
   <div class="floating" id="floating">
 
@@ -345,21 +362,27 @@ body {
     <div id="typewriter"></div>
 
     <div class="socials">
-      <a href="https://www.tiktok.com/@h8x1" target="_blank" rel="noopener noreferrer">
+
+      <a href="https://www.tiktok.com/@h8x1"
+         target="_blank" rel="noopener noreferrer">
         <img src="tiktok.webp" alt="TikTok">
       </a>
 
-      <a href="https://www.youtube.com/@wic.001" target="_blank" rel="noopener noreferrer">
+      <a href="https://www.youtube.com/@wic.001"
+         target="_blank" rel="noopener noreferrer">
         <img src="youtube.png" alt="YouTube">
       </a>
 
-      <a href="https://www.roblox.com/users/3675540/profile" target="_blank" rel="noopener noreferrer">
+      <a href="https://www.roblox.com/users/3675540/profile"
+         target="_blank" rel="noopener noreferrer">
         <img src="roblox.webp" alt="Roblox">
       </a>
 
-      <a href="https://www.instagram.com/wic.001/" target="_blank" rel="noopener noreferrer">
+      <a href="https://www.instagram.com/wic.001/"
+         target="_blank" rel="noopener noreferrer">
         <img src="insta.webp" alt="Instagram">
       </a>
+
     </div>
 
     <div class="footer">WIC WAS HERE © 2026</div>
@@ -367,14 +390,16 @@ body {
   </div>
 </main>
 
-<!-- AUDIO -->
+<!-- BACKGROUND MUSIC -->
+
 <audio id="bg-music" loop preload="auto">
-  <source src="./song.mp3" type="audio/mpeg">
+  <source src="/song.mp3" type="audio/mpeg">
 </audio>
 
 <button class="music" id="music" aria-label="Toggle music">♫</button>
 
 <!-- FIRST CLICK SCREEN -->
+
 <div id="start-screen">
   <div class="start-content">
     <p>CLICK TO ENTER</p>
@@ -384,7 +409,7 @@ body {
 
 <script>
 
-/* FIRST CLICK: START VIDEO AND MUSIC */
+/* MEDIA ELEMENTS */
 
 const video = document.getElementById("bg-video");
 const audio = document.getElementById("bg-music");
@@ -393,31 +418,29 @@ const musicButton = document.getElementById("music");
 
 let started = false;
 
-async function startExperience() {
+/* FIRST CLICK: START EVERYTHING */
+
+function startExperience() {
   if (started) return;
 
   started = true;
 
-  // Both playback calls happen directly inside the user click.
-  const videoPromise = video.play();
-  const audioPromise = audio.play();
-
-  const [videoResult, audioResult] = await Promise.allSettled([
-    videoPromise,
-    audioPromise
-  ]);
-
-  if (videoResult.status === "rejected") {
-    console.error("VIDEO ERROR:", videoResult.reason);
-  }
-
-  if (audioResult.status === "rejected") {
-    console.error("MUSIC ERROR:", audioResult.reason);
-  }
-
-  musicButton.textContent = audio.paused ? "♪" : "♫";
-
+  // Hide entry screen immediately.
   startScreen.classList.add("hidden");
+
+  // Start video and audio directly from the click.
+  video.muted = true;
+
+  video.play().catch(error => {
+    console.error("VIDEO PLAY ERROR:", error);
+  });
+
+  audio.play().then(() => {
+    musicButton.textContent = "♫";
+  }).catch(error => {
+    console.error("MUSIC PLAY ERROR:", error);
+    musicButton.textContent = "♪";
+  });
 }
 
 startScreen.addEventListener("click", startExperience, { once: true });
@@ -430,7 +453,7 @@ musicButton.addEventListener("click", async () => {
       await audio.play();
       musicButton.textContent = "♫";
     } catch (error) {
-      console.error("Music error:", error);
+      console.error("MUSIC ERROR:", error);
     }
   } else {
     audio.pause();
@@ -438,12 +461,12 @@ musicButton.addEventListener("click", async () => {
   }
 });
 
-/* VIDEO ERROR DETECTION */
+/* MEDIA ERROR DETECTION */
 
 video.addEventListener("error", () => {
   console.error(
-    "VIDEO FAILED TO LOAD:",
-    video.error?.message,
+    "VIDEO FAILED:",
+    video.error,
     video.currentSrc
   );
 });
@@ -453,10 +476,10 @@ video.addEventListener("playing", () => {
 });
 
 audio.addEventListener("error", () => {
-  console.error("MUSIC FAILED TO LOAD:", audio.error);
+  console.error("MUSIC FAILED:", audio.error);
 });
 
-/* STRONGER 3D MOUSE MOVEMENT */
+/* STRONG CURSOR MOVEMENT */
 
 const floating = document.getElementById("floating");
 const scene = document.getElementById("scene");
@@ -471,37 +494,42 @@ let currentY = 0;
 let currentMoveX = 0;
 let currentMoveY = 0;
 
-scene.addEventListener("mousemove", (e) => {
-  const rect = scene.getBoundingClientRect();
+document.addEventListener("mousemove", e => {
 
-  const mouseX = (e.clientX - (rect.left + rect.width / 2))
-    / (rect.width / 2);
+  // Move the entire composition toward the cursor.
+  const screenX = (e.clientX / window.innerWidth) - 0.5;
+  const screenY = (e.clientY / window.innerHeight) - 0.5;
 
-  const mouseY = (e.clientY - (rect.top + rect.height / 2))
-    / (rect.height / 2);
+  targetMoveX = screenX * 130;
+  targetMoveY = screenY * 90;
 
-  // Much stronger rotation.
-  targetX = mouseY * -22;
-  targetY = mouseX * 22;
+  // Strong 3D rotation based on cursor position over the content.
+  const rect = floating.getBoundingClientRect();
 
-  // Actual card movement follows cursor.
-  targetMoveX = mouseX * 45;
-  targetMoveY = mouseY * 35;
+  const mouseX =
+    (e.clientX - (rect.left + rect.width / 2)) /
+    (rect.width / 2);
 
-  const cardRect = floating.getBoundingClientRect();
+  const mouseY =
+    (e.clientY - (rect.top + rect.height / 2)) /
+    (rect.height / 2);
 
+  targetX = Math.max(-1, Math.min(1, mouseY)) * -28;
+  targetY = Math.max(-1, Math.min(1, mouseX)) * 28;
+
+  // Move the glass reflection with the cursor.
   floating.style.setProperty(
     "--mx",
-    `${e.clientX - cardRect.left}px`
+    `${e.clientX - rect.left}px`
   );
 
   floating.style.setProperty(
     "--my",
-    `${e.clientY - cardRect.top}px`
+    `${e.clientY - rect.top}px`
   );
 });
 
-scene.addEventListener("mouseleave", () => {
+document.addEventListener("mouseleave", () => {
   targetX = 0;
   targetY = 0;
   targetMoveX = 0;
@@ -511,12 +539,15 @@ scene.addEventListener("mouseleave", () => {
   floating.style.setProperty("--my", "50%");
 });
 
+/* SMOOTH INERTIA */
+
 function animateCard() {
-  // Smooth but responsive inertia.
-  currentX += (targetX - currentX) * .11;
-  currentY += (targetY - currentY) * .11;
-  currentMoveX += (targetMoveX - currentMoveX) * .11;
-  currentMoveY += (targetMoveY - currentMoveY) * .11;
+
+  currentX += (targetX - currentX) * .10;
+  currentY += (targetY - currentY) * .10;
+
+  currentMoveX += (targetMoveX - currentMoveX) * .10;
+  currentMoveY += (targetMoveY - currentMoveY) * .10;
 
   floating.style.transform = `
     translate3d(${currentMoveX}px, ${currentMoveY}px, 0)
@@ -529,19 +560,21 @@ function animateCard() {
 
 animateCard();
 
-/* GLITCH */
+/* RGB GLITCH */
 
 const r = document.querySelector(".glitch-r");
 const g = document.querySelector(".glitch-g");
 const b = document.querySelector(".glitch-b");
 
 document.addEventListener("mousemove", e => {
+
   const x = (e.clientX - innerWidth / 2) / 90;
   const y = (e.clientY - innerHeight / 2) / 90;
 
   r.style.transform = `translate(${-x}px, ${-y}px)`;
   g.style.transform = `translate(${x}px, ${y}px)`;
   b.style.transform = `translate(${y}px, ${-x}px)`;
+
 });
 
 /* TYPEWRITER */
@@ -552,12 +585,17 @@ const messages = [
   "all my links below"
 ];
 
-let i = 0, j = 0, deleting = false, pause = 0;
+let i = 0;
+let j = 0;
+let deleting = false;
+let pause = 0;
 
 const typeTarget = document.getElementById("typewriter");
 
 function type() {
+
   const message = messages[i];
+
   typeTarget.textContent = message.substring(0, j);
 
   if (!deleting && j < message.length) {
@@ -583,14 +621,16 @@ function type() {
 
 type();
 
-/* SNOW */
+/* SNOW PARTICLES */
 
 const canvas = document.getElementById("snow-canvas");
 const ctx = canvas.getContext("2d");
 
-let width, height;
+let width;
+let height;
 
 function resizeCanvas() {
+
   const dpr = Math.min(devicePixelRatio || 1, 2);
 
   width = innerWidth;
@@ -605,7 +645,10 @@ function resizeCanvas() {
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 
-const mouse = { x: -1000, y: -1000 };
+const mouse = {
+  x: -1000,
+  y: -1000
+};
 
 document.addEventListener("mousemove", e => {
   mouse.x = e.clientX;
@@ -613,16 +656,22 @@ document.addEventListener("mousemove", e => {
 });
 
 class Particle {
+
   constructor() {
-    this.x = Math.random() * width;
-    this.y = Math.random() * height;
-    this.baseX = this.x;
-    this.baseY = this.y;
+    this.reset(true);
     this.size = Math.random() * 1.5 + .5;
-    this.speed = Math.random() * .15 + .04;
+    this.speed = Math.random() * .6 + .2;
+  }
+
+  reset(initial = false) {
+    this.x = Math.random() * width;
+    this.y = initial ? Math.random() * height : -5;
   }
 
   update() {
+
+    this.y += this.speed;
+
     const dx = mouse.x - this.x;
     const dy = mouse.y - this.y;
     const dist = Math.hypot(dx, dy);
@@ -631,15 +680,10 @@ class Particle {
       const force = (110 - dist) / 110;
       this.x -= dx / dist * force * 2;
       this.y -= dy / dist * force * 2;
-    } else {
-      this.x += (this.baseX - this.x) * .025;
-      this.y += (this.baseY - this.y) * .025;
-      this.y += this.speed;
     }
 
-    if (this.y > height) {
-      this.y = 0;
-      this.baseY = Math.random() * height;
+    if (this.y > height + 5) {
+      this.reset();
     }
 
     ctx.fillStyle = "rgba(255,255,255,.65)";
@@ -655,13 +699,17 @@ const particles = Array.from(
 );
 
 function animateSnow() {
+
   ctx.clearRect(0, 0, width, height);
+
   particles.forEach(p => p.update());
+
   requestAnimationFrame(animateSnow);
 }
 
 animateSnow();
 
 </script>
+
 </body>
 </html>
