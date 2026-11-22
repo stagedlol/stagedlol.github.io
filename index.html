@@ -8,213 +8,425 @@
 
 <style>
 @font-face {
-  font-family: 'MostWanted';
-  src: url('mostwanted(1).ttf') format('truetype');
+  font-family: MostWanted;
+  src: url("mostwanted(1).ttf") format("truetype");
 }
 
 @font-face {
-  font-family: 'CodeFont';
-  src: url('Code.ttf') format('truetype');
+  font-family: CodeFont;
+  src: url("Code.ttf") format("truetype");
+}
+
+:root {
+  --mouse-x: 50%;
+  --mouse-y: 50%;
 }
 
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
+body {
+  height: 100vh;
   width: 100%;
-  height: 100%;
   overflow: hidden;
-  background: #000;
-  font-family: 'CodeFont', monospace;
+  background: #050505;
+  color: white;
+  font-family: CodeFont, monospace;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 /* BACKGROUND VIDEO */
+
 #bg-video {
   position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: -2;
+  z-index: -3;
+  filter: brightness(.55) contrast(1.1);
 }
+
+.background-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(ellipse at center, transparent 10%, rgba(0,0,0,.55) 100%),
+    linear-gradient(rgba(0,0,0,.2), rgba(0,0,0,.45));
+}
+
+/* FILM GRAIN */
 
 body::after {
   content: "";
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.25);
-  z-index: -1;
   pointer-events: none;
+  z-index: 5;
+  opacity: .12;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E");
 }
 
 /* SNOW */
+
 #snow-canvas {
   position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none;
   z-index: 1;
+  pointer-events: none;
 }
 
-/* CARD CONTAINER */
-.card-container {
-  perspective: 1200px;
-  z-index: 2;
+/* MAIN */
+
+.main {
+  position: relative;
+  z-index: 3;
+  perspective: 1400px;
   padding: 20px;
 }
 
 /* GLASS CARD */
-.glass-box {
+
+.card {
   position: relative;
-  width: 380px;
-  padding: 40px;
-  text-align: center;
-  color: white;
-  border-radius: 25px;
+  width: 410px;
+  max-width: calc(100vw - 40px);
+  padding: 48px 38px 35px;
+  border-radius: 28px;
+  overflow: hidden;
 
-  background: rgba(255,255,255,0.055);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
+  background: rgba(255,255,255,.075);
 
-  border: 1px solid rgba(255,255,255,0.18);
+  backdrop-filter: blur(28px) saturate(145%);
+  -webkit-backdrop-filter: blur(28px) saturate(145%);
+
+  border: 1px solid rgba(255,255,255,.19);
 
   box-shadow:
-    0 20px 60px rgba(0,0,0,0.5),
-    inset 0 0 20px rgba(255,255,255,0.04);
+    0 30px 100px rgba(0,0,0,.65),
+    0 0 45px rgba(255,255,255,.045),
+    inset 0 1px 1px rgba(255,255,255,.25),
+    inset 0 -1px 1px rgba(255,255,255,.05);
 
   transform-style: preserve-3d;
-  transition: transform 0.15s ease-out;
-  overflow: hidden;
-  animation: unfold 1.3s ease forwards;
+  will-change: transform;
+
+  opacity: 0;
+  animation: cardEnter 1.5s cubic-bezier(.16,1,.3,1) forwards;
 }
 
-/* MOUSE LIGHT REFLECTION */
-.glass-box::before {
+/* TOP GLASS REFLECTION */
+
+.card::before {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
+  pointer-events: none;
+
   background: radial-gradient(
-    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    rgba(255,255,255,0.24),
+    circle at var(--mouse-x) var(--mouse-y),
+    rgba(255,255,255,.25),
+    rgba(255,255,255,.06) 20%,
     transparent 55%
   );
-  opacity: 0.8;
-  pointer-events: none;
-  z-index: 0;
+
+  opacity: .9;
+  z-index: 1;
 }
 
-/* CARD CONTENT */
-.card-content {
+/* CARD BORDER LIGHT */
+
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,.35),
+    transparent 25%,
+    transparent 70%,
+    rgba(255,255,255,.13)
+  );
+
+  opacity: .55;
+  z-index: 1;
+}
+
+.content {
   position: relative;
   z-index: 2;
-  transform: translateZ(35px);
+  transform: translateZ(40px);
+  text-align: center;
 }
 
-/* GLITCH TITLE */
+/* STATUS */
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 13px;
+  margin-bottom: 27px;
+
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,.75);
+
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 30px;
+  background: rgba(255,255,255,.045);
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  background: #baffd0;
+  border-radius: 50%;
+  box-shadow: 0 0 12px #8affb0;
+  animation: pulse 2s infinite;
+}
+
+/* TITLE */
+
 .glitch-text {
   position: relative;
-  font-size: 3.5em;
-  font-weight: bold;
-  letter-spacing: 4px;
+  font-family: MostWanted, sans-serif;
+  font-size: clamp(55px, 12vw, 75px);
+  letter-spacing: 5px;
+  line-height: 1;
   text-transform: uppercase;
-  font-family: 'MostWanted', sans-serif;
+  text-shadow: 0 0 30px rgba(255,255,255,.12);
 }
 
 .glitch-layer {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
+  inset: 0;
   pointer-events: none;
 }
 
 .glitch-r {
-  color: red;
+  color: #ff3434;
   mix-blend-mode: screen;
 }
 
 .glitch-g {
-  color: lime;
+  color: #53ff8b;
   mix-blend-mode: screen;
 }
 
 .glitch-b {
-  color: blue;
+  color: #479eff;
   mix-blend-mode: screen;
 }
 
+/* SEPARATOR */
+
+.separator {
+  width: 45px;
+  height: 1px;
+  background: rgba(255,255,255,.65);
+  margin: 23px auto;
+  box-shadow: 0 0 12px white;
+}
+
 /* TYPEWRITER */
+
 #typewriter {
-  font-size: 1.2em;
-  margin-top: 20px;
   min-height: 25px;
-  text-shadow: 0 0 8px white, 0 0 20px #00f0ff;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  color: rgba(255,255,255,.85);
+  text-shadow: 0 0 15px rgba(255,255,255,.4);
   white-space: nowrap;
   overflow: hidden;
-  border-right: 2px solid white;
-  font-family: 'CodeFont', monospace;
 }
 
-/* SOCIAL ICONS */
-.social-icons-inside {
-  margin-top: 30px;
+/* SOCIAL SECTION */
+
+.social-label {
+  margin-top: 36px;
+  margin-bottom: 17px;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: rgba(255,255,255,.45);
+}
+
+.social-icons {
   display: flex;
   justify-content: center;
-  gap: 20px;
+  align-items: center;
+  gap: 14px;
 }
 
-.social-icons-inside a img {
-  width: 42px;
-  height: 42px;
+.social-icons a {
+  position: relative;
+  width: 53px;
+  height: 53px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 17px;
+  border: 1px solid rgba(255,255,255,.14);
+
+  background: rgba(255,255,255,.065);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  transition:
+    transform .4s cubic-bezier(.2,.8,.2,1),
+    background .4s ease,
+    box-shadow .4s ease,
+    border-color .4s ease;
+
+  opacity: 0;
+  animation: iconEnter .8s ease forwards;
+}
+
+.social-icons a:nth-child(1) { animation-delay: .7s; }
+.social-icons a:nth-child(2) { animation-delay: .85s; }
+.social-icons a:nth-child(3) { animation-delay: 1s; }
+.social-icons a:nth-child(4) { animation-delay: 1.15s; }
+
+.social-icons img {
+  width: 26px;
+  height: 26px;
   object-fit: contain;
-  filter: drop-shadow(0 0 8px white);
-  transition: 0.3s ease;
-  border-radius: 12px;
+  filter: grayscale(100%) brightness(1.5);
+  transition: .4s ease;
 }
 
-.social-icons-inside a:hover img {
-  transform: translateY(-7px) scale(1.15);
-  filter: drop-shadow(0 0 18px white);
+.social-icons a:hover {
+  transform: translateY(-8px) scale(1.1);
+  background: rgba(255,255,255,.18);
+  border-color: rgba(255,255,255,.6);
+
+  box-shadow:
+    0 0 15px rgba(255,255,255,.2),
+    0 0 35px rgba(255,255,255,.13),
+    inset 0 0 15px rgba(255,255,255,.1);
 }
 
-/* ANIMATION */
-@keyframes unfold {
+.social-icons a:hover img {
+  filter: grayscale(0%) brightness(1.3) drop-shadow(0 0 8px white);
+}
+
+/* BOTTOM */
+
+.bottom-text {
+  margin-top: 30px;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,.3);
+}
+
+/* MEDIA CONTROLS */
+
+.media-controls {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 8;
+  display: flex;
+  gap: 10px;
+}
+
+.media-button {
+  width: 43px;
+  height: 43px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+
+  color: white;
+  font-size: 15px;
+
+  background: rgba(255,255,255,.09);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  border: 1px solid rgba(255,255,255,.2);
+  box-shadow: 0 5px 25px rgba(0,0,0,.3);
+  transition: .3s ease;
+}
+
+.media-button:hover {
+  background: rgba(255,255,255,.22);
+  box-shadow: 0 0 25px rgba(255,255,255,.25);
+  transform: translateY(-3px);
+}
+
+/* ANIMATIONS */
+
+@keyframes cardEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(.85) rotateX(12deg);
+    filter: blur(15px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotateX(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes iconEnter {
   from {
     opacity: 0;
-    transform: rotateX(-15deg) scale(0.8);
+    transform: translateY(15px);
+    filter: blur(5px);
   }
   to {
     opacity: 1;
-    transform: rotateX(0deg) scale(1);
+    transform: translateY(0);
+    filter: blur(0);
   }
 }
 
+@keyframes pulse {
+  50% { opacity: .35; }
+}
+
 /* MOBILE */
-@media (max-width: 500px) {
-  .glass-box {
-    width: min(380px, 85vw);
-    padding: 30px 20px;
+
+@media(max-width: 500px) {
+  .card {
+    padding: 40px 20px 30px;
   }
 
-  .glitch-text {
-    font-size: 2.7em;
+  .social-icons {
+    gap: 10px;
   }
 
-  .social-icons-inside {
-    gap: 15px;
+  .social-icons a {
+    width: 48px;
+    height: 48px;
   }
 
-  .social-icons-inside a img {
-    width: 36px;
-    height: 36px;
+  .media-controls {
+    bottom: 15px;
+    right: 15px;
+  }
+}
+
+@media(prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
   }
 }
 </style>
@@ -223,18 +435,24 @@ body::after {
 <body>
 
 <!-- BACKGROUND VIDEO -->
-<video id="bg-video" autoplay muted loop playsinline>
-  <source src="background.mp4" type="video/mp4">
+<video id="bg-video" autoplay muted loop playsinline preload="auto">
+  <source src="./background.mp4" type="video/mp4">
 </video>
 
-<!-- SNOW -->
+<div class="background-overlay"></div>
+
 <canvas id="snow-canvas"></canvas>
 
-<!-- CARD -->
-<div class="card-container">
-  <div class="glass-box" id="card">
+<!-- MAIN CARD -->
+<main class="main">
+  <div class="card" id="card">
 
-    <div class="card-content">
+    <div class="content">
+
+      <div class="status">
+        <span class="status-dot"></span>
+        SYSTEM ONLINE
+      </div>
 
       <div class="glitch-text">
         <span class="glitch-layer glitch-r">Staged</span>
@@ -243,167 +461,179 @@ body::after {
         <span>Staged</span>
       </div>
 
+      <div class="separator"></div>
+
       <div id="typewriter"></div>
 
-      <div class="social-icons-inside">
+      <div class="social-label">FIND ME ELSEWHERE</div>
 
-        <a href="https://www.tiktok.com/@h8x1" target="_blank" rel="noopener noreferrer">
+      <div class="social-icons">
+
+        <a href="https://www.tiktok.com/@h8x1"
+           target="_blank" rel="noopener noreferrer">
           <img src="tiktok.webp" alt="TikTok">
         </a>
 
-        <a href="https://www.youtube.com/@wic.001" target="_blank" rel="noopener noreferrer">
+        <a href="https://www.youtube.com/@wic.001"
+           target="_blank" rel="noopener noreferrer">
           <img src="youtube.png" alt="YouTube">
         </a>
 
-        <a href="https://www.roblox.com/users/3675540/profile" target="_blank" rel="noopener noreferrer">
+        <a href="https://www.roblox.com/users/3675540/profile"
+           target="_blank" rel="noopener noreferrer">
           <img src="roblox.webp" alt="Roblox">
         </a>
 
-        <a href="https://www.instagram.com/wic.001/" target="_blank" rel="noopener noreferrer">
+        <a href="https://www.instagram.com/wic.001/"
+           target="_blank" rel="noopener noreferrer">
           <img src="insta.webp" alt="Instagram">
         </a>
 
       </div>
 
+      <div class="bottom-text">
+        WIC WAS HERE © 2026
+      </div>
+
     </div>
   </div>
-</div>
+</main>
 
-<!-- MUSIC -->
-<audio id="bg-music" autoplay loop>
-  <source src="song.mp3" type="audio/mpeg">
+<!-- AUDIO -->
+<audio id="bg-music" loop preload="auto">
+  <source src="./song.mp3" type="audio/mpeg">
 </audio>
+
+<!-- MEDIA BUTTONS -->
+<div class="media-controls">
+  <button class="media-button" id="video-btn"
+          aria-label="Pause background video" title="Pause video">Ⅱ</button>
+
+  <button class="media-button" id="music-btn"
+          aria-label="Play music" title="Play music">♫</button>
+</div>
 
 <script>
 
-/* MUSIC AUTOPLAY */
-const audio = document.getElementById("bg-music");
+/* VIDEO PLAYBACK */
 
-function startMusic() {
-  audio.play().catch(() => {});
+const video = document.getElementById("bg-video");
+const videoBtn = document.getElementById("video-btn");
+
+async function playVideo() {
+  try {
+    await video.play();
+    videoBtn.textContent = "Ⅱ";
+    videoBtn.title = "Pause video";
+  } catch (error) {
+    console.warn("Video playback failed:", error);
+  }
 }
 
-window.addEventListener("load", startMusic);
-document.addEventListener("click", startMusic, { once: true });
+videoBtn.addEventListener("click", async () => {
+  if (video.paused) {
+    await playVideo();
+  } else {
+    video.pause();
+    videoBtn.textContent = "▶";
+    videoBtn.title = "Play video";
+  }
+});
 
-/* 3D MOUSE CARD EFFECT */
+// Retry muted autoplay after the first interaction.
+document.addEventListener("click", () => {
+  if (video.paused) playVideo();
+}, { once: true });
+
+video.play().catch(error => {
+  console.warn("Autoplay blocked:", error);
+});
+
+/* MUSIC */
+
+const audio = document.getElementById("bg-music");
+const musicBtn = document.getElementById("music-btn");
+
+musicBtn.addEventListener("click", async () => {
+  if (audio.paused) {
+    try {
+      await audio.play();
+      musicBtn.textContent = "♫";
+      musicBtn.title = "Pause music";
+    } catch (error) {
+      console.warn("Audio playback failed:", error);
+    }
+  } else {
+    audio.pause();
+    musicBtn.textContent = "♪";
+    musicBtn.title = "Play music";
+  }
+});
+
+/* 3D CARD */
+
 const card = document.getElementById("card");
-const container = document.querySelector(".card-container");
+const main = document.querySelector(".main");
 
-let rect;
+let cardRect;
+let targetX = 0;
+let targetY = 0;
+let currentX = 0;
+let currentY = 0;
 
-container.addEventListener("mousemove", (e) => {
-  rect = card.getBoundingClientRect();
+main.addEventListener("mousemove", (e) => {
+  cardRect = card.getBoundingClientRect();
 
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
+  const x = e.clientX - cardRect.left;
+  const y = e.clientY - cardRect.top;
 
-  const centerX = rect.width / 2;
-  const centerY = rect.height / 2;
+  const centerX = cardRect.width / 2;
+  const centerY = cardRect.height / 2;
 
-  const rotateX = ((y - centerY) / centerY) * -12;
-  const rotateY = ((x - centerX) / centerX) * 12;
-
-  card.style.transform =
-    `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.04,1.04,1.04)`;
+  targetX = ((y - centerY) / centerY) * -10;
+  targetY = ((x - centerX) / centerX) * 10;
 
   card.style.setProperty("--mouse-x", `${x}px`);
   card.style.setProperty("--mouse-y", `${y}px`);
 });
 
-container.addEventListener("mouseleave", () => {
+function animateCard() {
+  currentX += (targetX - currentX) * .12;
+  currentY += (targetY - currentY) * .12;
+
   card.style.transform =
-    "rotateX(0deg) rotateY(0deg) scale3d(1,1,1)";
+    `rotateX(${currentX}deg) rotateY(${currentY}deg)`;
+
+  requestAnimationFrame(animateCard);
+}
+
+animateCard();
+
+main.addEventListener("mouseleave", () => {
+  targetX = 0;
+  targetY = 0;
 
   card.style.setProperty("--mouse-x", "50%");
   card.style.setProperty("--mouse-y", "50%");
 });
 
-/* SNOW PARTICLES */
-const canvas = document.getElementById("snow-canvas");
-const ctx = canvas.getContext("2d");
+/* GLITCH */
 
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
+const glitchR = document.querySelector(".glitch-r");
+const glitchG = document.querySelector(".glitch-g");
+const glitchB = document.querySelector(".glitch-b");
 
-resizeCanvas();
-window.addEventListener("resize", resizeCanvas);
+document.addEventListener("mousemove", (e) => {
+  const x = (e.clientX - innerWidth / 2) / 100;
+  const y = (e.clientY - innerHeight / 2) / 100;
 
-const mouse = { x: null, y: null };
-
-window.addEventListener("mousemove", e => {
-  mouse.x = e.clientX;
-  mouse.y = e.clientY;
+  glitchR.style.transform = `translate(${-x}px, ${-y}px)`;
+  glitchG.style.transform = `translate(${x}px, ${y}px)`;
+  glitchB.style.transform = `translate(${y}px, ${-x}px)`;
 });
-
-window.addEventListener("mouseout", e => {
-  if (!e.relatedTarget) {
-    mouse.x = null;
-    mouse.y = null;
-  }
-});
-
-class Particle {
-  constructor() {
-    this.reset();
-    this.baseX = this.x;
-    this.baseY = this.y;
-    this.density = Math.random() * 30 + 1;
-  }
-
-  reset() {
-    this.x = Math.random() * canvas.width;
-    this.y = Math.random() * canvas.height;
-    this.size = Math.random() * 2 + 1;
-  }
-
-  draw() {
-    ctx.fillStyle = "white";
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  update() {
-    if (mouse.x !== null && mouse.y !== null) {
-      const dx = mouse.x - this.x;
-      const dy = mouse.y - this.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-
-      if (dist < 120 && dist > 0) {
-        const force = (120 - dist) / 120;
-        this.x -= (dx / dist) * force * this.density;
-        this.y -= (dy / dist) * force * this.density;
-      } else {
-        this.x += (this.baseX - this.x) / 10;
-        this.y += (this.baseY - this.y) / 10;
-      }
-    } else {
-      this.x += (this.baseX - this.x) / 10;
-      this.y += (this.baseY - this.y) / 10;
-    }
-
-    this.draw();
-  }
-}
-
-const particlesArray = [];
-
-for (let i = 0; i < 200; i++) {
-  particlesArray.push(new Particle());
-}
-
-function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  particlesArray.forEach(p => p.update());
-  requestAnimationFrame(animate);
-}
-
-animate();
 
 /* TYPEWRITER */
+
 const messages = [
   "Fuck you S0cial!",
   "QUÉBECOIS CERTIFIED!!",
@@ -412,59 +642,123 @@ const messages = [
 
 let i = 0;
 let j = 0;
-let isDeleting = false;
-let waitTime = 0;
+let deleting = false;
+let pause = 0;
 
 const target = document.getElementById("typewriter");
 
 function type() {
-  const txt = messages[i].substring(0, j);
-  target.textContent = txt;
+  const message = messages[i];
 
-  if (!isDeleting && j < messages[i].length) {
+  target.textContent = message.substring(0, j);
+
+  if (!deleting && j < message.length) {
     j++;
-  } else if (isDeleting && j > 0) {
+  } else if (deleting && j > 0) {
     j--;
   } else {
-    if (!isDeleting) waitTime = 5;
+    deleting = !deleting;
 
-    isDeleting = !isDeleting;
-
-    if (!isDeleting) {
+    if (!deleting) {
       i = (i + 1) % messages.length;
+    } else {
+      pause = 12;
     }
   }
 
-  const speed = isDeleting ? 100 : 80;
+  const speed = pause > 0 ? (pause--, 1000) : deleting ? 45 : 85;
 
-  setTimeout(type, waitTime-- > 0 ? 1000 : speed);
+  setTimeout(type, speed);
 }
 
 type();
 
-/* GLITCH MOUSE MOVEMENT */
-const glitchR = document.querySelector(".glitch-r");
-const glitchG = document.querySelector(".glitch-g");
-const glitchB = document.querySelector(".glitch-b");
+/* SNOW PARTICLES */
 
-document.addEventListener("mousemove", e => {
-  const centerX = window.innerWidth / 2;
-  const centerY = window.innerHeight / 2;
+const canvas = document.getElementById("snow-canvas");
+const ctx = canvas.getContext("2d");
 
-  const offsetX = (e.clientX - centerX) / 90;
-  const offsetY = (e.clientY - centerY) / 90;
+let width;
+let height;
 
-  glitchR.style.transform =
-    `translate(${-offsetX}px, ${-offsetY}px)`;
+function resizeCanvas() {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-  glitchG.style.transform =
-    `translate(${offsetX}px, ${offsetY}px)`;
+  width = innerWidth;
+  height = innerHeight;
 
-  glitchB.style.transform =
-    `translate(${offsetY}px, ${-offsetX}px)`;
+  canvas.width = width * dpr;
+  canvas.height = height * dpr;
+
+  canvas.style.width = width + "px";
+  canvas.style.height = height + "px";
+
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+const mouse = { x: -1000, y: -1000 };
+
+window.addEventListener("mousemove", e => {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
 });
 
-</script>
+class Particle {
+  constructor() {
+    this.reset();
+    this.baseX = this.x;
+    this.baseY = this.y;
+    this.density = Math.random() * 20 + 2;
+  }
 
+  reset() {
+    this.x = Math.random() * width;
+    this.y = Math.random() * height;
+    this.size = Math.random() * 1.8 + .5;
+  }
+
+  update() {
+    const dx = mouse.x - this.x;
+    const dy = mouse.y - this.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+
+    if (dist < 110 && dist > 0) {
+      const force = (110 - dist) / 110;
+      this.x -= (dx / dist) * force * this.density;
+      this.y -= (dy / dist) * force * this.density;
+    } else {
+      this.x += (this.baseX - this.x) * .025;
+      this.y += (this.baseY - this.y) * .025;
+    }
+
+    this.draw();
+  }
+
+  draw() {
+    ctx.fillStyle = "rgba(255,255,255,.75)";
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+const particles = [];
+
+for (let i = 0; i < 130; i++) {
+  particles.push(new Particle());
+}
+
+function animateSnow() {
+  ctx.clearRect(0, 0, width, height);
+  particles.forEach(p => p.update());
+  requestAnimationFrame(animateSnow);
+}
+
+animateSnow();
+
+</script>
 </body>
 </html>
